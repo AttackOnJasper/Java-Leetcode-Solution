@@ -1,8 +1,5 @@
-package leetcode;
+package main;
 
-/**
- * Created by jasperwang on 16/11/12.
- */
 public class EasyQuestion {
     public String reverseString(String s){
         return new StringBuilder(s).reverse().toString();
