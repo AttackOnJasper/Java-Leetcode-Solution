@@ -16,7 +16,7 @@ public class EasyQuestion {
             start++;
             end--;
         }
-        return arr.toString();
+        return String.valueOf(arr);
     }
 
     public int findComplement(int num) {

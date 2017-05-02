@@ -2,6 +2,6 @@ out/
 
 src/META-INF/MANIFEST.MF
 
-*.xml
-
 *.lst
+
+.idea/*.xml
