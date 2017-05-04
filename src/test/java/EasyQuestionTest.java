@@ -23,6 +23,14 @@ public class EasyQuestionTest {
   @Test
   public void testFindComplement() {
     assertEquals(2, easyQuestion.findComplement(5));
+    assertEquals(0, easyQuestion.findComplement(15));
+    assertEquals(55, easyQuestion.findComplement(200));
+    assertEquals(262143, easyQuestion.findComplement(262144));
+
+    assertEquals(2, easyQuestion.findComplement2(5));
+    assertEquals(0, easyQuestion.findComplement2(15));
+    assertEquals(55, easyQuestion.findComplement2(200));
+    assertEquals(262143, easyQuestion.findComplement2(262144));
   }
 
   @Test
