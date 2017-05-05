@@ -34,6 +34,30 @@ public class EasyQuestion {
         return new int[]{i + 1, j + 1};
     }
 
+    // 206 Reverse Linked List
+    public ListNode reverseList1(ListNode head) {
+        return helper(head, null);
+    }
+
+    private ListNode helper(ListNode head, ListNode newHead) {
+        if (head == null) return newHead;
+        ListNode next = head.next;
+        head.next = newHead;
+        return helper(next, head);
+    }
+
+    public ListNode reverseList2(ListNode head) {
+    /* iterative solution */
+        ListNode newHead = null;
+        while (head != null) {
+            ListNode next = head.next;
+            head.next = newHead;
+            newHead = head;
+            head = next;
+        }
+        return newHead;
+    }
+
     // 216
     public TreeNode invertTree(TreeNode root) {
         if (root == null) return null;
@@ -101,6 +125,29 @@ public class EasyQuestion {
             res ^= c;
         }
         return res;
+    }
+
+    // 404 Sum of Left Leaves
+    public int sumOfLeftLeaves(TreeNode root) {
+        if(root == null) return 0;
+        int ans = 0;
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+
+        while(!stack.empty()) {
+            TreeNode node = stack.pop();
+            if(node.left != null) {
+                if (node.left.left == null && node.left.right == null)
+                    ans += node.left.val;
+                else
+                    stack.push(node.left);
+            }
+            if(node.right != null) {
+                if (node.right.left != null || node.right.right != null)
+                    stack.push(node.right);
+            }
+        }
+        return ans;
     }
 
     // 455 Cookie
