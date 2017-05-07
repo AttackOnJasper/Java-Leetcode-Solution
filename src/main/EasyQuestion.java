@@ -11,6 +11,22 @@ public class EasyQuestion {
         return root == null? 0 : 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
     }
 
+    // 108 Sorted Array to BST
+    public TreeNode sortedArrayToBST(int[] num) {
+        if (num.length == 0) return null;
+        return sortedArrayToBSTHelper(num, 0, num.length - 1);
+    }
+
+    private TreeNode sortedArrayToBSTHelper(int[] num, int low, int high) {
+        if (low > high) {
+            return null;
+        }
+        int mid = (low + high) / 2;
+        TreeNode res = new TreeNode(num[mid]);
+        res.left = sortedArrayToBSTHelper(num, low, mid - 1);
+        res.right = sortedArrayToBSTHelper(num, mid + 1, high);
+        return res;
+    }
     // 136
     public int singleNumber(int[] nums) {
         int res = 0;
@@ -110,6 +126,16 @@ public class EasyQuestion {
         }
     }
 
+    // 326 Power of Three
+    public boolean isPowerOfThree(int n) {
+        // 1162261467 is 3^19,  3^20 is bigger than int
+        return ( n>0 &&  1162261467%n==0);
+    }
+
+    public boolean isPowerOfTwo(int n) {
+        return n>0 && ((n & (n-1)) == 0);
+    }
+    
     // 371 Get Sum
     // Implement sum without +
     public int getSum(int a, int b) {
@@ -148,6 +174,31 @@ public class EasyQuestion {
             }
         }
         return ans;
+    }
+
+    // 405 Num to Hex
+    private char[] map = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
+
+    public String toHex(int num) {
+        if(num == 0) return "0";
+        String result = "";
+        while(num != 0){
+            result = map[(num & 15)] + result;
+            num = (num >>> 4);
+        }
+        return result;
+    }
+
+    // 415 Add two Strings
+    public String addStrings(String num1, String num2) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = num1.length() - 1, j = num2.length() - 1, carry = 0 ; i >= 0 || j >= 0 || carry == 1; i++, j++) {
+            int d1 = i < 0? 0 : num1.charAt(i) - '0';
+            int d2 = j < 0? 0 : num2.charAt(j) - '0';
+            sb.append((d1 + d2 + carry) % 10);
+            carry = (d1 + d2 + carry) / 10;
+        }
+        return sb.reverse().toString();
     }
 
     // 455 Cookie

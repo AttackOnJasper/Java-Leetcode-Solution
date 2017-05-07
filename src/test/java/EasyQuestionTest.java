@@ -51,4 +51,10 @@ public class EasyQuestionTest {
     final int[] arr = {1, 2, 3, 4};
     assertEquals(4, easyQuestion.arrayPairSum(arr));
   }
+
+  @Test
+  public void testToHex() {
+    assertEquals("1a", easyQuestion.toHex(26));
+  }
+
 }
