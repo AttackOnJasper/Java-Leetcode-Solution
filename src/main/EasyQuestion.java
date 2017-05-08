@@ -6,6 +6,98 @@ import java.util.Map;
 import java.util.Stack;
 
 public class EasyQuestion {
+    // 35 binary search
+    public int searchInsert(int[] A, int target) {
+        int low = 0, high = A.length-1;
+        while(low<=high){
+            int mid = (low+high)/2;
+            if(A[mid] == target) return mid;
+            else if(A[mid] > target) high = mid-1;
+            else low = mid+1;
+        }
+        return low;
+    }
+
+    // 53 Max subarray
+
+    // DP
+    public int maxSubArray(int[] nums) {
+        if (nums.length == 0) return 0;
+        int[] dp = new int[nums.length];
+        dp[0] = nums[0];
+        int res = dp[0];
+        for (int i = 1; i < nums.length; i++) {
+            dp[i] = nums[i] + (dp[i-1] > 0 ? dp[i-1] : 0);
+            res = Math.max(res, dp[i]);
+        }
+        return res;
+    }
+
+    // Divide-and-Conquer
+    public int maxSubArray1(int[] nums) {
+        if (nums.length == 0) return 0;
+        return maxSubArray1Helper(nums, 0, nums.length - 1);
+    }
+
+    private int maxSubArray1Helper(final int[] nums, final int low, final int high) {
+        if (low >= high) {
+            return nums[low];
+        }
+        final int mid = (low + high) / 2;
+        final int leftans = maxSubArray1Helper(nums, low, mid);
+        final int rightans = maxSubArray1Helper(nums, mid + 1, high);
+        int leftmax = nums[mid];
+        int rightmax = nums[mid + 1];
+        int temp = 0;
+        for(int i=mid;i>=low;i--) {
+            temp += nums[i];
+            if(temp > leftmax) leftmax = temp;
+        }
+        temp = 0;
+        for(int i=mid+1;i<=high;i++) {
+            temp += nums[i];
+            if(temp > rightmax) rightmax = temp;
+        }
+        return Math.max(Math.max(rightans, leftans), rightmax + leftmax);
+    }
+
+    // Greedy
+    public int maxSubArray2(int[] nums) {
+        if (nums.length == 0) {
+            return 0;
+        }
+        int sum = 0, min = 0, res = nums[0];
+        for (int i = 0; i < nums.length; i++) {
+            sum += nums[i];
+            if (sum - min > res) {
+                res = sum - min;
+            }
+            if (sum < min) {
+                min = sum;
+            }
+        }
+        return res;
+    }
+
+
+    // 83
+    public ListNode deleteDuplicates(ListNode head) {
+        ListNode list = head;
+
+        while(list != null) {
+            if (list.next == null) {
+                break;
+            }
+            if (list.val == list.next.val) {
+                list.next = list.next.next;
+            } else {
+                list = list.next;
+            }
+        }
+
+        return head;
+    }
+
     // 104
     public int maxDepth(TreeNode root) {
         return root == null? 0 : 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
