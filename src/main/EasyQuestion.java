@@ -49,14 +49,18 @@ public class EasyQuestion {
         int leftmax = nums[mid];
         int rightmax = nums[mid + 1];
         int temp = 0;
-        for(int i=mid;i>=low;i--) {
+        for (int i = mid; i >= low; i--) {
             temp += nums[i];
-            if(temp > leftmax) leftmax = temp;
+            if (temp > leftmax) {
+                leftmax = temp;
+            }
         }
         temp = 0;
-        for(int i=mid+1;i<=high;i++) {
+        for (int i = mid + 1; i <= high; i++) {
             temp += nums[i];
-            if(temp > rightmax) rightmax = temp;
+            if (temp > rightmax) {
+                rightmax = temp;
+            }
         }
         return Math.max(Math.max(rightans, leftans), rightmax + leftmax);
     }
