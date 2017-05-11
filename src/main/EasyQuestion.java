@@ -102,6 +102,17 @@ public class EasyQuestion {
         return head;
     }
 
+    // 101
+    public boolean isSymmetric(TreeNode root) {
+        return root == null || isSymmetricHelper(root.left, root.right);
+    }
+
+    private boolean isSymmetricHelper(TreeNode left, TreeNode right) {
+        if (left == null || right == null) return left == right;
+        if (left.val != right.val) return false;
+        return isSymmetricHelper(left.left, right.right) && isSymmetricHelper(right.left, left.right);
+    }
+
     // 104
     public int maxDepth(TreeNode root) {
         return root == null? 0 : 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
@@ -144,6 +155,28 @@ public class EasyQuestion {
             }
         }
         return new int[]{i + 1, j + 1};
+    }
+
+    // 191 Hamming weight
+
+    // bit manipulation
+    public int hammingWeight(int n) {
+        int count = 0;
+        while (n != 0) {
+            n = n & (n - 1);
+            count++;
+        }
+        return count;
+    }
+
+    // bit shift
+    public int hammingWeight2(int n) {
+        int count = 0;
+        while (n != 0) {
+            count += n & 1;
+            n = n >>> 2;
+        }
+        return count;
     }
 
     // 206 Reverse Linked List
@@ -209,6 +242,17 @@ public class EasyQuestion {
         return String.valueOf(arr);
     }
 
+    // 235. Lowest Common Ancestor
+    /*
+     * Just walk down from the whole tree's root as long as both p and q are in the same subtree
+     * (meaning their values are both smaller or both larger than root's)
+     */
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        while ((root.val - p.val) * (root.val - q.val) > 0)
+            root = p.val < root.val ? root.left : root.right;
+        return root;
+    }
+
     // 283. Move Zero
     public void moveZeroes(int[] nums) {
         int i = 0;
@@ -227,10 +271,58 @@ public class EasyQuestion {
         // 1162261467 is 3^19,  3^20 is bigger than int
         return ( n>0 &&  1162261467%n==0);
     }
-
+    // 231
     public boolean isPowerOfTwo(int n) {
         return n>0 && ((n & (n-1)) == 0);
     }
+    // 342
+    public boolean isPowerOfFour(int num) {
+        return num > 0 && (num & (num - 1)) == 0 && (num - 1) % 3 == 0;
+    }
+
+
+
+    // 367 perfect square
+    // sequence 1 + 3 + 5 + 7
+    public boolean isPerfectSquare(int num) {
+        if (num < 1) return false;
+        for (int i = 1; num > 0; i += 2)
+            num -= i;
+        return num == 0;
+    }
+
+    // binary search
+    public boolean isPerfectSquare1(int num) {
+        if (num < 1) return false;
+        long left = 1, right = num;// long type to avoid 2147483647 case
+
+        while (left <= right) {
+            long mid = left + (right - left) / 2;
+            long t = mid * mid;
+            if (t > num) {
+                right = mid - 1;
+            } else if (t < num) {
+                left = mid + 1;
+            } else {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // newton's method
+    boolean isPerfectSquare2(int num) {
+        if (num < 1) return false;
+        if (num == 1) return true;
+        long t = num / 2;
+        while (t * t > num) {
+            t = (t + num / t) / 2;
+        }
+        return t * t == num;
+    }
+
+
     
     // 371 Get Sum
     // Implement sum without +
@@ -311,6 +403,28 @@ public class EasyQuestion {
             }
         }
         return i;
+    }
+
+
+    // 459 Repeated Substring pattern
+    public boolean repeatedSubstringPattern(String s) {
+        final int length = s.length();
+        for (int i = length / 2; i >= 1; i--) {
+            if (length % i == 0) {
+                final int m = length / i;
+                final String subS = s.substring(0, i);
+                int j;
+                for (j = 1; j < m; j++) {
+                    if (!subS.equals(s.substring(j * i, i + j * i))) {
+                        break;
+                    }
+                }
+                if (j == m) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     // 461 Hamming distance
