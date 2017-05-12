@@ -2,7 +2,9 @@ package main;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 
 public class EasyQuestion {
@@ -17,6 +19,31 @@ public class EasyQuestion {
             x = x / 10;
         }
         return (x == rev || x == rev / 10);
+    }
+
+    // 20
+    public boolean isValid(String s) {
+        char[] arr = s.toCharArray();
+        Stack<Character> stack = new Stack<Character>();
+        for (char c : arr) {
+            switch (c) {
+                case '(':
+                case '[':
+                case '{':
+                    stack.push(c);
+                    break;
+                case ')':
+                    if (stack.isEmpty() || stack.pop() != '(') return false;
+                    break;
+                case ']':
+                    if (stack.isEmpty() || stack.pop() != '[') return false;
+                    break;
+                case '}':
+                    if (stack.isEmpty() || stack.pop() != '{') return false;
+                    break;
+            }
+        }
+        return stack.isEmpty();
     }
 
     // 35 binary search
@@ -115,6 +142,49 @@ public class EasyQuestion {
         return head;
     }
 
+
+    // 88
+    public void merge1(int[] nums1, int m, int[] nums2, int n) {
+        int i = 0, j = 0, newIndex = 0;
+        int[] temp = nums1.clone();
+        while (i < m && j < n) {
+            if (temp[i] <= nums2[j]) {
+                nums1[newIndex++] = temp[i++];
+            } else {
+                nums1[newIndex++] = nums2[j++];
+            }
+        }
+        while (i < m) {
+            nums1[newIndex++] = temp[i++];
+        }
+        while (j < n) {
+            nums1[newIndex++] = nums2[j++];
+        }
+    }
+
+    public void merge2(int[] nums1, int m, int[] nums2, int n) {
+        int i = m - 1, j = n -1, newIndex = m + n -1;
+        while (i >= 0 && j >= 0) {
+            if (nums1[i] > nums2[j]) {
+                nums1[newIndex--] = nums1[i--];
+            } else {
+                nums1[newIndex--] = nums2[j--];
+            }
+        }
+        while (i >= 0) {
+            nums1[newIndex--] = nums1[i--];
+        }
+        while (j >= 0) {
+            nums1[newIndex--] = nums2[j--];
+        }
+    }
+
+    public void merge3(int[] nums1, int m, int[] nums2, int n) {
+        while (n > 0) {
+            nums1[m + n - 1] = (m == 0 || nums2[n - 1] > nums1[m - 1]) ? nums2[--n] : nums1[--m];
+        }
+    }
+
     // 101
     public boolean isSymmetric(TreeNode root) {
         return root == null || isSymmetricHelper(root.left, root.right);
@@ -163,6 +233,20 @@ public class EasyQuestion {
         return 1 + Math.max(left, right);
     }
 
+    // 111
+    public int minDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        if (root.left == null) {
+            return minDepth(root.right) + 1;
+        }
+        if (root.right == null) {
+            return minDepth(root.left) + 1;
+        }
+        return Math.min(minDepth(root.left), minDepth(root.right)) + 1;
+    }
+
     // 136
     public int singleNumber(int[] nums) {
         int res = 0;
@@ -206,6 +290,29 @@ public class EasyQuestion {
             n = n >>> 2;
         }
         return count;
+    }
+
+
+    // 203 Remove Linked List Elements
+    public ListNode removeElements(ListNode head, int val) {
+        if (head == null) return null;
+        head.next = removeElements(head.next, val);
+        return head.val == val ? head.next : head;
+    }
+
+    public ListNode removeElements2(ListNode head, int val) {
+        ListNode fakeHead = new ListNode(-1);
+        fakeHead.next = head;
+        ListNode curr = head, prev = fakeHead;
+        while (curr != null) {
+            if (curr.val == val) {
+                prev.next = curr.next;
+            } else {
+                prev = prev.next;
+            }
+            curr = curr.next;
+        }
+        return fakeHead.next;
     }
 
     // 205 Isomorphic
@@ -257,6 +364,16 @@ public class EasyQuestion {
         return root;
     }
 
+    // 219
+    public boolean containsNearbyDuplicate(int[] nums, int k) {
+        Set<Integer> set = new HashSet<Integer>();
+        for(int i = 0; i < nums.length; i++){
+            if(i > k) set.remove(nums[i-k-1]);
+            if(!set.add(nums[i])) return true;
+        }
+        return false;
+    }
+
 
     public String reverseString(String s){
         return new StringBuilder(s).reverse().toString();
@@ -286,6 +403,40 @@ public class EasyQuestion {
         return String.valueOf(arr);
     }
 
+    // 234  Palindrome Linked List (in O(n) time and O(1) space)
+    public boolean isPalindrome(ListNode head) {
+        ListNode fast = head, slow = head;
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        if (fast != null) { // odd nodes: let right half smaller
+            slow = slow.next;
+        }
+        slow = reverse(slow);
+        fast = head;
+
+        while (slow != null) {
+            if (fast.val != slow.val) {
+                return false;
+            }
+            fast = fast.next;
+            slow = slow.next;
+        }
+        return true;
+    }
+
+    private ListNode reverse(ListNode head) {
+        ListNode prev = null;
+        while (head != null) {
+            ListNode next = head.next;
+            head.next = prev;
+            prev = head;
+            head = next;
+        }
+        return prev;
+    }
+
     // 235. Lowest Common Ancestor
     /*
      * Just walk down from the whole tree's root as long as both p and q are in the same subtree
@@ -308,6 +459,29 @@ public class EasyQuestion {
         for (; i < nums.length; i++) {
             nums[i] = 0;
         }
+    }
+
+    // 290 Word Pattern
+    public boolean wordPattern(String pattern, String str) {
+        HashMap<Character, String> map = new HashMap<Character, String>();
+        String[] splited = str.split(" ");
+        char[] arr = pattern.toCharArray();
+        if (arr.length != splited.length) {
+            return false;
+        }
+        for (int i = 0; i < arr.length; i++) {
+            if (map.containsKey(arr[i])) {
+                if (!map.get(arr[i]).equals(splited[i])) {
+                    return false;
+                }
+            } else {
+                if (map.containsValue(splited[i])) {
+                    return false;
+                }
+                map.put(arr[i], splited[i]);
+            }
+        }
+        return true;
     }
 
     // 326 Power of Three

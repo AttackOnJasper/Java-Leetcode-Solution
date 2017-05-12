@@ -1,5 +1,6 @@
 package test.java;
 
+import static junit.framework.Assert.assertTrue;
 import static junit.framework.TestCase.assertEquals;
 
 import main.EasyQuestion;
@@ -14,12 +15,49 @@ public class EasyQuestionTest {
   public void setUp() {
   }
 
+  // 20
+  @Test
+  public void testIsValid() {
+    assertTrue(easyQuestion.isValid("()"));
+  }
+
+  // 88
+  @Test
+  public void testMerge() {
+    int[] arr = new int[]{1, 2, 3, 0, 0, 0};
+    easyQuestion.merge2(arr, 3, new int[]{2, 5, 6}, 3);
+    assertEquals(1, arr[0]);
+    assertEquals(2, arr[1]);
+    assertEquals(2, arr[2]);
+    assertEquals(3, arr[3]);
+  }
+
+  // 290
+  @Test
+  public void testWordPattern() {
+    assertTrue(easyQuestion.wordPattern("abba", "dog cat cat dog"));
+  }
+
   @Test
   public void testReverseString() {
     assertEquals("hello", easyQuestion.reverseString("olleh"));
     assertEquals("hello", easyQuestion.reverseString2("olleh"));
   }
 
+
+  // 405
+  @Test
+  public void testToHex() {
+    assertEquals("1a", easyQuestion.toHex(26));
+  }
+
+  // 461
+  @Test
+  public void testHammingDistance() {
+    assertEquals(2, easyQuestion.hammingDistance(1, 4));
+  }
+
+  // 476
   @Test
   public void testFindComplement() {
     assertEquals(2, easyQuestion.findComplement(5));
@@ -33,11 +71,7 @@ public class EasyQuestionTest {
     assertEquals(262143, easyQuestion.findComplement2(262144));
   }
 
-  @Test
-  public void testHammingDistance() {
-    assertEquals(2, easyQuestion.hammingDistance(1, 4));
-  }
-
+  // 560
   @Test
   public void testPairSum() {
     /*
@@ -51,10 +85,4 @@ public class EasyQuestionTest {
     final int[] arr = {1, 2, 3, 4};
     assertEquals(4, easyQuestion.arrayPairSum(arr));
   }
-
-  @Test
-  public void testToHex() {
-    assertEquals("1a", easyQuestion.toHex(26));
-  }
-
 }
