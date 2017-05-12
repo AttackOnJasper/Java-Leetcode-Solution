@@ -6,6 +6,19 @@ import java.util.Map;
 import java.util.Stack;
 
 public class EasyQuestion {
+    // 9
+    public boolean isPalindrome(int x) {
+        if (x < 0 || (x != 0 && x % 10 == 0)) {
+            return false;
+        }
+        int rev = 0;
+        while (x > rev) {
+            rev = rev * 10 + x % 10;
+            x = x / 10;
+        }
+        return (x == rev || x == rev / 10);
+    }
+
     // 35 binary search
     public int searchInsert(int[] A, int target) {
         int low = 0, high = A.length-1;
@@ -134,6 +147,22 @@ public class EasyQuestion {
         res.right = sortedArrayToBSTHelper(num, mid + 1, high);
         return res;
     }
+
+    // 110
+    public boolean isBalanced(TreeNode root) {
+        return isBalancedHelper(root) != -1;
+    }
+
+    private int isBalancedHelper(TreeNode root) {
+        if (root == null) return 0;
+        int left = isBalancedHelper(root.left);
+        if (left == -1) return -1;
+        int right = isBalancedHelper(root.right);
+        if (right == -1) return -1;
+        if (Math.abs(left - right) > 1) return -1;
+        return 1 + Math.max(left, right);
+    }
+
     // 136
     public int singleNumber(int[] nums) {
         int res = 0;
@@ -177,6 +206,21 @@ public class EasyQuestion {
             n = n >>> 2;
         }
         return count;
+    }
+
+    // 205 Isomorphic
+    public boolean isIsomorphic(String s, String t) {
+        int sLen = s.length(), tLen = t.length();
+        if (sLen != tLen) return false;
+        int[] cs = new int[128], ct = new int[128];
+        for (int i = 0; i < sLen; i++) {
+            if (cs[s.charAt(i)] != ct[t.charAt(i)]) return false;
+            if (cs[s.charAt(i)] == 0) {
+                cs[s.charAt(i)] = i + 1;
+                ct[t.charAt(i)] = i + 1;
+            }
+        }
+        return true;
     }
 
     // 206 Reverse Linked List
@@ -387,6 +431,11 @@ public class EasyQuestion {
             carry = (d1 + d2 + carry) / 10;
         }
         return sb.reverse().toString();
+    }
+
+    // 434
+    public int countSegments(String s) {
+        return ("x " + s).split(" +").length - 1;
     }
 
     // 455 Cookie
