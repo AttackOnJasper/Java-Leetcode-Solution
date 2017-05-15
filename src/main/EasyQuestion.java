@@ -46,6 +46,17 @@ public class EasyQuestion {
         return stack.isEmpty();
     }
 
+    // 28 IndexOf
+    public int strStr(String haystack, String needle) {
+        for (int i = 0; ; i++) {
+            for (int j = 0; ; j++) {
+                if (j == needle.length()) return i;
+                if (i + j == haystack.length()) return -1;
+                if (needle.charAt(j) != haystack.charAt(i + j)) break;
+            }
+        }
+    }
+
     // 35 binary search
     public int searchInsert(int[] A, int target) {
         int low = 0, high = A.length-1;
@@ -121,6 +132,14 @@ public class EasyQuestion {
             }
         }
         return res;
+    }
+
+    // 69
+    public int mySqrt(int x) {
+        long r = x;
+        while (r*r > x)
+            r = (r + x/r) / 2;
+        return (int) r;
     }
 
 
@@ -247,6 +266,39 @@ public class EasyQuestion {
         return Math.min(minDepth(root.left), minDepth(root.right)) + 1;
     }
 
+    // 125
+    public boolean isPalindrome(String s) {
+        String temp = s.replaceAll("[^A-Za-z0-9]", "").toLowerCase();
+        String reversed = new StringBuffer(temp).reverse().toString();
+        return reversed.equals(temp);
+    }
+
+    public boolean isPalindrome2(String s) {
+        if (s.isEmpty()) {
+            return true;
+        }
+        int head = 0, tail = s.length() - 1;
+        char cHead, cTail;
+        while(head <= tail) {
+            cHead = s.charAt(head);
+            cTail = s.charAt(tail);
+            if (!Character.isLetterOrDigit(cHead)) {
+                head++;
+            } else if(!Character.isLetterOrDigit(cTail)) {
+                tail--;
+            } else {
+                if (Character.toLowerCase(cHead) != Character.toLowerCase(cTail)) {
+                    return false;
+                }
+                head++;
+                tail--;
+            }
+        }
+
+        return true;
+    }
+
+
     // 136
     public int singleNumber(int[] nums) {
         int res = 0;
@@ -254,6 +306,54 @@ public class EasyQuestion {
             res ^= i;
         }
         return res;
+    }
+
+    // 155
+    public class MinStack {
+
+        long min;
+        final Stack<Long> stack;
+
+        public MinStack() {
+            stack = new Stack<>();
+        }
+
+        public void push(int x) {
+            if (stack.isEmpty()) {
+                stack.push(0L);
+                min = x;
+            } else {
+                stack.push(
+                    x - min); // need to change to previous min during pop if x is smaller than min
+                if (x < min) {
+                    min = x;
+                }
+            }
+        }
+
+        public void pop() {
+            if (stack.isEmpty()) {
+                return;
+            }
+            final long pop = stack.pop();
+            if (pop < 0) {
+                min = min - pop; // If negative, increase the min value
+            }
+
+        }
+
+        public int top() {
+            final long top = stack.peek();
+            if (top > 0) {
+                return (int) (top + min);
+            } else {
+                return (int) (min);
+            }
+        }
+
+        public int getMin() {
+            return (int) min;
+        }
     }
 
     // 167 TwoSumSorted
@@ -313,6 +413,21 @@ public class EasyQuestion {
             curr = curr.next;
         }
         return fakeHead.next;
+    }
+
+    // 204 Count Primes
+    public int countPrimes(int n) {
+        int res = 0;
+        boolean[] notPrime = new boolean[n];
+        for (int i = 2; i < n; i++) {
+            if (notPrime[i] == false) {
+                res++;
+                for (int j = 2; i * j < n; j++) {
+                    notPrime[i * j] = true;
+                }
+            }
+        }
+        return res;
     }
 
     // 205 Isomorphic
@@ -446,6 +561,25 @@ public class EasyQuestion {
         while ((root.val - p.val) * (root.val - q.val) > 0)
             root = p.val < root.val ? root.left : root.right;
         return root;
+    }
+
+
+    // 278
+    private boolean isBadVersion(int n) {
+        return true;
+    }
+    // binary search
+    public int firstBadVersion(int n) {
+        int low = 1, high = n;
+        while (low < high) {
+            int mid = low + (high - low) / 2;
+            if (isBadVersion(mid)) {
+                high = mid;
+            } else {
+                low = mid + 1;
+            }
+        }
+        return low;
     }
 
     // 283. Move Zero
