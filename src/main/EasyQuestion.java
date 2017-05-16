@@ -1,11 +1,13 @@
 package main;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
+import java.util.List;
 
 public class EasyQuestion {
     // 9
@@ -563,6 +565,20 @@ public class EasyQuestion {
         return root;
     }
 
+    // 266 return true if permutation of string can be a palindrome
+    public boolean canPermutePalindrome(String s) {
+        HashSet<Character> h = new HashSet<Character>();
+        char[] arr = s.toCharArray();
+        for (char c : arr) {
+            if (h.contains(c)) {
+                h.remove(c);
+            } else {
+                h.add(c);
+            }
+        }
+        return h.size() < 2;
+    }
+
 
     // 278
     private boolean isBadVersion(int n) {
@@ -616,6 +632,14 @@ public class EasyQuestion {
             }
         }
         return true;
+    }
+
+    // 293
+    public List<String> generatePossibleNextMoves(String s) {
+        List list = new ArrayList();
+        for (int i=-1; (i = s.indexOf("++", i+1)) >= 0; )
+            list.add(s.substring(0, i) + "--" + s.substring(i+2));
+        return list;
     }
 
     // 326 Power of Three
