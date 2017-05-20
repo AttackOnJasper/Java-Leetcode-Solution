@@ -565,6 +565,35 @@ public class EasyQuestion {
         return root;
     }
 
+
+    // 252 Meeting rooms
+    private class Interval {
+        int start;
+        int end;
+    }
+
+    public boolean canAttendMeetings(Interval[] intervals) {
+        int len=intervals.length;
+        if(len==0){
+            return true;
+        }
+        int[]begin=new int[len];
+        int[]stop=new int[len];
+        for(int i=0;i<len;i++){
+            begin[i]=intervals[i].start;
+            stop[i]=intervals[i].end;
+        }
+        Arrays.sort(begin);
+        Arrays.sort(stop);
+        for(int i=1;i<len;i++){
+            if(begin[i]<stop[i-1]){
+                return false;
+            }
+        }
+        return true;
+    }
+
+
     // 266 return true if permutation of string can be a palindrome
     public boolean canPermutePalindrome(String s) {
         HashSet<Character> h = new HashSet<Character>();
@@ -579,6 +608,14 @@ public class EasyQuestion {
         return h.size() < 2;
     }
 
+    // 270 Closest Binary Search Tree Value
+    public int closestValue(TreeNode root, double target) {
+        int a = root.val;
+        TreeNode child = (a < target) ? root.right : root.left;
+        if (child == null) return a;
+        int b = closestValue(child, target);
+        return Math.abs(a - target) < Math.abs(b - target) ? a : b;
+    }
 
     // 278
     private boolean isBadVersion(int n) {
@@ -657,6 +694,24 @@ public class EasyQuestion {
     }
 
 
+    // 366 find leaves on nodes
+    public class findLeavesSolution {
+        final List<List<Integer>> res = new ArrayList<>();
+        public List<List<Integer>> findLeaves(TreeNode root) {
+            findLeavesHelper(root);
+            return res;
+        }
+
+        private int findLeavesHelper(TreeNode root) {
+            if (root == null) return -1;
+            final int level = 1 + Math.max(findLeavesHelper(root.left), findLeavesHelper(root.right));
+            if (res.size() <= level) {
+                res.add(new ArrayList<>());
+            }
+            res.get(level).add(root.val);
+            return level;
+        }
+    }
 
     // 367 perfect square
     // sequence 1 + 3 + 5 + 7
@@ -763,6 +818,17 @@ public class EasyQuestion {
             carry = (d1 + d2 + carry) / 10;
         }
         return sb.reverse().toString();
+    }
+
+    // 422 Valid Word Square
+    public boolean validWordSquare(List<String> words) {
+        for (int i = 0, size = words.size(); i < size; i++) {
+            String temp = words.get(i);
+            for (int j = 0, len = temp.length(); j < len; j++) {
+                if (size <= j || words.get(j).length() <= i || words.get(j).charAt(i) != temp.charAt(j)) return false;
+            }
+        }
+        return true;
     }
 
     // 434

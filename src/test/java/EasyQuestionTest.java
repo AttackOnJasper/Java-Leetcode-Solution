@@ -2,7 +2,10 @@ package test.java;
 
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertFalse;
 
+import java.util.ArrayList;
+import java.util.List;
 import main.EasyQuestion;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,6 +54,14 @@ public class EasyQuestionTest {
     assertEquals("1a", easyQuestion.toHex(26));
   }
 
+  // 422
+  @Test
+  public void testValidSquare() {
+    final List<String> l = new ArrayList<>();
+    l.add("abc");
+    l.add("b");
+    assertFalse(easyQuestion.validWordSquare(l));
+  }
   // 461
   @Test
   public void testHammingDistance() {
