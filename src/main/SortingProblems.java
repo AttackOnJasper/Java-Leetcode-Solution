@@ -35,6 +35,7 @@ public class SortingProblems {
         return arr;
     }
 
+    // quick select
     public int selectK(int[] arr, int k) {
         if (arr.length < 10) {
             return selectKShort(arr, k);

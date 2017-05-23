@@ -1,13 +1,94 @@
 package main;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
+
 
 public class MediumQuestion {
+    public void bfs(TreeNode root) {
+        Queue<TreeNode> q = new ArrayDeque<TreeNode>();
+        HashSet<Integer> visited = new HashSet<>();
+        q.add(root);
+        while (!q.isEmpty()) {
+            root = q.poll();
+            System.out.print(root.val);
+            if (!visited.contains(root.val)) {
+                visited.add(root.val);
+                q.add(root.left);
+                q.add(root.right);
+            }
+        }
+    }
+
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> res = new ArrayList<Integer>();
+        Stack<TreeNode> s = new Stack<TreeNode>();
+        s.push(root);
+        while (!s.isEmpty()) {
+            root = s.peek();
+            if (root.left == null && root.right == null) {
+                s.pop();
+                res.add(root.val);
+            } else {
+                if (root.right != null) {
+                    s.push(root.right);
+                    root.right = null;
+                }
+                if (root.left != null) {
+                    s.push(root.left);
+                    root.left = null;
+                }
+            }
+        }
+        return res;
+    }
+
+    // 94
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> res = new ArrayList<Integer>();
+        Stack<TreeNode> s = new Stack<TreeNode>();
+        while (root != null || !s.isEmpty()) {
+            while (root != null) {
+                s.push(root);
+                root = root.left;
+            }
+            root = s.pop();
+            res.add(root.val);
+            root = root.right;
+        }
+        return res;
+    }
+
+    // 114
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> res = new ArrayList<Integer>();
+        Stack<TreeNode> s = new Stack<TreeNode>();
+        while (root != null || !s.isEmpty()) {
+            while (root != null) {
+                res.add(root.val);
+                s.push(root);
+                root = root.left;
+            }
+            root = s.pop();
+            root = root.right;
+        }
+        return res;
+    }
+
+    public List<Integer> preorderTraversal2(TreeNode root) {
+        List<Integer> res = new ArrayList<Integer>();
+        Stack<TreeNode> s = new Stack<TreeNode>();
+        s.add(root);
+        while (!s.isEmpty()) {
+            root = s.pop();
+            if (root != null) {
+                res.add(root.val);
+                s.push(root.right);
+                s.push(root.left);
+            }
+        }
+        return res;
+    }
+
     // 338
     public int[] countBits(int num) {
         int[] res = new int[num + 1];
