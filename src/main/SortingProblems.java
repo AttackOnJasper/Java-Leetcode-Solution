@@ -53,6 +53,25 @@ public class SortingProblems {
         return selectK(right.stream().mapToInt(i -> i).toArray(), k - left.size());
     }
 
+    public int selectK2(int[] A, int k, int start, int end) {
+        int l = start, r = end, pivot = A[(l+r)/2];
+        while (l<=r) {
+            while (A[l] < pivot) l++;
+            while (A[r] > pivot) r--;
+            if (l>=r) break;
+            swap(A, l++, r--);
+        }
+        if (l-start+1 > k) return selectK2(A, k, start, l-1);
+        if (l-start+1 == k && l==r) return A[l];
+        return selectK2(A, k-r+start-1, r+1, end);
+    }
+
+    private void swap(int[] A, int i, int j) {
+        int temp = A[i];
+        A[i] = A[j];
+        A[j] = temp;
+    }
+
     private int findPivot(int[] arr) {
         int[] groupsOf5 = new int[arr.length / 5 + 1];
         for (int i = 0, j = 0; i < arr.length; i += 5, j++) {
