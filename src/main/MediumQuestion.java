@@ -96,6 +96,29 @@ public class MediumQuestion {
         return res;
     }
 
+    // 347
+    public static List<Integer> topKFrequent(int[] nums, int k) {
+        List<Integer>[] buckets = new List[nums.length + 1];
+        HashMap<Integer, Integer> m = new HashMap<Integer, Integer>();
+        for (int n : nums) {
+            m.put(n, m.getOrDefault(n, 0) + 1);
+        }
+        for (int key : m.keySet()) {
+            int freq = m.get(key);
+            if (buckets[freq] == null) {
+                buckets[freq] = new ArrayList<Integer>();
+            }
+            buckets[freq].add(key);
+        }
+        List<Integer> res = new ArrayList<>();
+        for (int pos = buckets.length - 1; pos >= 0 && res.size() < k; pos--) {
+            if (buckets[pos] != null) {
+                res.addAll(buckets[pos]);
+            }
+        }
+        return res;
+    }
+
     // 362
     public class HitCounter {
         private int[] times;
