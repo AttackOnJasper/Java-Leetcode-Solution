@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
@@ -372,8 +373,34 @@ public class EasyQuestion {
         return new int[]{i + 1, j + 1};
     }
 
-    // 191 Hamming weight
+    // 170
+    public class TwoSum {
+        Set<Integer> num;
+        Set<Integer> sum;
 
+        TwoSum() {
+            num = new HashSet<Integer>();
+            sum = new HashSet<Integer>();
+        }
+
+        public void add(int number) {
+            if (num.contains(number)) {
+                sum.add(number * 2);
+            } else {
+                num.add(number);
+                Iterator<Integer> it = num.iterator();
+                while (it.hasNext()) {
+                    sum.add(it.next() + number);
+                }
+            }
+        }
+
+        public boolean find(int value) {
+            return sum.contains(value);
+        }
+    }
+
+    // 191 Hamming weight
     // bit manipulation
     public int hammingWeight(int n) {
         int count = 0;

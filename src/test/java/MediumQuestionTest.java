@@ -15,4 +15,9 @@ public class MediumQuestionTest {
         assertEquals(1, (int)res.get(0));
         assertEquals(2, (int)res.get(1));
     }
+
+    @Test
+    public void testTernaryParser() {
+        assertEquals("F", MediumQuestion.parseTernary("T?T?F:5:3"));
+    }
 }

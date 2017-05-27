@@ -89,6 +89,34 @@ public class MediumQuestion {
         return res;
     }
 
+    // 280
+    public void wiggleSort(int[] nums) {
+        // swap between 2 consecutive numbers
+        for (int i=1; i<nums.length; i++) {
+            int a = nums[i-1];
+            if ((i%2 == 1) == (a > nums[i])) {
+                nums[i-1] = nums[i];
+                nums[i] = a;
+            }
+        }
+    }
+
+    // 311 Sparse Matrix Multiplication
+    public int[][] multiply(int[][] A, int[][] B) {
+        int rowA = A.length;
+        if (rowA == 0) return null;
+        int colA = A[0].length;
+        int colB = B[0].length;
+        int[][] res = new int[rowA][colB];
+        for (int i = 0; i < rowA; i++)
+            for (int k = 0; k < colA; k++)
+                if (A[i][k] != 0)
+                    for (int j = 0; j < colB; j++)
+                        if (B[k][j] != 0)
+                            res[i][j] += A[i][k] * B[k][j];
+        return res;
+    }
+
     // 338
     public int[] countBits(int num) {
         int[] res = new int[num + 1];
@@ -98,7 +126,7 @@ public class MediumQuestion {
 
     // 347
     public static List<Integer> topKFrequent(int[] nums, int k) {
-        List<Integer>[] buckets = new List[nums.length + 1];
+        List<Integer>[] buckets = new List[nums.length + 1];     // Bucket Sort
         HashMap<Integer, Integer> m = new HashMap<Integer, Integer>();
         for (int n : nums) {
             m.put(n, m.getOrDefault(n, 0) + 1);
@@ -153,6 +181,26 @@ public class MediumQuestion {
             return total;
         }
     }
+
+
+    // 364
+    /** Instead of multiplying by depth, add integers multiple times (by going level by level and adding the unweighted sum to the weighted sum after each level) */
+    // Input [[1, 1], 2, [1, 1]] -> output 8 (4 * 1 + 2 * 2)
+//    public int depthSumInverse(List<NestedInteger> nestedList) {
+//        int unweighted = 0, weighted = 0;
+//        while (!nestedList.isEmpty()) {
+//            List<NestedInteger> nextLevel = new ArrayList<>();
+//            for (NestedInteger ni : nestedList) {
+//                if (ni.isInteger())
+//                    unweighted += ni.getInteger();
+//                else
+//                    nextLevel.addAll(ni.getList());
+//            }
+//            weighted += unweighted;
+//            nestedList = nextLevel;
+//        }
+//        return weighted;
+//    }
 
     // 369
     private int carry = 1;
@@ -217,5 +265,102 @@ public class MediumQuestion {
             res[i] += res[i-1];
         }
         return res;
+    }
+
+    // 382
+    /** Reservoir Sampling: choose k elements from an array with unknown length */
+    public class Solution {
+        ListNode head;
+        Random randomGen = null;
+
+        /** @param head The linked list's head.
+        Note that the head is guaranteed to be not null, so it contains at least one node. */
+        public Solution(ListNode head) {
+            this.head = head;
+            this.randomGen = new Random();
+        }
+
+        /** Returns a random node's value. */
+        public int getRandom() {
+            ListNode res = null, curr = head;
+            for (int i = 1; curr != null; i++) {
+                if (randomGen.nextInt(i) == 0) { // returns a number between 0 and i - 1
+                    res = curr;
+                }
+                curr = curr.next;
+            }
+            return res.val;
+        }
+    }
+
+    // 439
+    public String parseTernary(String expression) {
+        if (expression == null || expression.length() == 0) return "";
+        Deque<Character> stack = new LinkedList<>();
+
+        for (int i = expression.length() - 1; i >= 0; i--) {
+            char c = expression.charAt(i);
+            if (!stack.isEmpty() && stack.peek() == '?') {
+
+                stack.pop(); //pop '?'
+                char first = stack.pop();
+                stack.pop(); //pop ':'
+                char second = stack.pop();
+
+                if (c == 'T') stack.push(first);
+                else stack.push(second);
+            } else {
+                stack.push(c);
+            }
+        }
+
+        return String.valueOf(stack.peek());
+    }
+
+    // 447
+    public int totalHammingDistance(int[] nums) {
+        int total = 0, n = nums.length;
+        for (int j=0;j<32;j++) {
+            int bitCount = 0;
+            for (int i=0;i<n;i++)
+                bitCount += (nums[i] >> j) & 1;
+            total += bitCount*(n - bitCount);
+        }
+        return total;
+    }
+
+    // 503
+    public int[] nextGreaterElements(int[] nums) {
+        Stack<Integer> s = new Stack<>();
+        int n = nums.length;
+        int[] res = new int[n];
+        Arrays.fill(res, -1);
+        for (int i = 0; i < 2 * n; i++) {
+            int num = nums[i % n];
+            while (!s.isEmpty() && nums[s.peek()] < num) {
+                res[s.pop()] = num;
+            }
+            if (i < n) s.push(i);
+        }
+        return res;
+    }
+
+    // 592
+    public String fractionAddition(String expression) {
+        Scanner sc = new Scanner(expression).useDelimiter("/|(?=[-+])");
+        int A = 0, B = 1;
+        while (sc.hasNext()) {
+            int a = sc.nextInt(), b = sc.nextInt();
+            A = A * b + a * B;
+            B *= b;
+            int g = gcd(A, B);
+            A /= g;
+            B /= g;
+        }
+        return A + "/" + B;
+    }
+
+    private int gcd(int a, int b) {
+        return a != 0 ? gcd(b % a, a) : Math.abs(b);
     }
 }
