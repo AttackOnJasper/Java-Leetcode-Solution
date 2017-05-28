@@ -42,6 +42,30 @@ public class MediumQuestion {
         return res;
     }
 
+    // 2. Add Two Numbers Linked List
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode res = new ListNode(0);
+        ListNode temp = res;
+        int sum = 0;
+        while (l1 != null || l2 != null) {
+            sum /= 10;
+            if (l1 != null) {
+                sum += l1.val;
+                l1 = l1.next;
+            }
+            if (l2 != null) {
+                sum += l2.val;
+                l2 = l2.next;
+            }
+            temp.next = new ListNode(sum % 10);
+            temp = temp.next;
+        }
+        if (sum / 10 == 1)
+            temp.next = new ListNode(1);
+        return res.next;
+    }
+
+
     // 94
     public List<Integer> inorderTraversal(TreeNode root) {
         List<Integer> res = new ArrayList<Integer>();
@@ -89,6 +113,77 @@ public class MediumQuestion {
         return res;
     }
 
+    // 156 Binary Tree Upside Down
+    public TreeNode upsideDownBinaryTree(TreeNode root) {
+        if(root == null || root.left == null) return root;
+        TreeNode newRoot = upsideDownBinaryTree(root.left);
+        root.left.left = root.right;
+        root.left.right = root;
+        root.left = null;
+        root.right = null;
+        return newRoot;
+    }
+
+    public TreeNode upsideDownBinaryTree2(TreeNode root) {
+        TreeNode curr = root;
+        TreeNode next = null;
+        TreeNode temp = null;
+        TreeNode prev = null;
+
+        while(curr != null) {
+            next = curr.left;
+
+            // swapping nodes now, need temp to keep the previous right child
+            curr.left = temp;
+            temp = curr.right;
+            curr.right = prev;
+
+            prev = curr;
+            curr = next;
+        }
+        return prev;
+    }
+
+
+    // 245 Shortest Word Distance III
+    public static int shortestWordDistance(String[] words, String word1, String word2) {
+        int i = 0, index1 = -1, index2 = -1, res = Integer.MAX_VALUE;
+        boolean flag = word1.equals(word2);
+        while (i < words.length) {
+            if (words[i].equals(word1)) {
+                if (flag) {
+                    index2 = index1;
+                }
+                index1 = i;
+            } else if (words[i].equals(word2)) {
+                index2 = i;
+            }
+            if (index1 != -1 && index2 != -1) {
+                res = Math.min(res, Math.abs(index1 - index2));
+            }
+            i++;
+        }
+        return res;
+    }
+
+    // 250 Count Univalue Subtrees
+    int res = 0;
+
+    public int countUnivalSubtrees(TreeNode root) {
+        if (root == null) return 0;
+        countUnivalSubtreesHelper(root, root.val);
+        return res;
+    }
+
+    private boolean countUnivalSubtreesHelper(TreeNode root, int val) {
+        if (root == null) return true;
+        if (!countUnivalSubtreesHelper(root.left, root.val) | !countUnivalSubtreesHelper(root.right, root.val)) return false;
+        res++;
+        return root.val == val;
+    }
+
+
+
     // 280
     public void wiggleSort(int[] nums) {
         // swap between 2 consecutive numbers
@@ -100,6 +195,71 @@ public class MediumQuestion {
             }
         }
     }
+
+    // 294 Flip Game II
+    /** decides if the first player can guarantee a win
+     *  Idea 1: recursion on sub-case
+     *  Idea 2: Dynamic programming
+     * */
+    public boolean canWin(String s) {
+        if(s == null || s.length() < 2) return false;
+
+        Set<String> winSet = new HashSet<String>();
+        return canWin(s, winSet);
+    }
+
+    private boolean canWin(String s, Set<String> winSet){
+        if(winSet.contains(s)) return true;
+
+        for(int i = 0; i < s.length() - 1; i++) {
+            if(s.charAt(i) == '+' && s.charAt(i + 1) == '+') {
+
+                String sOpponent = s.substring(0, i) + "--" + s.substring(i + 2);
+                if(!canWin(sOpponent, winSet)) {
+                    winSet.add(s);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean canWin2(String s) {
+        s = s.replace('-', ' ');
+        int G = 0;
+        List<Integer> g = new ArrayList<>();
+        for (String t : s.split("[ ]+")) {
+            int p = t.length();
+            if (p == 0) continue;
+            while (g.size() <= p) {
+                char[] x = t.toCharArray();
+                int i = 0, j = g.size() - 2;
+                while (i <= j)
+                    x[g.get(i++) ^ g.get(j--)] = '-';
+                g.add(new String(x).indexOf('+'));
+            }
+            G ^= g.get(p);
+        }
+        return G != 0;
+    }
+
+
+    // 298
+    private static int max = 0;
+    public static int longestConsecutive(TreeNode root) {
+        if(root == null) return 0;
+        longestConsecutiveHelper(root, 0, root.val);
+        return max;
+    }
+
+    private static void longestConsecutiveHelper(TreeNode root, int cur, int target){
+        if(root == null) return;
+        cur = (root.val == target)? cur + 1 : 1;
+        max = Math.max(cur, max);
+        longestConsecutiveHelper(root.left, cur, root.val + 1);
+        longestConsecutiveHelper(root.right, cur, root.val + 1);
+    }
+
 
     // 311 Sparse Matrix Multiplication
     public int[][] multiply(int[][] A, int[][] B) {
@@ -115,6 +275,32 @@ public class MediumQuestion {
                         if (B[k][j] != 0)
                             res[i][j] += A[i][k] * B[k][j];
         return res;
+    }
+
+
+    // 323 Number of Connected Components in an Undirected Graph
+    /** Given n = 5 and edges = [[0, 1], [1, 2], [3, 4]], return 2 */
+    public int countComponents(int n, int[][] edges) {
+        int[] roots = new int[n];
+        for(int i = 0; i < n; i++) roots[i] = i;
+
+        for(int[] e : edges) {
+            int root1 = find(roots, e[0]);
+            int root2 = find(roots, e[1]);
+            if(root1 != root2) {
+                roots[root1] = root2;  // union
+                n--;
+            }
+        }
+        return n;
+    }
+
+    private int find(int[] roots, int id) {
+        while(roots[id] != id) {
+            roots[id] = roots[roots[id]];  // optional: path compression
+            id = roots[id];
+        }
+        return id;
     }
 
     // 338
@@ -294,7 +480,7 @@ public class MediumQuestion {
     }
 
     // 439
-    public String parseTernary(String expression) {
+    public static String parseTernary(String expression) {
         if (expression == null || expression.length() == 0) return "";
         Deque<Character> stack = new LinkedList<>();
 
