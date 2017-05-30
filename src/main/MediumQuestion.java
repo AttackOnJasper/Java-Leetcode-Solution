@@ -65,6 +65,20 @@ public class MediumQuestion {
         return res.next;
     }
 
+    // 3
+
+
+    // 5. Longest Palindromic Substring
+
+
+    // 6
+
+    // 11. Container With Most Water
+
+    // 12. Integer to Roman
+
+
+
 
     // 94
     public List<Integer> inorderTraversal(TreeNode root) {
@@ -113,6 +127,9 @@ public class MediumQuestion {
         return res;
     }
 
+
+    // 148. Sort List
+
     // 156 Binary Tree Upside Down
     public TreeNode upsideDownBinaryTree(TreeNode root) {
         if(root == null || root.left == null) return root;
@@ -145,6 +162,10 @@ public class MediumQuestion {
     }
 
 
+    // 238. Product of Array Except Self
+
+
+
     // 245 Shortest Word Distance III
     public static int shortestWordDistance(String[] words, String word1, String word2) {
         int i = 0, index1 = -1, index2 = -1, res = Integer.MAX_VALUE;
@@ -166,6 +187,25 @@ public class MediumQuestion {
         return res;
     }
 
+    // 246 Same after rotatign 180 degrees
+    public boolean isStrobogrammatic(String num) {
+        HashMap<Character, Character> h = new HashMap<>();
+        h.put('8','8');
+        h.put('1','1');
+        h.put('6','9');
+        h.put('9','6');
+        h.put('0', '0');
+
+        int l = 0, r = num.length() - 1;
+        while (l <= r) {
+            if (!h.containsKey(num.charAt(l))) return false;
+            if (h.get(num.charAt(l)) != num.charAt(r)) return false;
+            l++;
+            r--;
+        }
+        return true;
+    }
+
     // 250 Count Univalue Subtrees
     int res = 0;
 
@@ -182,11 +222,11 @@ public class MediumQuestion {
         return root.val == val;
     }
 
-
-
     // 280
     public void wiggleSort(int[] nums) {
         // swap between 2 consecutive numbers
+        // if odd index & prev > curr, swap
+        // if even index & prev < curr, swap
         for (int i=1; i<nums.length; i++) {
             int a = nums[i-1];
             if ((i%2 == 1) == (a > nums[i])) {
@@ -478,6 +518,8 @@ public class MediumQuestion {
             return res.val;
         }
     }
+
+    // 388 Longest Absolute File Path
 
     // 439
     public static String parseTernary(String expression) {
