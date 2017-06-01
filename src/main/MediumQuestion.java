@@ -2,7 +2,6 @@ package main;
 
 import java.util.*;
 
-
 public class MediumQuestion {
     public void bfs(TreeNode root) {
         Queue<TreeNode> q = new ArrayDeque<TreeNode>();
@@ -69,7 +68,33 @@ public class MediumQuestion {
 
 
     // 5. Longest Palindromic Substring
+    public String longestPalindrome(String s) {
+        if(s==null || s.length() <= 1) return s;
 
+        boolean[][] dp = new boolean[s.length()][s.length()];
+        char[] w = s.toCharArray();
+        int maxLen = 0;
+        String maxSub = null;
+
+        dp[s.length()-1][s.length()-1] = true;
+        for(int i = s.length()-2;i>=0;--i){
+            int maxJ = i;
+            for (int j = i+1; j < s.length(); j++) {
+                if(w[j] == w[i] && (j<i+3 || dp[i+1][j-1])){
+                    dp[i][j] = true;
+                    maxJ = j;
+                }else{
+                    dp[i][j] = false;
+                }
+            }
+
+            if(maxJ - i+1 > maxLen){
+                maxLen = maxJ - i+1;
+                maxSub = s.substring(i,maxJ+1);
+            }
+        }
+        return maxSub;
+    }
 
     // 6
 
@@ -571,6 +596,24 @@ public class MediumQuestion {
             if (i < n) s.push(i);
         }
         return res;
+    }
+
+
+    // 516
+    public int longestPalindromeSubseq(String s) {
+        int[][] dp = new int[s.length()][s.length()];
+
+        for (int i = s.length() - 1; i >= 0; i--) {
+            dp[i][i] = 1;
+            for (int j = i+1; j < s.length(); j++) {
+                if (s.charAt(i) == s.charAt(j)) {
+                    dp[i][j] = dp[i+1][j-1] + 2;
+                } else {
+                    dp[i][j] = Math.max(dp[i+1][j], dp[i][j-1]);
+                }
+            }
+        }
+        return dp[0][s.length()-1];
     }
 
     // 592

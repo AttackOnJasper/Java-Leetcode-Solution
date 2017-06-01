@@ -24,6 +24,38 @@ public class EasyQuestion {
         return (x == rev || x == rev / 10);
     }
 
+    // 13
+    public static int romanToInt(String s) {
+        int res = 0;
+        for (int i = s.length() - 1; i >= 0; i--) {
+            char c = s.charAt(i);
+            switch (c) {
+                case 'I':
+                    res += (res >= 5 ? -1 : 1);
+                    break;
+                case 'V':
+                    res += 5;
+                    break;
+                case 'X':
+                    res += 10 * (res >= 50 ? -1 : 1);
+                    break;
+                case 'L':
+                    res += 50;
+                    break;
+                case 'C':
+                    res += 100 * (res >= 500 ? -1 : 1);
+                    break;
+                case 'D':
+                    res += 500;
+                    break;
+                case 'M':
+                    res += 1000;
+                    break;
+            }
+        }
+        return res;
+    }
+
     // 20
     public boolean isValid(String s) {
         char[] arr = s.toCharArray();
@@ -936,6 +968,20 @@ public class EasyQuestion {
         return i;
     }
 
+    // 448. Find All Numbers Disappeared in an Array
+    public List<Integer> findDisappearedNumbers(int[] nums) {
+        List<Integer> res = new ArrayList<Integer>();
+        for (int i = 0; i < nums.length; i++) {
+            int val = Math.abs(nums[i]) - 1;
+            if (nums[val] > 0) {
+                nums[val] = -nums[val];
+            }
+        }
+        for (int i = 0; i < nums.length; i++)
+            if (nums[i] > 0)
+                res.add(i + 1);
+        return res;
+    }
 
     // 459 Repeated Substring pattern
     public boolean repeatedSubstringPattern(String s) {
@@ -1030,18 +1076,18 @@ public class EasyQuestion {
     }
 
     // 496 Next Greater Element
+    /** Use a stack to store a decreasing subsequence, and pop all items that is smaller than the next item */
     public int[] nextGreaterElement(int[] findNums, int[] nums) {
-        Map<Integer, Integer> map = new HashMap<>();
-        Stack<Integer> stack = new Stack<>();
-        for (int i = nums.length - 1; i >= 0; i--) {
-            while (!stack.empty() && nums[i] > stack.peek()) {
-                stack.pop();
+        Map<Integer, Integer> map = new HashMap<>();  // store the integer and its next greater integer
+        Stack<Integer> s = new Stack<Integer>();
+        for (int n : nums) {
+            while (!s.isEmpty() && s.peek() < n) {
+                map.put(s.pop(), n);
             }
-            map.put(nums[i], (stack.empty()) ? -1 : stack.peek());
-            stack.push(nums[i]);
+            s.push(n);
         }
         for (int i = 0; i < findNums.length; i++) {
-            findNums[i] = map.get(findNums[i]);
+            findNums[i] = map.getOrDefault(findNums[i], -1);
         }
         return findNums;
     }
