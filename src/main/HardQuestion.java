@@ -19,8 +19,8 @@ public class HardQuestion {
         if (bStart + k/2 - 1 < B.length) bMid = B[bStart + k/2 - 1];
 
         if (aMid < bMid)
-            return getkth(A, aStart + k/2, B, bStart,       k - k/2);// Check: aRight + bLeft
-        return getkth(A, aStart,       B, bStart + k/2, k - k/2);// Check: bRight + aLeft
+            return getkth(A, aStart + k/2, B, bStart, k - k/2);// Check: aRight + bLeft
+        return getkth(A, aStart, B, bStart + k/2, k - k/2);// Check: bRight + aLeft
     }
 
 }

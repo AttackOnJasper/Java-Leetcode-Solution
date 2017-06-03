@@ -106,7 +106,7 @@ public class EasyQuestion {
 
     // 53 Max subarray
 
-    // DP
+    // DP dp[i]: max subarray that ends with nums[i]
     public int maxSubArray(int[] nums) {
         if (nums.length == 0) return 0;
         int[] dp = new int[nums.length];
@@ -170,6 +170,7 @@ public class EasyQuestion {
     }
 
     // 69
+    /** Newton's method */
     public int mySqrt(int x) {
         long r = x;
         while (r*r > x)
@@ -459,7 +460,7 @@ public class EasyQuestion {
         }
     }
 
-    // 191 Hamming weight
+    // 191 Hamming weight (bitCount)
     // bit manipulation
     public int hammingWeight(int n) {
         int count = 0;
@@ -577,7 +578,7 @@ public class EasyQuestion {
         return false;
     }
 
-
+    // 344
     public String reverseString(String s){
         return new StringBuilder(s).reverse().toString();
     }
@@ -641,7 +642,7 @@ public class EasyQuestion {
     }
 
     // 235. Lowest Common Ancestor
-    /*
+    /**
      * Just walk down from the whole tree's root as long as both p and q are in the same subtree
      * (meaning their values are both smaller or both larger than root's)
      */

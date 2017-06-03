@@ -18,6 +18,7 @@ public class MediumQuestion {
         }
     }
 
+    /** push right & set right to null, push left & set left to null */
     public List<Integer> postorderTraversal(TreeNode root) {
         List<Integer> res = new ArrayList<Integer>();
         Stack<TreeNode> s = new Stack<TreeNode>();
@@ -153,6 +154,26 @@ public class MediumQuestion {
     }
 
 
+    // 139 Word Break
+    public boolean wordBreak(String s, List<String> wordDict) {
+        boolean[] d = new boolean[s.length()];
+        Arrays.fill(d, false);
+        d[0] = wordDict.contains(String.valueOf(s.charAt(0)));
+        for (int i = 1; i < d.length; i++) {
+            if (wordDict.contains(s.substring(0, i + 1))) {
+                d[i] = true;
+            } else {
+                for (int j = 0; j < i; j++) {
+                    if (d[j] && wordDict.contains(s.substring(j + 1, i + 1))) {
+                        d[i] = true;
+                    }
+                }
+            }
+        }
+        return d[d.length - 1];
+    }
+
+
     // 148. Sort List
 
     // 156 Binary Tree Upside Down
@@ -188,7 +209,19 @@ public class MediumQuestion {
 
 
     // 238. Product of Array Except Self
-
+    public int[] productExceptSelf(int[] nums) {
+        int len = nums.length, right = 1;
+        int[] res = new int[len];
+        res[0] = 1;
+        for (int i = 1; i < len; i++) {
+            res[i] = res[i-1] * nums[i-1];
+        }
+        for (int i = len - 1; i >= 0; i--) {
+            res[i] *= right;
+            right *= nums[i];
+        }
+        return res;
+    }
 
 
     // 245 Shortest Word Distance III
@@ -614,6 +647,41 @@ public class MediumQuestion {
             }
         }
         return dp[0][s.length()-1];
+    }
+
+    // 565 Array Nesting
+    public int arrayNesting(int[] nums) {
+        int res = 1;
+        for (int i = 0; i < nums.length; i++) {
+            int count = 0;
+            for (int k = i; nums[k] >= 0; count++) {
+                int ak = nums[k];
+                nums[k] = -1; // mark a[k] as visited;
+                k = ak;
+            }
+            res = Math.max(res, count);
+        }
+        return res;
+    }
+
+    // 582 Kill process
+    public List<Integer> killProcess(List<Integer> pid, List<Integer> ppid, int kill) {
+        Map<Integer, List<Integer>> map = new HashMap<>();  // store parent children relationship
+        for (int i = 0; i < pid.size(); ++i) {
+            map.putIfAbsent(ppid.get(i), new ArrayList<>());
+            map.get(ppid.get(i)).add(pid.get(i));
+        }
+        List<Integer> ans = new ArrayList<>();
+        Queue<Integer> q = new ArrayDeque<>();
+        q.add(kill);
+        while (!q.isEmpty()) {
+            int n = q.poll();
+            ans.add(n);
+            if (map.containsKey(n)) {
+                q.addAll(map.get(n));
+            }
+        }
+        return ans;
     }
 
     // 592
