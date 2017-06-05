@@ -137,7 +137,7 @@ public class MediumQuestion {
         }
         return res;
     }
-
+    // dfs
     public List<Integer> preorderTraversal2(TreeNode root) {
         List<Integer> res = new ArrayList<Integer>();
         Stack<TreeNode> s = new Stack<TreeNode>();

@@ -56,7 +56,7 @@ public class EasyQuestion {
         return res;
     }
 
-    // 20
+    // 20 Valid Parenthesis
     public boolean isValid(String s) {
         char[] arr = s.toCharArray();
         Stack<Character> stack = new Stack<Character>();
@@ -152,6 +152,7 @@ public class EasyQuestion {
     }
 
     // Greedy
+    /** find the largest difference between the sums when summing up the array from left to right */
     public int maxSubArray2(int[] nums) {
         if (nums.length == 0) {
             return 0;
@@ -177,7 +178,6 @@ public class EasyQuestion {
             r = (r + x/r) / 2;
         return (int) r;
     }
-
 
     // 83
     public ListNode deleteDuplicates(ListNode head) {
@@ -479,6 +479,28 @@ public class EasyQuestion {
             n = n >>> 2;
         }
         return count;
+    }
+
+    // 202
+    private int next(int n) {
+        int res = 0;
+        while (n != 0) {
+            int t = n % 10;
+            res += t * t;
+            n /= 10;
+        }
+        return res;
+    }
+
+    public boolean isHappy(int n) {
+        int i1 = n, i2 = next(n);
+
+        while (i2 != i1) {
+            i1 = next(i1);
+            i2 = next(next(i2));
+        }
+
+        return i1 == 1;
     }
 
 
@@ -953,6 +975,36 @@ public class EasyQuestion {
         return ("x " + s).split(" +").length - 1;
     }
 
+    // 447
+    public int numberOfBoomerangs(int[][] points) {
+        int res = 0;
+        // store the distance & number of coordinates for that distance
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int i=0; i<points.length; i++) {
+            for(int j=0; j<points.length; j++) {
+                if(i == j)
+                    continue;
+
+                int d = getDistance(points[i], points[j]);
+                map.put(d, map.getOrDefault(d, 0) + 1);
+            }
+
+            for(int val : map.values()) {
+                res += val * (val-1);
+            }
+            map.clear();
+        }
+
+        return res;
+    }
+
+    private int getDistance(int[] a, int[] b) {
+        int dx = a[0] - b[0];
+        int dy = a[1] - b[1];
+
+        return dx*dx + dy*dy;
+    }
+
     // 455 Cookie
     public int findContentChildren(int[] g, int[] s) {
         if (s.length == 0 || g.length == 0) {
@@ -1185,5 +1237,19 @@ public class EasyQuestion {
             res[i/c][i%c] = nums[i/y][i%y];
         }
         return res;
+    }
+
+    // 598. Range Addition II
+    public int maxCount(int m, int n, int[][] ops) {
+        if (ops == null || ops.length == 0) {
+            return m * n;
+        }
+        int row = Integer.MAX_VALUE, col = Integer.MAX_VALUE;
+        for(int[] op : ops) {
+            row = Math.min(row, op[0]);
+            col = Math.min(col, op[1]);
+        }
+
+        return row * col;
     }
 }
