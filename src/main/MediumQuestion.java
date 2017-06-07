@@ -603,6 +603,38 @@ public class MediumQuestion {
         return String.valueOf(stack.peek());
     }
 
+    // 445
+    /** numbers are in right order */
+    public ListNode addTwoNumbers2(ListNode l1, ListNode l2) {
+        Stack<Integer> s1 = new Stack<Integer>();
+        Stack<Integer> s2 = new Stack<Integer>();
+
+        while(l1 != null) {
+            s1.push(l1.val);
+            l1 = l1.next;
+        };
+        while(l2 != null) {
+            s2.push(l2.val);
+            l2 = l2.next;
+        }
+        ListNode res = new ListNode(0);
+        int sum = 0;
+        while (!s1.isEmpty() || !s2.isEmpty()) {
+            sum /= 10;
+            if (!s1.isEmpty()) {
+                sum += s1.pop();
+            }
+            if (!s2.isEmpty()) {
+                sum += s2.pop();
+            }
+            ListNode temp = new ListNode(sum / 10);
+            res.val = sum % 10;
+            temp.next = res;
+            res = temp;
+        }
+        return res.val == 0 ? res.next : res;
+    }
+
     // 447
     public int totalHammingDistance(int[] nums) {
         int total = 0, n = nums.length;
@@ -613,6 +645,27 @@ public class MediumQuestion {
             total += bitCount*(n - bitCount);
         }
         return total;
+    }
+
+    // 454 4Sum II
+    public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
+        Map<Integer, Integer> map = new HashMap<>();
+
+        for(int i=0; i<C.length; i++) {
+            for(int j=0; j<D.length; j++) {
+                int sum = C[i] + D[j];
+                map.put(sum, map.getOrDefault(sum, 0) + 1);
+            }
+        }
+
+        int res=0;
+        for(int i=0; i<A.length; i++) {
+            for(int j=0; j<B.length; j++) {
+                res += map.getOrDefault(-1 * (A[i]+B[j]), 0);
+            }
+        }
+
+        return res;
     }
 
     // 503
