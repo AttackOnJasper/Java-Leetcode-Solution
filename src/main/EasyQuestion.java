@@ -94,12 +94,17 @@ public class EasyQuestion {
 
     // 35 binary search
     public int searchInsert(int[] A, int target) {
-        int low = 0, high = A.length-1;
-        while(low<=high){
-            int mid = (low+high)/2;
-            if(A[mid] == target) return mid;
-            else if(A[mid] > target) high = mid-1;
-            else low = mid+1;
+        int low = 0, high = A.length - 1;
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            if (A[mid] == target) {
+                return mid;
+            }
+            if (A[mid] > target) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
         }
         return low;
     }
@@ -309,32 +314,6 @@ public class EasyQuestion {
         return reversed.equals(temp);
     }
 
-    public boolean isPalindrome2(String s) {
-        if (s.isEmpty()) {
-            return true;
-        }
-        int head = 0, tail = s.length() - 1;
-        char cHead, cTail;
-        while(head <= tail) {
-            cHead = s.charAt(head);
-            cTail = s.charAt(tail);
-            if (!Character.isLetterOrDigit(cHead)) {
-                head++;
-            } else if(!Character.isLetterOrDigit(cTail)) {
-                tail--;
-            } else {
-                if (Character.toLowerCase(cHead) != Character.toLowerCase(cTail)) {
-                    return false;
-                }
-                head++;
-                tail--;
-            }
-        }
-
-        return true;
-    }
-
-
     // 136
     public int singleNumber(int[] nums) {
         int res = 0;
@@ -526,12 +505,26 @@ public class EasyQuestion {
         return fakeHead.next;
     }
 
+    public ListNode removeElements3(ListNode head, int val) {
+        if (head == null) return null;
+        ListNode cur = head;
+        while (cur.next != null) {
+            if (cur.next.val == val) {
+                cur.next = cur.next.next;
+            } else {
+                cur = cur.next;
+            }
+        }
+        return head.val == val ? head.next : head;
+    }
+
+
     // 204 Count Primes
     public int countPrimes(int n) {
         int res = 0;
         boolean[] notPrime = new boolean[n];
         for (int i = 2; i < n; i++) {
-            if (notPrime[i] == false) {
+            if (!notPrime[i]) {
                 res++;
                 for (int j = 2; i * j < n; j++) {
                     notPrime[i * j] = true;
@@ -547,10 +540,11 @@ public class EasyQuestion {
         if (sLen != tLen) return false;
         int[] cs = new int[128], ct = new int[128];
         for (int i = 0; i < sLen; i++) {
+            /** check if the first index of corresponding char matches */
             if (cs[s.charAt(i)] != ct[t.charAt(i)]) return false;
             if (cs[s.charAt(i)] == 0) {
-                cs[s.charAt(i)] = i + 1;
-                ct[t.charAt(i)] = i + 1;
+                cs[s.charAt(i)] = i;
+                ct[t.charAt(i)] = i;
             }
         }
         return true;
