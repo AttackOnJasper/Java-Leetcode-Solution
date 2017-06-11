@@ -4,6 +4,18 @@ import java.util.*;
 
 public class ArrayQuestion {
 
+    // 26 Remove Duplicates
+    public int removeDuplicates(int[] nums) {
+        if (nums.length == 1) return 1;
+        int newLength = 1;
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] != nums[i-1]) {
+                nums[newLength++] = nums[i];
+            }
+        }
+        return newLength;
+    }
+
     // 35 binary search
     public int searchInsert(int[] A, int target) {
         int low = 0, high = A.length - 1;
@@ -220,6 +232,17 @@ public class ArrayQuestion {
             }
         }
         return rets;
+    }
+
+    // 268 the Missing Number from 0 to n in a n-size array
+    public int missingNumber(int[] nums) {
+        int res = 0;
+        for (int i = 0; i < nums.length; i++) {
+            res ^= nums[i];
+            res ^= i;
+        }
+        res ^= nums.length;
+        return res;
     }
 
     // 280
@@ -471,5 +494,24 @@ public class ArrayQuestion {
         }
 
         return row * col;
+    }
+
+    // 605
+    // place flowers s.t. no flowers are adjacent to each other
+    public boolean canPlaceFlowers(int[] flowerbed, int n) {
+        int count = 0;
+        for(int i = 0; i < flowerbed.length && count < n; i++) {
+            if(flowerbed[i] == 0) {
+                //get next and prev flower bed slot values. If i lies at the ends the next and prev are considered as 0.
+                int next = (i == flowerbed.length - 1) ? 0 : flowerbed[i + 1];
+                int prev = (i == 0) ? 0 : flowerbed[i - 1];
+                if(next == 0 && prev == 0) {
+                    flowerbed[i] = 1;
+                    count++;
+                }
+            }
+        }
+
+        return count == n;
     }
 }
