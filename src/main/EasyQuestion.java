@@ -92,88 +92,6 @@ public class EasyQuestion {
         }
     }
 
-    // 35 binary search
-    public int searchInsert(int[] A, int target) {
-        int low = 0, high = A.length - 1;
-        while (low <= high) {
-            int mid = (low + high) / 2;
-            if (A[mid] == target) {
-                return mid;
-            }
-            if (A[mid] > target) {
-                high = mid - 1;
-            } else {
-                low = mid + 1;
-            }
-        }
-        return low;
-    }
-
-    // 53 Max subarray
-
-    // DP dp[i]: max subarray that ends with nums[i]
-    public int maxSubArray(int[] nums) {
-        if (nums.length == 0) return 0;
-        int[] dp = new int[nums.length];
-        dp[0] = nums[0];
-        int res = dp[0];
-        for (int i = 1; i < nums.length; i++) {
-            dp[i] = nums[i] + (dp[i-1] > 0 ? dp[i-1] : 0);
-            res = Math.max(res, dp[i]);
-        }
-        return res;
-    }
-
-    // Divide-and-Conquer
-    public int maxSubArray1(int[] nums) {
-        if (nums.length == 0) return 0;
-        return maxSubArray1Helper(nums, 0, nums.length - 1);
-    }
-
-    private int maxSubArray1Helper(final int[] nums, final int low, final int high) {
-        if (low >= high) {
-            return nums[low];
-        }
-        final int mid = (low + high) / 2;
-        final int leftans = maxSubArray1Helper(nums, low, mid);
-        final int rightans = maxSubArray1Helper(nums, mid + 1, high);
-        int leftmax = nums[mid];
-        int rightmax = nums[mid + 1];
-        int temp = 0;
-        for (int i = mid; i >= low; i--) {
-            temp += nums[i];
-            if (temp > leftmax) {
-                leftmax = temp;
-            }
-        }
-        temp = 0;
-        for (int i = mid + 1; i <= high; i++) {
-            temp += nums[i];
-            if (temp > rightmax) {
-                rightmax = temp;
-            }
-        }
-        return Math.max(Math.max(rightans, leftans), rightmax + leftmax);
-    }
-
-    // Greedy
-    /** find the largest difference between the sums when summing up the array from left to right */
-    public int maxSubArray2(int[] nums) {
-        if (nums.length == 0) {
-            return 0;
-        }
-        int sum = 0, min = 0, res = nums[0];
-        for (int i = 0; i < nums.length; i++) {
-            sum += nums[i];
-            if (sum - min > res) {
-                res = sum - min;
-            }
-            if (sum < min) {
-                min = sum;
-            }
-        }
-        return res;
-    }
 
     // 69
     /** Newton's method */
@@ -203,124 +121,19 @@ public class EasyQuestion {
     }
 
 
-    // 88
-    public void merge1(int[] nums1, int m, int[] nums2, int n) {
-        int i = 0, j = 0, newIndex = 0;
-        int[] temp = nums1.clone();
-        while (i < m && j < n) {
-            if (temp[i] <= nums2[j]) {
-                nums1[newIndex++] = temp[i++];
-            } else {
-                nums1[newIndex++] = nums2[j++];
-            }
-        }
-        while (i < m) {
-            nums1[newIndex++] = temp[i++];
-        }
-        while (j < n) {
-            nums1[newIndex++] = nums2[j++];
-        }
-    }
 
-    public void merge2(int[] nums1, int m, int[] nums2, int n) {
-        int i = m - 1, j = n -1, newIndex = m + n -1;
-        while (i >= 0 && j >= 0) {
-            if (nums1[i] > nums2[j]) {
-                nums1[newIndex--] = nums1[i--];
-            } else {
-                nums1[newIndex--] = nums2[j--];
-            }
-        }
-        while (i >= 0) {
-            nums1[newIndex--] = nums1[i--];
-        }
-        while (j >= 0) {
-            nums1[newIndex--] = nums2[j--];
-        }
-    }
 
-    public void merge3(int[] nums1, int m, int[] nums2, int n) {
-        while (n > 0) {
-            nums1[m + n - 1] = (m == 0 || nums2[n - 1] > nums1[m - 1]) ? nums2[--n] : nums1[--m];
-        }
-    }
 
-    // 101
-    public boolean isSymmetric(TreeNode root) {
-        return root == null || isSymmetricHelper(root.left, root.right);
-    }
 
-    private boolean isSymmetricHelper(TreeNode left, TreeNode right) {
-        if (left == null || right == null) return left == right;
-        if (left.val != right.val) return false;
-        return isSymmetricHelper(left.left, right.right) && isSymmetricHelper(right.left, left.right);
-    }
 
-    // 104
-    public int maxDepth(TreeNode root) {
-        return root == null? 0 : 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
-    }
 
-    // 108 Sorted Array to BST
-    public TreeNode sortedArrayToBST(int[] num) {
-        if (num.length == 0) return null;
-        return sortedArrayToBSTHelper(num, 0, num.length - 1);
-    }
 
-    private TreeNode sortedArrayToBSTHelper(int[] num, int low, int high) {
-        if (low > high) {
-            return null;
-        }
-        int mid = (low + high) / 2;
-        TreeNode res = new TreeNode(num[mid]);
-        res.left = sortedArrayToBSTHelper(num, low, mid - 1);
-        res.right = sortedArrayToBSTHelper(num, mid + 1, high);
-        return res;
-    }
-
-    // 110
-    public boolean isBalanced(TreeNode root) {
-        return isBalancedHelper(root) != -1;
-    }
-
-    private int isBalancedHelper(TreeNode root) {
-        if (root == null) return 0;
-        int left = isBalancedHelper(root.left);
-        if (left == -1) return -1;
-        int right = isBalancedHelper(root.right);
-        if (right == -1) return -1;
-        if (Math.abs(left - right) > 1) return -1;
-        return 1 + Math.max(left, right);
-    }
-
-    // 111
-    public int minDepth(TreeNode root) {
-        if (root == null) {
-            return 0;
-        }
-        if (root.left == null) {
-            return minDepth(root.right) + 1;
-        }
-        if (root.right == null) {
-            return minDepth(root.left) + 1;
-        }
-        return Math.min(minDepth(root.left), minDepth(root.right)) + 1;
-    }
 
     // 125
     public boolean isPalindrome(String s) {
         String temp = s.replaceAll("[^A-Za-z0-9]", "").toLowerCase();
         String reversed = new StringBuffer(temp).reverse().toString();
         return reversed.equals(temp);
-    }
-
-    // 136
-    public int singleNumber(int[] nums) {
-        int res = 0;
-        for (int i : nums) {
-            res ^= i;
-        }
-        return res;
     }
 
     // 155
@@ -574,26 +387,6 @@ public class EasyQuestion {
         return newHead;
     }
 
-    // 216
-    public TreeNode invertTree(TreeNode root) {
-        if (root == null) return null;
-        TreeNode newLeft = invertTree(root.right);
-        TreeNode newRight = invertTree(root.left);
-        root.left = newLeft;
-        root.right = newRight;
-        return root;
-    }
-
-    // 219
-    public boolean containsNearbyDuplicate(int[] nums, int k) {
-        Set<Integer> set = new HashSet<Integer>();
-        for(int i = 0; i < nums.length; i++){
-            if(i > k) set.remove(nums[i-k-1]);
-            if(!set.add(nums[i])) return true;
-        }
-        return false;
-    }
-
     // 344
     public String reverseString(String s){
         return new StringBuilder(s).reverse().toString();
@@ -657,16 +450,7 @@ public class EasyQuestion {
         return prev;
     }
 
-    // 235. Lowest Common Ancestor
-    /**
-     * Just walk down from the whole tree's root as long as both p and q are in the same subtree
-     * (meaning their values are both smaller or both larger than root's)
-     */
-    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        while ((root.val - p.val) * (root.val - q.val) > 0)
-            root = p.val < root.val ? root.left : root.right;
-        return root;
-    }
+
 
 
     // 252 Meeting rooms
@@ -696,19 +480,7 @@ public class EasyQuestion {
         return true;
     }
 
-    // 256. Paint House
-    public int minCost(int[][] costs) {
-        int n = costs.length;
-        if (n == 0) return 0;
-        int[][] d = new int[n][3];
-        d[0] = costs[0];
-        for (int i = 1; i < n; i++) {
-            d[i][0] = costs[i][0] + Math.min(d[i-1][1], d[i-1][2]);
-            d[i][1] = costs[i][1] + Math.min(d[i-1][0], d[i-1][2]);
-            d[i][2] = costs[i][2] + Math.min(d[i-1][0], d[i-1][1]);
-        }
-        return Math.min(d[n-1][0], Math.min(d[n-1][1], d[n-1][2]));
-    }
+
 
     // 266 return true if permutation of string can be a palindrome
     public boolean canPermutePalindrome(String s) {
@@ -724,35 +496,13 @@ public class EasyQuestion {
         return h.size() < 2;
     }
 
-    // 276 Faint Fence
-    /** Return the total number of ways to paint n posts given k colors s.t. no more than 2 adjacent
-     * posts have the same color
-     * */
-    public int numWays(int n, int k) {
-        if(n == 0) return 0;
-        if(n == 1) return k;
-        int diffColorCounts = k*(k-1);
-        int sameColorCounts = k;
-        for(int i=2; i<n; i++) {
-            int temp = diffColorCounts;
-            diffColorCounts = (diffColorCounts + sameColorCounts) * (k-1);
-            sameColorCounts = temp;
-        }
-        return diffColorCounts + sameColorCounts;
-    }
 
-    // 270 Closest Binary Search Tree Value
-    public int closestValue(TreeNode root, double target) {
-        int a = root.val;
-        TreeNode child = (a < target) ? root.right : root.left;
-        if (child == null) return a;
-        int b = closestValue(child, target);
-        return Math.abs(a - target) < Math.abs(b - target) ? a : b;
-    }
+
+
 
     // 278
     private boolean isBadVersion(int n) {
-        return true;
+        return n % 2 == 0;
     }
     // binary search
     public int firstBadVersion(int n) {
@@ -768,18 +518,6 @@ public class EasyQuestion {
         return low;
     }
 
-    // 283. Move Zero
-    public void moveZeroes(int[] nums) {
-        int i = 0;
-        for (int n : nums) {
-            if (n != 0) {
-                nums[i++] = n;
-            }
-        }
-        for (; i < nums.length; i++) {
-            nums[i] = 0;
-        }
-    }
 
     // 290 Word Pattern
     public boolean wordPattern(String pattern, String str) {
@@ -827,24 +565,7 @@ public class EasyQuestion {
     }
 
 
-    // 366 find leaves on nodes
-    public class findLeavesSolution {
-        final List<List<Integer>> res = new ArrayList<>();
-        public List<List<Integer>> findLeaves(TreeNode root) {
-            findLeavesHelper(root);
-            return res;
-        }
 
-        private int findLeavesHelper(TreeNode root) {
-            if (root == null) return -1;
-            final int level = 1 + Math.max(findLeavesHelper(root.left), findLeavesHelper(root.right));
-            if (res.size() <= level) {
-                res.add(new ArrayList<>());
-            }
-            res.get(level).add(root.val);
-            return level;
-        }
-    }
 
     // 367 perfect square
     // sequence 1 + 3 + 5 + 7
@@ -905,29 +626,6 @@ public class EasyQuestion {
         return res;
     }
 
-    // 404 Sum of Left Leaves
-    public int sumOfLeftLeaves(TreeNode root) {
-        if(root == null) return 0;
-        int ans = 0;
-        Stack<TreeNode> stack = new Stack<>();
-        stack.push(root);
-
-        while(!stack.empty()) {
-            TreeNode node = stack.pop();
-            if(node.left != null) {
-                if (node.left.left == null && node.left.right == null)
-                    ans += node.left.val;
-                else
-                    stack.push(node.left);
-            }
-            if(node.right != null) {
-                if (node.right.left != null || node.right.right != null)
-                    stack.push(node.right);
-            }
-        }
-        return ans;
-    }
-
     // 405 Num to Hex
     private char[] map = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
 
@@ -965,6 +663,7 @@ public class EasyQuestion {
     }
 
     // 434
+    /** " a b c" split -> "" "a" "b" "c" */
     public int countSegments(String s) {
         return ("x " + s).split(" +").length - 1;
     }
@@ -997,37 +696,6 @@ public class EasyQuestion {
         int dy = a[1] - b[1];
 
         return dx*dx + dy*dy;
-    }
-
-    // 455 Cookie
-    public int findContentChildren(int[] g, int[] s) {
-        if (s.length == 0 || g.length == 0) {
-            return 0;
-        }
-        Arrays.sort(g);
-        Arrays.sort(s);
-        int i = 0;
-        for (int j = 0; i < g.length && j < s.length; j++) {
-            if (g[i] <= s[j]) {
-                i++;
-            }
-        }
-        return i;
-    }
-
-    // 448. Find All Numbers Disappeared in an Array
-    public List<Integer> findDisappearedNumbers(int[] nums) {
-        List<Integer> res = new ArrayList<Integer>();
-        for (int i = 0; i < nums.length; i++) {
-            int val = Math.abs(nums[i]) - 1;
-            if (nums[val] > 0) {
-                nums[val] = -nums[val];
-            }
-        }
-        for (int i = 0; i < nums.length; i++)
-            if (nums[i] > 0)
-                res.add(i + 1);
-        return res;
     }
 
     // 459 Repeated Substring pattern
@@ -1105,71 +773,6 @@ public class EasyQuestion {
         return (N + 1) >> 1;
     }
 
-    // 485 Max Consecutive Ones
-    public int findMaxConsecutiveOnes(int[] nums) {
-        if (nums == null || nums.length == 0) {
-            return -1;
-        }
-        int maxSum = 0, curSum = 0;
-        for (int i = 0; i < nums.length + 1; i++) {
-            if (i < nums.length && nums[i] == 1) {
-                curSum++;
-            } else {
-                maxSum = Math.max(curSum, maxSum);
-                curSum = 0;
-            }
-        }
-        return maxSum;
-    }
-
-    // 496 Next Greater Element
-    /** Use a stack to store a decreasing subsequence, and pop all items that is smaller than the next item */
-    public int[] nextGreaterElement(int[] findNums, int[] nums) {
-        Map<Integer, Integer> map = new HashMap<>();  // store the integer and its next greater integer
-        Stack<Integer> s = new Stack<Integer>();
-        for (int n : nums) {
-            while (!s.isEmpty() && s.peek() < n) {
-                map.put(s.pop(), n);
-            }
-            s.push(n);
-        }
-        for (int i = 0; i < findNums.length; i++) {
-            findNums[i] = map.getOrDefault(findNums[i], -1);
-        }
-        return findNums;
-    }
-
-    // 506
-    public String[] findRelativeRanks(int[] nums) {
-        if (nums == null || nums.length == 0) {
-            return new String[0];
-        }
-        int n = nums.length;
-        String[] result = new String[n];
-        Map<Integer, Integer> map = new HashMap<>();
-
-        for (int i = 0; i < n; ++i) {
-            map.put(nums[i], i);
-        }
-        Arrays.sort(nums);
-        for (int i = 0; i < n / 2; ++i) {
-            int temp = nums[i];
-            nums[i] = nums[n - i - 1];
-            nums[n - i - 1] = temp;
-        }
-
-        result[map.get(nums[0])] = "Gold Medal";
-        if (1 < n) {
-            result[map.get(nums[1])] = "Silver Medal";
-        }
-        if (2 < n) {
-            result[map.get(nums[2])] = "Bronze Medal";
-        }
-        for (int j = 3; j < n; ++j) {
-            result[map.get(nums[j])] = String.valueOf(j + 1);
-        }
-        return result;
-    }
 
     // 520 Detect Capital
     public boolean detectCapitalUse(String word) {
@@ -1207,43 +810,5 @@ public class EasyQuestion {
             ca[i] = ca[j];
             ca[j] = tmp;
         }
-    }
-
-    // 561 Array Partition
-    public int arrayPairSum(int[] nums) {
-        Arrays.sort(nums);
-        int res = 0;
-        for (int i = 0; i < nums.length; i += 2) {
-            res += nums[i];
-        }
-        return res;
-    }
-
-    // 566 Matrix Reshape
-    public int[][] matrixReshape(int[][] nums, int r, int c) {
-        int x = nums.length;
-        int y = nums[0].length;
-        if (x * y != r * c) {
-            return nums;
-        }
-        int[][] res = new int[r][c];
-        for (int i = 0; i < r * c; i++) {
-            res[i/c][i%c] = nums[i/y][i%y];
-        }
-        return res;
-    }
-
-    // 598. Range Addition II
-    public int maxCount(int m, int n, int[][] ops) {
-        if (ops == null || ops.length == 0) {
-            return m * n;
-        }
-        int row = Integer.MAX_VALUE, col = Integer.MAX_VALUE;
-        for(int[] op : ops) {
-            row = Math.min(row, op[0]);
-            col = Math.min(col, op[1]);
-        }
-
-        return row * col;
     }
 }

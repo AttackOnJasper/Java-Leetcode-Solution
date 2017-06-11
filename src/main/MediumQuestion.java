@@ -3,44 +3,6 @@ package main;
 import java.util.*;
 
 public class MediumQuestion {
-    public void bfs(TreeNode root) {
-        Queue<TreeNode> q = new ArrayDeque<TreeNode>();
-        HashSet<Integer> visited = new HashSet<>();
-        q.add(root);
-        while (!q.isEmpty()) {
-            root = q.poll();
-            System.out.print(root.val);
-            if (!visited.contains(root.val)) {
-                visited.add(root.val);
-                q.add(root.left);
-                q.add(root.right);
-            }
-        }
-    }
-
-    /** push right & set right to null, push left & set left to null */
-    public List<Integer> postorderTraversal(TreeNode root) {
-        List<Integer> res = new ArrayList<Integer>();
-        Stack<TreeNode> s = new Stack<TreeNode>();
-        s.push(root);
-        while (!s.isEmpty()) {
-            root = s.peek();
-            if (root.left == null && root.right == null) {
-                s.pop();
-                res.add(root.val);
-            } else {
-                if (root.right != null) {
-                    s.push(root.right);
-                    root.right = null;
-                }
-                if (root.left != null) {
-                    s.push(root.left);
-                    root.left = null;
-                }
-            }
-        }
-        return res;
-    }
 
     // 2. Add Two Numbers Linked List
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
@@ -68,35 +30,6 @@ public class MediumQuestion {
     // 3
 
 
-    // 5. Longest Palindromic Substring
-    public String longestPalindrome(String s) {
-        if(s==null || s.length() <= 1) return s;
-
-        boolean[][] dp = new boolean[s.length()][s.length()];
-        char[] w = s.toCharArray();
-        int maxLen = 0;
-        String maxSub = null;
-
-        dp[s.length()-1][s.length()-1] = true;
-        for(int i = s.length()-2;i>=0;--i){
-            int maxJ = i;
-            for (int j = i+1; j < s.length(); j++) {
-                if(w[j] == w[i] && (j<i+3 || dp[i+1][j-1])){
-                    dp[i][j] = true;
-                    maxJ = j;
-                }else{
-                    dp[i][j] = false;
-                }
-            }
-
-            if(maxJ - i+1 > maxLen){
-                maxLen = maxJ - i+1;
-                maxSub = s.substring(i,maxJ+1);
-            }
-        }
-        return maxSub;
-    }
-
     // 6
 
     // 11. Container With Most Water
@@ -104,54 +37,6 @@ public class MediumQuestion {
     // 12. Integer to Roman
 
 
-
-
-    // 94
-    public List<Integer> inorderTraversal(TreeNode root) {
-        List<Integer> res = new ArrayList<Integer>();
-        Stack<TreeNode> s = new Stack<TreeNode>();
-        while (root != null || !s.isEmpty()) {
-            while (root != null) {
-                s.push(root);
-                root = root.left;
-            }
-            root = s.pop();
-            res.add(root.val);
-            root = root.right;
-        }
-        return res;
-    }
-
-    // 114
-    public List<Integer> preorderTraversal(TreeNode root) {
-        List<Integer> res = new ArrayList<Integer>();
-        Stack<TreeNode> s = new Stack<TreeNode>();
-        while (root != null || !s.isEmpty()) {
-            while (root != null) {
-                res.add(root.val);
-                s.push(root);
-                root = root.left;
-            }
-            root = s.pop();
-            root = root.right;
-        }
-        return res;
-    }
-    // dfs
-    public List<Integer> preorderTraversal2(TreeNode root) {
-        List<Integer> res = new ArrayList<Integer>();
-        Stack<TreeNode> s = new Stack<TreeNode>();
-        s.add(root);
-        while (!s.isEmpty()) {
-            root = s.pop();
-            if (root != null) {
-                res.add(root.val);
-                s.push(root.right);
-                s.push(root.left);
-            }
-        }
-        return res;
-    }
 
 
     // 139 Word Break
@@ -176,52 +61,6 @@ public class MediumQuestion {
 
     // 148. Sort List
 
-    // 156 Binary Tree Upside Down
-    public TreeNode upsideDownBinaryTree(TreeNode root) {
-        if(root == null || root.left == null) return root;
-        TreeNode newRoot = upsideDownBinaryTree(root.left);
-        root.left.left = root.right;
-        root.left.right = root;
-        root.left = null;
-        root.right = null;
-        return newRoot;
-    }
-
-    public TreeNode upsideDownBinaryTree2(TreeNode root) {
-        TreeNode curr = root;
-        TreeNode next = null;
-        TreeNode temp = null;
-        TreeNode prev = null;
-
-        while(curr != null) {
-            next = curr.left;
-
-            // swapping nodes now, need temp to keep the previous right child
-            curr.left = temp;
-            temp = curr.right;
-            curr.right = prev;
-
-            prev = curr;
-            curr = next;
-        }
-        return prev;
-    }
-
-
-    // 238. Product of Array Except Self
-    public int[] productExceptSelf(int[] nums) {
-        int len = nums.length, right = 1;
-        int[] res = new int[len];
-        res[0] = 1;
-        for (int i = 1; i < len; i++) {
-            res[i] = res[i-1] * nums[i-1];
-        }
-        for (int i = len - 1; i >= 0; i--) {
-            res[i] *= right;
-            right *= nums[i];
-        }
-        return res;
-    }
 
 
     // 245 Shortest Word Distance III
@@ -275,23 +114,10 @@ public class MediumQuestion {
 
     private boolean countUnivalSubtreesHelper(TreeNode root, int val) {
         if (root == null) return true;
+        // use | here for explicit comparison
         if (!countUnivalSubtreesHelper(root.left, root.val) | !countUnivalSubtreesHelper(root.right, root.val)) return false;
         res++;
         return root.val == val;
-    }
-
-    // 280
-    public void wiggleSort(int[] nums) {
-        // swap between 2 consecutive numbers
-        // if odd index & prev > curr, swap
-        // if even index & prev < curr, swap
-        for (int i=1; i<nums.length; i++) {
-            int a = nums[i-1];
-            if ((i%2 == 1) == (a > nums[i])) {
-                nums[i-1] = nums[i];
-                nums[i] = a;
-            }
-        }
     }
 
     // 294 Flip Game II
@@ -311,7 +137,6 @@ public class MediumQuestion {
 
         for(int i = 0; i < s.length() - 1; i++) {
             if(s.charAt(i) == '+' && s.charAt(i + 1) == '+') {
-
                 String sOpponent = s.substring(0, i) + "--" + s.substring(i + 2);
                 if(!canWin(sOpponent, winSet)) {
                     winSet.add(s);
@@ -340,24 +165,6 @@ public class MediumQuestion {
         }
         return G != 0;
     }
-
-
-    // 298
-    private static int max = 0;
-    public static int longestConsecutive(TreeNode root) {
-        if(root == null) return 0;
-        longestConsecutiveHelper(root, 0, root.val);
-        return max;
-    }
-
-    private static void longestConsecutiveHelper(TreeNode root, int cur, int target){
-        if(root == null) return;
-        cur = (root.val == target)? cur + 1 : 1;
-        max = Math.max(cur, max);
-        longestConsecutiveHelper(root.left, cur, root.val + 1);
-        longestConsecutiveHelper(root.right, cur, root.val + 1);
-    }
-
 
     // 311 Sparse Matrix Multiplication
     public int[][] multiply(int[][] A, int[][] B) {
@@ -405,29 +212,6 @@ public class MediumQuestion {
     public int[] countBits(int num) {
         int[] res = new int[num + 1];
         for (int i=1; i<=num; i++) res[i] = res[i >> 1] + (i & 1);
-        return res;
-    }
-
-    // 347
-    public static List<Integer> topKFrequent(int[] nums, int k) {
-        List<Integer>[] buckets = new List[nums.length + 1];     // Bucket Sort
-        HashMap<Integer, Integer> m = new HashMap<Integer, Integer>();
-        for (int n : nums) {
-            m.put(n, m.getOrDefault(n, 0) + 1);
-        }
-        for (int key : m.keySet()) {
-            int freq = m.get(key);
-            if (buckets[freq] == null) {
-                buckets[freq] = new ArrayList<Integer>();
-            }
-            buckets[freq].add(key);
-        }
-        List<Integer> res = new ArrayList<>();
-        for (int pos = buckets.length - 1; pos >= 0 && res.size() < k; pos--) {
-            if (buckets[pos] != null) {
-                res.addAll(buckets[pos]);
-            }
-        }
         return res;
     }
 
@@ -532,25 +316,6 @@ public class MediumQuestion {
         return dummy.val == 1 ? dummy : dummy.next;
     }
 
-
-
-    // 370
-    public int[] getModifiedArray(int length, int[][] updates) {
-        // add val at the start index and -val at the end index
-        int res[] = new int[length];
-        for (int[] update : updates) {
-            res[update[0]] += update[2];
-            int end = update[1];
-            if(end < length - 1) {
-                res[end + 1] -= update[2];
-            }
-        }
-        for (int i = 1; i < length; i++) {
-            res[i] += res[i-1];
-        }
-        return res;
-    }
-
     // 382
     /** Reservoir Sampling: choose k elements from an array with unknown length */
     public class Solution {
@@ -633,88 +398,6 @@ public class MediumQuestion {
             res = temp;
         }
         return res.val == 0 ? res.next : res;
-    }
-
-    // 447
-    public int totalHammingDistance(int[] nums) {
-        int total = 0, n = nums.length;
-        for (int j=0;j<32;j++) {
-            int bitCount = 0;
-            for (int i=0;i<n;i++)
-                bitCount += (nums[i] >> j) & 1;
-            total += bitCount*(n - bitCount);
-        }
-        return total;
-    }
-
-    // 454 4Sum II
-    public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
-        Map<Integer, Integer> map = new HashMap<>();
-
-        for(int i=0; i<C.length; i++) {
-            for(int j=0; j<D.length; j++) {
-                int sum = C[i] + D[j];
-                map.put(sum, map.getOrDefault(sum, 0) + 1);
-            }
-        }
-
-        int res=0;
-        for(int i=0; i<A.length; i++) {
-            for(int j=0; j<B.length; j++) {
-                res += map.getOrDefault(-1 * (A[i]+B[j]), 0);
-            }
-        }
-
-        return res;
-    }
-
-    // 503
-    public int[] nextGreaterElements(int[] nums) {
-        Stack<Integer> s = new Stack<>();
-        int n = nums.length;
-        int[] res = new int[n];
-        Arrays.fill(res, -1);
-        for (int i = 0; i < 2 * n; i++) {
-            int num = nums[i % n];
-            while (!s.isEmpty() && nums[s.peek()] < num) {
-                res[s.pop()] = num;
-            }
-            if (i < n) s.push(i);
-        }
-        return res;
-    }
-
-
-    // 516
-    public int longestPalindromeSubseq(String s) {
-        int[][] dp = new int[s.length()][s.length()];
-
-        for (int i = s.length() - 1; i >= 0; i--) {
-            dp[i][i] = 1;
-            for (int j = i+1; j < s.length(); j++) {
-                if (s.charAt(i) == s.charAt(j)) {
-                    dp[i][j] = dp[i+1][j-1] + 2;
-                } else {
-                    dp[i][j] = Math.max(dp[i+1][j], dp[i][j-1]);
-                }
-            }
-        }
-        return dp[0][s.length()-1];
-    }
-
-    // 565 Array Nesting
-    public int arrayNesting(int[] nums) {
-        int res = 1;
-        for (int i = 0; i < nums.length; i++) {
-            int count = 0;
-            for (int k = i; nums[k] >= 0; count++) {
-                int ak = nums[k];
-                nums[k] = -1; // mark a[k] as visited;
-                k = ak;
-            }
-            res = Math.max(res, count);
-        }
-        return res;
     }
 
     // 582 Kill process
