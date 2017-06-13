@@ -34,6 +34,31 @@ public class DPQuestion {
 
     // 120. Triangle
 
+    // 121 Best Time to buy & sell
+    public int maxProfit(int[] prices) {
+        if (prices.length == 0) return 0;
+        int[] d = new int[prices.length];
+        int min = prices[0];
+        d[0] = 0;
+        for (int i = 1; i < prices.length; i++) {
+            if (min >= prices[i]) {
+                min = prices[i];
+            }
+            d[i] = Math.max(d[i-1], prices[i] - min);
+        }
+        return d[prices.length - 1];
+    }
+
+    /** Kadane's algorithm  */
+    public int maxProfit2(int[] prices) {
+        int maxCur = 0, maxSoFar = 0;
+        for(int i = 1; i < prices.length; i++) {
+            maxCur = Math.max(0, maxCur += prices[i] - prices[i-1]);
+            maxSoFar = Math.max(maxCur, maxSoFar);
+        }
+        return maxSoFar;
+    }
+
 
     // 256. Paint House
     public int minCost(int[][] costs) {

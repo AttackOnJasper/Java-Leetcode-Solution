@@ -33,6 +33,8 @@ public class ArrayQuestion {
         return low;
     }
 
+
+
     // 53 Max subarray
 
     // DP dp[i]: max subarray that ends with nums[i]
@@ -480,6 +482,15 @@ public class ArrayQuestion {
             res[i/c][i%c] = nums[i/y][i%y];
         }
         return res;
+    }
+
+    // 581 Shortest Unsorted Continuous Subarray
+    public int findUnsortedSubarray(int[] A) {
+        int start = -1, end = -1, min = A[0], max = A[0];
+        for (int i = 0; i < A.length; i++) {
+
+        }
+        return end - start + 1;
     }
 
     // 598. Range Addition II
