@@ -6,10 +6,12 @@ public class ArrayQuestion {
 
     // 26 Remove Duplicates
     public int removeDuplicates(int[] nums) {
-        if (nums.length == 1) return 1;
+        if (nums.length == 1) {
+            return 1;
+        }
         int newLength = 1;
         for (int i = 1; i < nums.length; i++) {
-            if (nums[i] != nums[i-1]) {
+            if (nums[i] != nums[i - 1]) {
                 nums[newLength++] = nums[i];
             }
         }
@@ -33,26 +35,89 @@ public class ArrayQuestion {
         return low;
     }
 
+    // 39. Combination Sum 1
+    /** Each number can be used infinite number of times */
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        Arrays.sort(candidates);
+        List<List<Integer>> res = new ArrayList<List<Integer>>();
+        List<Integer> path = new ArrayList<Integer>();
+        dfsHelper(candidates, target, 0, path, res);
+        return res;
+    }
 
+    private void dfsHelper(int[] candidates, int target, int start, List<Integer> path, List<List<Integer>> res) {
+        if (target == 0) {
+            res.add(new ArrayList(path));
+            return;
+        }
+        if (target < 0) return;
+        for (int i = start; i < candidates.length; i++) {
+            path.add(candidates[i]);
+            dfsHelper(candidates, target - candidates[i], i, path, res); /** can re-use i element */
+            path.remove(path.size() - 1);
+        }
+    }
+
+    // 40. Combination Sum 2
+    /** each number can only be used once */
+    public List<List<Integer>> combinationSum2(int[] cand, int target) {
+        Arrays.sort(cand);
+        List<List<Integer>> res = new ArrayList<List<Integer>>();
+        List<Integer> path = new ArrayList<Integer>();
+        dfs(cand, 0, target, path, res);
+        return res;
+    }
+
+    private void dfs(int[] cand, int cur, int target, List<Integer> path, List<List<Integer>> res) {
+        if (target == 0) {
+            res.add(new ArrayList(path));  // otherwise each list would be empty
+            return;
+        }
+        if (target < 0) {
+            return;
+        }
+        for (int i = cur; i < cand.length; i++) {
+            if (i > cur && cand[i] == cand[i - 1]) {
+                continue;
+            }
+            path.add(path.size(), cand[i]);
+            dfs(cand, i + 1, target - cand[i], path, res);
+            path.remove(path.size() - 1);
+        }
+    }
 
     // 53 Max subarray
 
     // DP dp[i]: max subarray that ends with nums[i]
     public int maxSubArray(int[] nums) {
-        if (nums.length == 0) return 0;
+        if (nums.length == 0) {
+            return 0;
+        }
         int[] dp = new int[nums.length];
         dp[0] = nums[0];
         int res = dp[0];
         for (int i = 1; i < nums.length; i++) {
-            dp[i] = nums[i] + (dp[i-1] > 0 ? dp[i-1] : 0);
+            dp[i] = nums[i] + (dp[i - 1] > 0 ? dp[i - 1] : 0);
             res = Math.max(res, dp[i]);
         }
         return res;
     }
 
-    // Divide-and-Conquer
+    // another dp
     public int maxSubArray1(int[] nums) {
-        if (nums.length == 0) return 0;
+        int curMax = nums[0], maxSoFar = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            curMax = nums[i] + (curMax > 0 ? curMax : 0);
+            maxSoFar = Math.max(curMax, maxSoFar);
+        }
+        return maxSoFar;
+    }
+
+    // Divide-and-Conquer
+    public int maxSubArray2(int[] nums) {
+        if (nums.length == 0) {
+            return 0;
+        }
         return maxSubArray1Helper(nums, 0, nums.length - 1);
     }
 
@@ -83,8 +148,11 @@ public class ArrayQuestion {
     }
 
     // Greedy
-    /** find the largest difference between the sums when summing up the array from left to right */
-    public int maxSubArray2(int[] nums) {
+
+    /**
+     * find the largest difference between the sums when summing up the array from left to right
+     */
+    public int maxSubArray3(int[] nums) {
         if (nums.length == 0) {
             return 0;
         }
@@ -121,7 +189,7 @@ public class ArrayQuestion {
     }
 
     public void merge2(int[] nums1, int m, int[] nums2, int n) {
-        int i = m - 1, j = n -1, newIndex = m + n -1;
+        int i = m - 1, j = n - 1, newIndex = m + n - 1;
         while (i >= 0 && j >= 0) {
             if (nums1[i] > nums2[j]) {
                 nums1[newIndex--] = nums1[i--];
@@ -141,6 +209,21 @@ public class ArrayQuestion {
         while (n > 0) {
             nums1[m + n - 1] = (m == 0 || nums2[n - 1] > nums1[m - 1]) ? nums2[--n] : nums1[--m];
         }
+    }
+
+
+    // 119
+    public List<Integer> getRow(int rowIndex) {
+        List<Integer> res = new ArrayList<>();
+        res.add(1);
+        for (int i = 1; i < rowIndex; i++) {
+            for (int j = i - 1; j > 0; j--) {
+                int temp = res.get(j - 1) + res.get(j);
+                res.set(j, temp);
+            }
+            res.add(1);
+        }
+        return res;
     }
 
 
@@ -180,16 +263,41 @@ public class ArrayQuestion {
         return r;
     }
 
+    // 189
+    public void rotate(int[] nums, int k) {
+        k %= nums.length;
+        reverse(nums, 0, nums.length - 1);
+        reverse(nums, 0, k - 1);
+        reverse(nums, k, nums.length - 1);
+    }
+
+    private void reverse(int[] nums, int start, int end) {
+        while (start < end) {
+            int temp = nums[start];
+            nums[start] = nums[end];
+            nums[end] = temp;
+            start++;
+            end--;
+        }
+    }
+
     // 219
-    /** Given an array of integers and an integer k, find out whether there are two distinct indices
-     * i and j in the array such that nums[i] = nums[j] and the absolute difference between i and j is at most k.
+
+    /**
+     * Given an array of integers and an integer k, find out whether there are two distinct indices
+     * i and j in the array such that nums[i] = nums[j] and the absolute difference between i and j
+     * is at most k.
      */
     public boolean containsNearbyDuplicate(int[] nums, int k) {
         Set<Integer> set = new HashSet<Integer>();
-        for(int i = 0; i < nums.length; i++){
+        for (int i = 0; i < nums.length; i++) {
             // sliding window
-            if(i > k) set.remove(nums[i-k-1]);
-            if(!set.add(nums[i])) return true;
+            if (i > k) {
+                set.remove(nums[i - k - 1]);
+            }
+            if (!set.add(nums[i])) {
+                return true;
+            }
         }
         return false;
     }
@@ -200,7 +308,7 @@ public class ArrayQuestion {
         int[] res = new int[len];
         res[0] = 1;
         for (int i = 1; i < len; i++) {
-            res[i] = res[i-1] * nums[i-1];
+            res[i] = res[i - 1] * nums[i - 1];
         }
         for (int i = len - 1; i >= 0; i--) {
             res[i] *= right;
@@ -222,13 +330,11 @@ public class ArrayQuestion {
 
         // Pass 2 :
         int[] rets = {0, 0}; // this array stores the two numbers we will return
-        for (int num : nums)
-        {
+        for (int num : nums) {
             if ((num & diff) == 0) // the bit is not set
             {
                 rets[0] ^= num;
-            }
-            else // the bit is set
+            } else // the bit is set
             {
                 rets[1] ^= num;
             }
@@ -252,10 +358,10 @@ public class ArrayQuestion {
         // swap between 2 consecutive numbers
         // if odd index & prev > curr, swap
         // if even index & prev < curr, swap
-        for (int i=1; i<nums.length; i++) {
-            int a = nums[i-1];
-            if ((i%2 == 1) == (a > nums[i])) {
-                nums[i-1] = nums[i];
+        for (int i = 1; i < nums.length; i++) {
+            int a = nums[i - 1];
+            if ((i % 2 == 1) == (a > nums[i])) {
+                nums[i - 1] = nums[i];
                 nums[i] = a;
             }
         }
@@ -304,12 +410,12 @@ public class ArrayQuestion {
         for (int[] update : updates) {
             res[update[0]] += update[2];
             int end = update[1];
-            if(end < length - 1) {
+            if (end < length - 1) {
                 res[end + 1] -= update[2];
             }
         }
         for (int i = 1; i < length; i++) {
-            res[i] += res[i-1];
+            res[i] += res[i - 1];
         }
         return res;
     }
@@ -333,11 +439,12 @@ public class ArrayQuestion {
     // 447
     public int totalHammingDistance(int[] nums) {
         int total = 0, n = nums.length;
-        for (int j=0;j<32;j++) {
+        for (int j = 0; j < 32; j++) {
             int bitCount = 0;
-            for (int i=0;i<n;i++)
+            for (int i = 0; i < n; i++) {
                 bitCount += (nums[i] >> j) & 1;
-            total += bitCount*(n - bitCount);
+            }
+            total += bitCount * (n - bitCount);
         }
         return total;
     }
@@ -351,9 +458,11 @@ public class ArrayQuestion {
                 nums[val] = -nums[val];
             }
         }
-        for (int i = 0; i < nums.length; i++)
-            if (nums[i] > 0)
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] > 0) {
                 res.add(i + 1);
+            }
+        }
         return res;
     }
 
@@ -361,17 +470,17 @@ public class ArrayQuestion {
     public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
         Map<Integer, Integer> map = new HashMap<>();
 
-        for(int i=0; i<C.length; i++) {
-            for(int j=0; j<D.length; j++) {
+        for (int i = 0; i < C.length; i++) {
+            for (int j = 0; j < D.length; j++) {
                 int sum = C[i] + D[j];
                 map.put(sum, map.getOrDefault(sum, 0) + 1);
             }
         }
 
-        int res=0;
-        for(int i=0; i<A.length; i++) {
-            for(int j=0; j<B.length; j++) {
-                res += map.getOrDefault(-1 * (A[i]+B[j]), 0);
+        int res = 0;
+        for (int i = 0; i < A.length; i++) {
+            for (int j = 0; j < B.length; j++) {
+                res += map.getOrDefault(-1 * (A[i] + B[j]), 0);
             }
         }
 
@@ -396,7 +505,11 @@ public class ArrayQuestion {
     }
 
     // 496 Next Greater Element
-    /** Use a stack to store a decreasing subsequence, and pop all items that is smaller than the next item */
+
+    /**
+     * Use a stack to store a decreasing subsequence, and pop all items that is smaller than the
+     * next item
+     */
     public int[] nextGreaterElement(int[] findNums, int[] nums) {
         Map<Integer, Integer> map = new HashMap<>();  // store the integer and its next greater integer
         Stack<Integer> s = new Stack<Integer>();
@@ -423,7 +536,9 @@ public class ArrayQuestion {
             while (!s.isEmpty() && nums[s.peek()] < num) {
                 res[s.pop()] = num;
             }
-            if (i < n) s.push(i);
+            if (i < n) {
+                s.push(i);
+            }
         }
         return res;
     }
@@ -479,7 +594,7 @@ public class ArrayQuestion {
         }
         int[][] res = new int[r][c];
         for (int i = 0; i < r * c; i++) {
-            res[i/c][i%c] = nums[i/y][i%y];
+            res[i / c][i % c] = nums[i / y][i % y];
         }
         return res;
     }
@@ -499,7 +614,7 @@ public class ArrayQuestion {
             return m * n;
         }
         int row = Integer.MAX_VALUE, col = Integer.MAX_VALUE;
-        for(int[] op : ops) {
+        for (int[] op : ops) {
             row = Math.min(row, op[0]);
             col = Math.min(col, op[1]);
         }
@@ -511,12 +626,12 @@ public class ArrayQuestion {
     // place flowers s.t. no flowers are adjacent to each other
     public boolean canPlaceFlowers(int[] flowerbed, int n) {
         int count = 0;
-        for(int i = 0; i < flowerbed.length && count < n; i++) {
-            if(flowerbed[i] == 0) {
+        for (int i = 0; i < flowerbed.length && count < n; i++) {
+            if (flowerbed[i] == 0) {
                 //get next and prev flower bed slot values. If i lies at the ends the next and prev are considered as 0.
                 int next = (i == flowerbed.length - 1) ? 0 : flowerbed[i + 1];
                 int prev = (i == 0) ? 0 : flowerbed[i - 1];
-                if(next == 0 && prev == 0) {
+                if (next == 0 && prev == 0) {
                     flowerbed[i] = 1;
                     count++;
                 }
