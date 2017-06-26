@@ -640,4 +640,13 @@ public class ArrayQuestion {
 
         return count == n;
     }
+
+    // 628. Maximum Product of Three Numbers
+    public int maximumProduct(int[] nums) {
+        Arrays.sort(nums);
+        final int a = nums[nums.length - 1] * nums[nums.length - 2] * nums[nums.length - 3];
+        // there might be negative values
+        final int b = nums[0] * nums[1] * nums[nums.length - 1];
+        return a > b ? a : b;
+    }
 }
