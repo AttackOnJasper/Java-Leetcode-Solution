@@ -649,4 +649,34 @@ public class ArrayQuestion {
         final int b = nums[0] * nums[1] * nums[nums.length - 1];
         return a > b ? a : b;
     }
+
+    // 645. Set Mismatch
+    /** n size array with elements ranging from 1 to n, one element is duplicated & another element is missing; find these elements
+     */
+    public int[] findErrorNums(int[] nums) {
+        int[] res = new int[2];
+        for (int n : nums) {
+            if (nums[Math.abs(n) - 1] < 0) {
+                res[0] = Math.abs(n);
+            } else {
+                nums[Math.abs(n) - 1] *= -1;
+            }
+        }
+        for (int i=0;i<nums.length;i++) {
+            if (nums[i] > 0) res[1] = i+1;
+        }
+        return res;
+    }
+
+    public int[] findErrorNums2(int[] nums) {
+        Set<Integer> set = new HashSet<>();
+        int duplicate = 0, n = nums.length;
+        long sum = (n * (n+1)) / 2;
+        for(int i : nums) {
+            if(set.contains(i)) duplicate = i;
+            sum -= i;
+            set.add(i);
+        }
+        return new int[] {duplicate, (int)sum + duplicate};
+    }
 }

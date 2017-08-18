@@ -272,4 +272,46 @@ public class TreeQuestion {
         return ans;
     }
 
+    // 653 Two Sum IV - Input is a BST
+    /** Method 1
+     *  Use in-order traversal to store input as an array -> two pointers
+     */
+    public boolean findTarget(TreeNode root, int k) {
+        List<Integer> l = new ArrayList<>();
+        inorder(root, l);
+        int start = 0, end = l.size() - 1;
+        while (start < end) {
+            if (l.get(start) + l.get(end) == k) {
+                return true;
+            }
+            if (l.get(start) + l.get(end) < k) {
+                start++;
+            } else {
+                end--;
+            }
+        }
+        return false;
+    }
+
+    private void inorder(TreeNode root, List<Integer> l) {
+        if (root == null) return;
+        inorder(root.left, l);
+        l.add(root.val);
+        inorder(root.right, l);
+    }
+
+    /** Method 2
+     * Use hashtable to store the values
+     */
+    public boolean findTarget2(TreeNode root, int k) {
+        HashSet<Integer> set = new HashSet<>();
+        return dfs(root, set, k);
+    }
+
+    private boolean dfs(TreeNode root, HashSet<Integer> set, int k){
+        if(root == null)return false;
+        if(set.contains(k - root.val))return true;
+        set.add(root.val);
+        return dfs(root.left, set, k) || dfs(root.right, set, k);
+    }
 }
