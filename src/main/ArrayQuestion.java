@@ -226,6 +226,16 @@ public class ArrayQuestion {
         return res;
     }
 
+    // 121
+    public int maxProfit(int[] prices) {
+        int maxCur = 0, maxSoFar = 0;
+        for(int i = 1; i < prices.length; i++) {
+            maxCur = Math.max(0, maxCur + prices[i] - prices[i-1]);
+            maxSoFar = Math.max(maxCur, maxSoFar);
+        }
+        return maxSoFar;
+    }
+
 
     // 136
     public int singleNumber(int[] nums) {
@@ -281,6 +291,33 @@ public class ArrayQuestion {
         }
     }
 
+    // 216 Combination Sum
+    /**
+     * Find all possible combinations of k numbers that add up to a number n,
+     * given that only numbers from 1 to 9 can be used and each combination should be a unique set of numbers.
+     */
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        List<List<Integer>> res = new ArrayList<>();
+        combination(res, new ArrayList<>(), k, 1, n);
+        return res;
+    }
+
+    private void combination(List<List<Integer>> ans, List<Integer> comb, int k,  int start, int n) {
+        if (comb.size() > k) {
+            return;
+        }
+        if (comb.size() == k && n == 0) {
+            List<Integer> li = new ArrayList<>(comb);
+            ans.add(li);
+            return;
+        }
+        for (int i = start; i <= n && i<=9; i++) {
+            comb.add(i);
+            combination(ans, comb, k, i+1, n-i);
+            comb.remove(comb.size() - 1);
+        }
+    }
+
     // 219
 
     /**
@@ -313,6 +350,25 @@ public class ArrayQuestion {
         for (int i = len - 1; i >= 0; i--) {
             res[i] *= right;
             right *= nums[i];
+        }
+        return res;
+    }
+
+    // shortest word distance 3
+    public int shortestWordDistance(String[] words, String word1, String word2) {
+        int p1 = -1, p2 = -1, res = Integer.MAX_VALUE;
+        for (int i = 0; i < words.length; i++) {
+            if (words[i].equals(word1)) {
+                if (word1.equals(word2)) {
+                    p2 = p1;
+                }
+                p1 = i;
+            } else if (words[i].equals(word2)) {
+                p2 = i;
+            }
+            if (p1 != -1 && p2 != -1) {
+                res = Math.min(res, Math.abs(p1-p2));
+            }
         }
         return res;
     }
@@ -354,6 +410,10 @@ public class ArrayQuestion {
     }
 
     // 280
+
+    /**
+     * Given an unsorted array nums, reorder it in-place such that nums[0] <= nums[1] >= nums[2] <= nums[3]....
+     */
     public void wiggleSort(int[] nums) {
         // swap between 2 consecutive numbers
         // if odd index & prev > curr, swap
@@ -378,6 +438,45 @@ public class ArrayQuestion {
         for (; i < nums.length; i++) {
             nums[i] = 0;
         }
+    }
+
+    // 287. Find the Duplicate Number (Yext Interview)
+    // Method 1: divide-and-conquer
+    public int findDuplicate(int[] nums) {
+        int start = 1, end = nums.length - 1;
+        while (start < end) {
+            int mid = start + (end - start) / 2;
+            int count = 0;
+            for (int n : nums) {
+                if (n <= mid) {
+                    count++;
+                }
+            }
+            if (count <= mid) {
+                start = mid + 1;
+            } else {
+                end = mid;
+            }
+        }
+        return start;
+    }
+
+    // Method 2: Linked list cycle 2
+    public int findDuplicate2(int[] nums) {
+        if (nums.length > 1) {
+            int slow = nums[0], fast = nums[nums[0]];
+            while (slow != fast) {
+                slow = nums[slow];
+                fast = nums[nums[fast]];
+            }
+            fast = 0;
+            while(fast != slow) {
+                fast = nums[fast];
+                slow = nums[slow];
+            }
+            return slow;
+        }
+        return -1;
     }
 
     // 347
@@ -416,6 +515,22 @@ public class ArrayQuestion {
         }
         for (int i = 1; i < length; i++) {
             res[i] += res[i - 1];
+        }
+        return res;
+    }
+
+    // 442. Find All Duplicates in an Array
+    /**
+     * Given an array of integers, 1 ≤ a[i] ≤ n (n = size of array), some elements appear twice and others appear once.
+     * Find all the elements that appear twice in this array.
+     */
+    public List<Integer> findDuplicates(int[] nums) {
+        List<Integer> res = new ArrayList<>();
+        for (int i = 0; i < nums.length; ++i) {
+            int index = Math.abs(nums[i])-1;
+            if (nums[index] < 0)
+                res.add(Math.abs(index+1));
+            nums[index] = -nums[index];
         }
         return res;
     }
@@ -543,6 +658,28 @@ public class ArrayQuestion {
         return res;
     }
 
+    // 531 Find lonely pixels
+
+    /**
+     * A black lonely pixel is character 'B' that located at a specific position where the same row and same column don't have any other black pixels.
+     */
+    // record the number of Bs in each column & each row
+    public int findLonelyPixel(char[][] picture) {
+        int n = picture.length, m = picture[0].length;
+
+        int[] rowCount = new int[n], colCount = new int[m];
+        for (int i=0;i<n;i++)
+            for (int j=0;j<m;j++)
+                if (picture[i][j] == 'B') { rowCount[i]++; colCount[j]++; }
+
+        int count = 0;
+        for (int i=0;i<n;i++)
+            for (int j=0;j<m;j++)
+                if (picture[i][j] == 'B' && rowCount[i] == 1 && colCount[j] == 1) count++;
+
+        return count;
+    }
+
     // 560 Subarray Sum Equals k
     public int subarraySum(int[] nums, int k) {
         int result = 0, sum = 0;
@@ -571,13 +708,17 @@ public class ArrayQuestion {
     }
 
     // 565 Array Nesting
+
+    /**
+     * S[K] = { A[K], A[A[K]], A[A[A[K]]], ... }; find the largest size of S[K]
+     */
     public int arrayNesting(int[] nums) {
         int res = 1;
         for (int i = 0; i < nums.length; i++) {
             int count = 0;
             for (int k = i; nums[k] >= 0; count++) {
                 int ak = nums[k];
-                nums[k] = -1; // mark a[k] as visited;
+                nums[k] = -1; // mark a[k] as visited; next time don't step on it because it would be a smaller cycle
                 k = ak;
             }
             res = Math.max(res, count);
@@ -639,6 +780,20 @@ public class ArrayQuestion {
         }
 
         return count == n;
+    }
+
+    // 621
+    public int leastInterval(char[] tasks, int n) {
+        int[] c = new int[26];
+        for (char t : tasks) {
+            c[t - 'A']++;
+        }
+        Arrays.sort(c);
+        int i = 25;
+        while (i >= 0 && c[i] == c[25]) {  // make most freq. numbers into frames with fixed order
+            i--;
+        }
+        return Math.max(tasks.length, (c[25] - 1) * (n + 1) + 25 - i);
     }
 
     // 628. Maximum Product of Three Numbers
