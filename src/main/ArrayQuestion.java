@@ -169,6 +169,23 @@ public class ArrayQuestion {
         return res;
     }
 
+    // 78 Subsets
+    public List<List<Integer>> subsets(int[] nums) {  // backtracking
+        final List<List<Integer>> list = new ArrayList<>();
+        Arrays.sort(nums);
+        backtrack(list, new ArrayList<>(), nums, 0);
+        return list;
+    }
+
+    private void backtrack(List<List<Integer>> list , List<Integer> tempList, int [] nums, int start){
+        list.add(new ArrayList<>(tempList));
+        for(int i = start; i < nums.length; i++){
+            tempList.add(nums[i]);
+            backtrack(list, tempList, nums, i + 1);
+            tempList.remove(tempList.size() - 1);
+        }
+    }
+
     // 88 Merge Sorted Arrays
     public void merge1(int[] nums1, int m, int[] nums2, int n) {
         int i = 0, j = 0, newIndex = 0;
@@ -226,7 +243,12 @@ public class ArrayQuestion {
         return res;
     }
 
-    // 121
+    // 121 Max profit from one buy & sell
+    /**
+     * Kadane's Algorithm: the logic is to calculate the difference (maxCur += prices[i] - prices[i-1])
+     * of the original array, and find a contiguous subarray giving maximum profit.
+     * If the difference falls below 0, reset it to zero.
+     */
     public int maxProfit(int[] prices) {
         int maxCur = 0, maxSoFar = 0;
         for(int i = 1; i < prices.length; i++) {
@@ -407,6 +429,13 @@ public class ArrayQuestion {
         }
         res ^= nums.length;
         return res;
+    }
+
+    public int missingNumber2(int[] nums) {
+        int sum = nums.length;
+        for (int i = 0; i < nums.length; i++)
+            sum += i - nums[i];
+        return sum;
     }
 
     // 280
@@ -833,5 +862,21 @@ public class ArrayQuestion {
             set.add(i);
         }
         return new int[] {duplicate, (int)sum + duplicate};
+    }
+
+    // 665
+    public boolean checkPossibility(int[] nums) {
+        int count = 0;
+        for (int i = 1; i < nums.length && count <= 1; i++) {
+            if (nums[i - 1] > nums[i]) {
+                count++;
+                if (i - 1 > 0 && nums[i - 2] > nums[i]) {
+                    nums[i] = nums[i-1];
+                } else {
+                    nums[i-1] = nums[i];
+                }
+            }
+        }
+        return count <= 1;
     }
 }
