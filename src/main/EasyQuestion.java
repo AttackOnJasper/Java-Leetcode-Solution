@@ -92,7 +92,6 @@ public class EasyQuestion {
         }
     }
 
-
     // 69
     /** Newton's method */
     public int mySqrt(int x) {
@@ -119,15 +118,6 @@ public class EasyQuestion {
 
         return head;
     }
-
-
-
-
-
-
-
-
-
 
     // 125
     public boolean isPalindrome(String s) {

@@ -87,7 +87,6 @@ public class ArrayQuestion {
     }
 
     // 53 Max subarray
-
     // DP dp[i]: max subarray that ends with nums[i]
     public int maxSubArray(int[] nums) {
         if (nums.length == 0) {
@@ -771,9 +770,12 @@ public class ArrayQuestion {
 
     // 581 Shortest Unsorted Continuous Subarray
     public int findUnsortedSubarray(int[] A) {
-        int start = -1, end = -1, min = A[0], max = A[0];
-        for (int i = 0; i < A.length; i++) {
-
+        int len = A.length, start = -1, end = -2, min = A[len-1], max = A[0];
+        for (int i = 1; i < len; i++) {
+            min = Math.min(min, A[len - 1 - i]);
+            max = Math.max(max, A[i]);
+            if (A[i] < max) end = i; // if the index is not max, unsorted, move end to this index
+            if (A[len - 1 - i] > min) start = len - 1 - i; // if the index is not min, unsorted, move start to this index
         }
         return end - start + 1;
     }
