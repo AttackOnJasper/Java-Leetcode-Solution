@@ -12,12 +12,61 @@ public class TreeQuestion {
             System.out.print(root.val);
             if (!visited.contains(root.val)) {
                 visited.add(root.val);
-                q.add(root.left);
-                q.add(root.right);
+                if (root.left != null) q.add(root.left);
+                if (root.right != null) q.add(root.right);
             }
         }
     }
 
+    // 144 Preorder Traversal
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        ArrayDeque<TreeNode> stack = new ArrayDeque<>();
+        while (root != null || !stack.isEmpty()) {
+            if (root != null) {
+                stack.push(root);
+                res.add(root.val);
+                root = root.left;
+            } else {
+                root = stack.pop();
+                root = root.right;
+            }
+        }
+        return res;
+    }
+
+    public List<Integer> preorderTraversal2(TreeNode root) {
+        List<Integer> res = new ArrayList<Integer>();
+        Stack<TreeNode> s = new Stack<TreeNode>();
+        while (root != null || !s.isEmpty()) {
+            while (root != null) {
+                res.add(root.val);
+                s.push(root);
+                root = root.left;
+            }
+            root = s.pop();
+            root = root.right;
+        }
+        return res;
+    }
+
+    // dfs
+    public List<Integer> preorderTraversal3(TreeNode root) {
+        List<Integer> res = new ArrayList<Integer>();
+        Stack<TreeNode> s = new Stack<TreeNode>();
+        s.add(root);
+        while (!s.isEmpty()) {
+            root = s.pop();
+            if (root != null) {
+                res.add(root.val);
+                s.push(root.right);
+                s.push(root.left);
+            }
+        }
+        return res;
+    }
+
+    // 145 Postorder Traversal
     /** push right & set right to null, push left & set left to null */
     public List<Integer> postorderTraversal(TreeNode root) {
         List<Integer> res = new ArrayList<Integer>();
@@ -42,7 +91,24 @@ public class TreeQuestion {
         return res;
     }
 
-    // 94
+    public List<Integer> postorderTraversal2(TreeNode root) {
+        LinkedList<Integer> res = new LinkedList<>();
+        if (root == null) return res;
+        ArrayDeque<TreeNode> stack = new ArrayDeque<>();
+        while (root != null || !stack.isEmpty()) {
+            if (root != null) {
+                stack.push(root);
+                res.addFirst(root.val);
+                root = root.right;
+            } else {
+                root = stack.pop();
+                root = root.left;
+            }
+        }
+        return res;
+    }
+
+    // 94 Inorder Traversal
     public List<Integer> inorderTraversal(TreeNode root) {
         List<Integer> res = new ArrayList<Integer>();
         Stack<TreeNode> s = new Stack<TreeNode>();
@@ -54,6 +120,22 @@ public class TreeQuestion {
             root = s.pop();
             res.add(root.val);
             root = root.right;
+        }
+        return res;
+    }
+
+    public List<Integer> inorderTraversal2(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        ArrayDeque<TreeNode> stack = new ArrayDeque<>();
+        while (root != null || !stack.isEmpty()) {
+            if (root != null) {
+                stack.push(root);
+                root = root.left;
+            } else {
+                root = stack.pop();
+                res.add(root.val);
+                root = root.right;
+            }
         }
         return res;
     }
@@ -119,38 +201,6 @@ public class TreeQuestion {
         }
         return Math.min(minDepth(root.left), minDepth(root.right)) + 1;
     }
-
-    // 114
-    public List<Integer> preorderTraversal(TreeNode root) {
-        List<Integer> res = new ArrayList<Integer>();
-        Stack<TreeNode> s = new Stack<TreeNode>();
-        while (root != null || !s.isEmpty()) {
-            while (root != null) {
-                res.add(root.val);
-                s.push(root);
-                root = root.left;
-            }
-            root = s.pop();
-            root = root.right;
-        }
-        return res;
-    }
-    // dfs
-    public List<Integer> preorderTraversal2(TreeNode root) {
-        List<Integer> res = new ArrayList<Integer>();
-        Stack<TreeNode> s = new Stack<TreeNode>();
-        s.add(root);
-        while (!s.isEmpty()) {
-            root = s.pop();
-            if (root != null) {
-                res.add(root.val);
-                s.push(root.right);
-                s.push(root.left);
-            }
-        }
-        return res;
-    }
-
 
     // 156 Binary Tree Upside Down
     public TreeNode upsideDownBinaryTree(TreeNode root) {

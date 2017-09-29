@@ -881,4 +881,23 @@ public class ArrayQuestion {
         }
         return count <= 1;
     }
+
+    // 682
+    public int calPoints(String[] ops) {
+        int res = 0;
+        ArrayList<Integer> arr = new ArrayList<>();
+        for (int i = 0; i < ops.length; i++) {
+            if (ops[i].equals("C")) {
+                if (i > 0) arr.remove(arr.size()-1);
+            } else if (ops[i].matches("-?\\d+(\\.\\d+)?")) {
+                arr.add(Integer.valueOf(ops[i]));
+            } else if (ops[i].equals("D")) {
+                arr.add(arr.get(arr.size()-1) * 2);
+            } else arr.add(arr.get(arr.size()-1) + arr.get(arr.size()-2));
+        }
+        for (int i = 0; i < arr.size(); i++) {
+            res += arr.get(i);
+        }
+        return res;
+    }
 }

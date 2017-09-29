@@ -46,4 +46,10 @@ public class ArrayQuestionTest {
         assertEquals(2, (int)res.get(1));
     }
 
+    @Test
+    public void testBaseballGame() {
+        String[] ops = new String[]{"5","-2","4","C","D","9","+","+"};
+        assertEquals(27, arrayQuestion.calPoints(ops));
+    }
+
 }

@@ -41,4 +41,9 @@ public class StringQuestion {
             if (s.charAt(l) != s.charAt(r)) return false;
         return true;
     }
+
+    // 681. Next Closest Time
+    public String nextClosestTime(String time) {
+        return "";
+    }
 }
