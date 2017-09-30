@@ -140,6 +140,12 @@ public class TreeQuestion {
         return res;
     }
 
+    // 100
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        if (p == null || q == null) return p == q;
+        return p.val == q.val && isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+    }
+
     // 101
     public boolean isSymmetric(TreeNode root) {
         return root == null || isSymmetricHelper(root.left, root.right);
@@ -254,6 +260,17 @@ public class TreeQuestion {
         return root;
     }
 
+    // 257. Binary Tree Paths: return all root-to-leaf paths
+    public List<String> binaryTreePaths(TreeNode root) {
+        List<String> res = new ArrayList<>();
+        binaryTreePathsHelper(root, res);
+        return res;
+    }
+
+    private void binaryTreePathsHelper(TreeNode root, List<String> res) {
+
+    }
+
     // 270 Closest Binary Search Tree Value
     public int closestValue(TreeNode root, double target) {
         int a = root.val;
@@ -322,6 +339,35 @@ public class TreeQuestion {
         return ans;
     }
 
+    // 617 Merge two trees
+    public TreeNode mergeTrees(TreeNode t1, TreeNode t2) {
+        if (t1 == null) return t2;
+        if (t2 == null) return t1;
+        TreeNode res = new TreeNode(t1.val + t2.val);
+        res.left = mergeTrees(t1.left, t2.left);
+        res.right = mergeTrees(t1.right, t2.right);
+        return res;
+    }
+
+    // 637
+    public List<Double> averageOfLevels(final TreeNode root) {
+        List<Double> res = new ArrayList<>();
+        Queue<TreeNode> q = new ArrayDeque<>();
+        q.add(root);
+        while (!q.isEmpty()) {
+            final int n = q.size();
+            double sum = 0;
+            for (int i = 0; i < n; i++) {
+                TreeNode cur = q.poll();
+                sum += cur.val;
+                if (cur.left != null) q.offer(cur.left);
+                if (cur.right != null) q.offer(cur.right);
+            }
+            res.add(sum / n);
+        }
+        return res;
+    }
+
     // 653 Two Sum IV - Input is a BST
     /** Method 1
      *  Use in-order traversal to store input as an array -> two pointers
@@ -364,4 +410,17 @@ public class TreeQuestion {
         set.add(root.val);
         return dfs(root.left, set, k) || dfs(root.right, set, k);
     }
+
+    // 671
+    public int findSecondMinimumValue(TreeNode root) {
+        if (root == null || root.left == null) return -1;
+        int left = root.left.val, right = root.right.val;
+        if (left == root.val) left = findSecondMinimumValue(root.left);
+        if (right == root.val) right = findSecondMinimumValue(root.right);
+        if (left == -1) return right;
+        if (right == -1) return left;
+        return Math.min(left, right);
+    }
+
+
 }
