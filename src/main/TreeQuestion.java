@@ -150,7 +150,6 @@ public class TreeQuestion {
     public boolean isSymmetric(TreeNode root) {
         return root == null || isSymmetricHelper(root.left, root.right);
     }
-
     private boolean isSymmetricHelper(TreeNode left, TreeNode right) {
         if (left == null || right == null) return left == right;
         if (left.val != right.val) return false;
@@ -168,6 +167,9 @@ public class TreeQuestion {
         return sortedArrayToBSTHelper(num, 0, num.length - 1);
     }
 
+    /**
+     * watch out the use of low & high to avoid extra space used because of splitting array
+     */
     private TreeNode sortedArrayToBSTHelper(int[] num, int low, int high) {
         if (low > high) {
             return null;
@@ -180,6 +182,9 @@ public class TreeQuestion {
     }
 
     // 110
+    /**
+     * watch out the reduction of recursion here
+     */
     public boolean isBalanced(TreeNode root) {
         return isBalancedHelper(root) != -1;
     }
@@ -339,6 +344,38 @@ public class TreeQuestion {
         return ans;
     }
 
+    /**
+     * 437 Path Sum:
+     * return the number of paths from up to down whose values sum up to target (sum)
+     */
+    public int pathSum(TreeNode root, int sum) {
+        HashMap<Integer, Integer> preSum = new HashMap();
+        preSum.put(0,1);
+        return pathSumHelper(root, 0, sum, preSum);
+    }
+
+    private int pathSumHelper(TreeNode root, int currSum, int target, HashMap<Integer, Integer> preSum) {
+        if (root == null) return 0;
+        currSum += root.val;
+        int res = preSum.getOrDefault(currSum - target, 0);
+        preSum.put(currSum, preSum.getOrDefault(currSum, 0) + 1);
+
+        res += pathSumHelper(root.left, currSum, target, preSum) + pathSumHelper(root.right, currSum, target, preSum);
+        preSum.put(currSum, preSum.get(currSum) - 1);
+        return res;
+    }
+
+    public int pathSum2(TreeNode root, int sum) {
+        if (root == null) return 0;
+        return pathSumFrom(root, sum) + pathSum2(root.left, sum) + pathSum2(root.right, sum);
+    }
+
+    private int pathSumFrom(TreeNode node, int sum) {
+        if (node == null) return 0;
+        return (node.val == sum ? 1 : 0)
+            + pathSumFrom(node.left, sum - node.val) + pathSumFrom(node.right, sum - node.val);
+    }
+
     // 617 Merge two trees
     public TreeNode mergeTrees(TreeNode t1, TreeNode t2) {
         if (t1 == null) return t2;
@@ -349,7 +386,7 @@ public class TreeQuestion {
         return res;
     }
 
-    // 637
+    // 637 average of each level
     public List<Double> averageOfLevels(final TreeNode root) {
         List<Double> res = new ArrayList<>();
         Queue<TreeNode> q = new ArrayDeque<>();
