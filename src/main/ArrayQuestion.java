@@ -3,7 +3,6 @@ package main;
 import java.util.*;
 
 public class ArrayQuestion {
-
     // 26 Remove Duplicates
     public int removeDuplicates(int[] nums) {
         if (nums.length == 1) {

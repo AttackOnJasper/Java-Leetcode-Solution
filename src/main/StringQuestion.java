@@ -2,9 +2,6 @@ package main;
 
 import java.util.Arrays;
 
-/**
- * Created by jasperwang on 2017-09-21.
- */
 public class StringQuestion {
     // 14
     public String longestCommonPrefix(String[] strs) {
@@ -22,6 +19,27 @@ public class StringQuestion {
             }
         }
         return result.toString();
+    }
+
+    // 459 Repeated Substring pattern
+    public boolean repeatedSubstringPattern(String s) {
+        final int length = s.length();
+        for (int i = length / 2; i >= 1; i--) {
+            if (length % i == 0) {
+                final int m = length / i;
+                final String subS = s.substring(0, i);
+                int j;
+                for (j = 1; j < m; j++) {
+                    if (!subS.equals(s.substring(j * i, i + j * i))) {
+                        break;
+                    }
+                }
+                if (j == m) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     // 680

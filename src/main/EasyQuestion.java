@@ -24,38 +24,6 @@ public class EasyQuestion {
         return (x == rev || x == rev / 10);
     }
 
-    // 13
-    public static int romanToInt(String s) {
-        int res = 0;
-        for (int i = s.length() - 1; i >= 0; i--) {
-            char c = s.charAt(i);
-            switch (c) {
-                case 'I':
-                    res += (res >= 5 ? -1 : 1);
-                    break;
-                case 'V':
-                    res += 5;
-                    break;
-                case 'X':
-                    res += 10 * (res >= 50 ? -1 : 1);
-                    break;
-                case 'L':
-                    res += 50;
-                    break;
-                case 'C':
-                    res += 100 * (res >= 500 ? -1 : 1);
-                    break;
-                case 'D':
-                    res += 500;
-                    break;
-                case 'M':
-                    res += 1000;
-                    break;
-            }
-        }
-        return res;
-    }
-
     // 20 Valid Parenthesis
     public boolean isValid(String s) {
         char[] arr = s.toCharArray();
@@ -126,7 +94,10 @@ public class EasyQuestion {
         return reversed.equals(temp);
     }
 
-    // 155
+    // 155 Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
+    /**
+     * push the difference between min & the # to be pushed
+     */
     class MinStack {
         long min;
         final Stack<Long> stack;
@@ -156,7 +127,6 @@ public class EasyQuestion {
             if (pop < 0) {
                 min = min - pop; // If negative, increase the min value
             }
-
         }
 
         public int top() {
@@ -177,8 +147,7 @@ public class EasyQuestion {
         int min = Integer.MAX_VALUE;
         Stack<Integer> stack = new Stack<Integer>();
         public void push(int x) {
-            // only push the old minimum value when the current
-            // minimum value changes after pushing the new value x
+            // only push the old minimum value when min would be updated to x
             if(x <= min){
                 stack.push(min);
                 min=x;
@@ -189,7 +158,7 @@ public class EasyQuestion {
         public void pop() {
             // if pop operation could result in the changing of the current minimum value,
             // pop twice and change the current minimum value to the last minimum value.
-            if(stack.pop() == min) min=stack.pop();
+            if(stack.pop() == min) min = stack.pop();
         }
 
         public int top() {
@@ -199,20 +168,6 @@ public class EasyQuestion {
         public int getMin() {
             return min;
         }
-    }
-
-    // 167 TwoSumSorted
-    public int[] twoSum(int[] numbers, int target) {
-        int i = 0, j = numbers.length - 1;
-        while (i < j) {
-            if (numbers[i] + numbers[j] == target) break;
-            if (numbers[i] + numbers[j] > target) {
-                j--;
-            } else {
-                i++;
-            }
-        }
-        return new int[]{i + 1, j + 1};
     }
 
     // 170
@@ -252,7 +207,6 @@ public class EasyQuestion {
         }
         return count;
     }
-
     // bit shift
     public int hammingWeight2(int n) {
         int count = 0;
@@ -264,6 +218,14 @@ public class EasyQuestion {
     }
 
     // 202
+    public boolean isHappy(int n) {
+        int i1 = n, i2 = next(n);
+        while (i2 != i1) {
+            i1 = next(i1);
+            i2 = next(next(i2));
+        }
+        return i1 == 1;
+    }
     private int next(int n) {
         int res = 0;
         while (n != 0) {
@@ -274,25 +236,12 @@ public class EasyQuestion {
         return res;
     }
 
-    public boolean isHappy(int n) {
-        int i1 = n, i2 = next(n);
-
-        while (i2 != i1) {
-            i1 = next(i1);
-            i2 = next(next(i2));
-        }
-
-        return i1 == 1;
-    }
-
-
     // 203 Remove Linked List Elements
     public ListNode removeElements(ListNode head, int val) {
         if (head == null) return null;
         head.next = removeElements(head.next, val);
         return head.val == val ? head.next : head;
     }
-
     public ListNode removeElements2(ListNode head, int val) {
         ListNode fakeHead = new ListNode(-1);
         fakeHead.next = head;
@@ -307,7 +256,6 @@ public class EasyQuestion {
         }
         return fakeHead.next;
     }
-
     public ListNode removeElements3(ListNode head, int val) {
         if (head == null) return null;
         ListNode cur = head;
@@ -320,7 +268,6 @@ public class EasyQuestion {
         }
         return head.val == val ? head.next : head;
     }
-
 
     // 204 Count Primes
     public int countPrimes(int n) {
@@ -337,7 +284,7 @@ public class EasyQuestion {
         return res;
     }
 
-    // 205 Isomorphic
+    // 205 Isomorphic (Yext interview)
     public boolean isIsomorphic(String s, String t) {
         int sLen = s.length(), tLen = t.length();
         if (sLen != tLen) return false;
@@ -357,7 +304,6 @@ public class EasyQuestion {
     public ListNode reverseList1(ListNode head) {
         return helper(head, null);
     }
-
     private ListNode helper(ListNode head, ListNode newHead) {
         if (head == null) return newHead;
         ListNode next = head.next;
@@ -370,19 +316,17 @@ public class EasyQuestion {
         ListNode newHead = null;
         while (head != null) {
             ListNode next = head.next;
+            // build new list from end to start
             head.next = newHead;
             newHead = head;
+            // move to next node
             head = next;
         }
         return newHead;
     }
 
     // 344
-    public String reverseString(String s){
-        return new StringBuilder(s).reverse().toString();
-    }
-
-    public String reverseString2(String s) {
+    public String reverseString(String s) {
         char[] arr = s.toCharArray();
         int start = 0;
         int end = arr.length - 1;
@@ -392,16 +336,6 @@ public class EasyQuestion {
             arr[end] = temp;
             start++;
             end--;
-        }
-        return String.valueOf(arr);
-    }
-
-    public String reverseString3(String s) {
-        char[] arr = s.toCharArray();
-        for (int start = 0, end = arr.length - 1; start < end; start++, end--) {
-            char temp = arr[start];
-            arr[start] = arr[end];
-            arr[end] = temp;
         }
         return String.valueOf(arr);
     }
@@ -416,7 +350,7 @@ public class EasyQuestion {
         if (fast != null) { // odd nodes: let right half smaller
             slow = slow.next;
         }
-        slow = reverse(slow);
+        slow = reverseList1(slow);
         fast = head;
 
         while (slow != null) {
@@ -429,31 +363,14 @@ public class EasyQuestion {
         return true;
     }
 
-    private ListNode reverse(ListNode head) {
-        ListNode prev = null;
-        while (head != null) {
-            ListNode next = head.next;
-            head.next = prev;
-            prev = head;
-            head = next;
-        }
-        return prev;
-    }
-
-
-
-
     // 252 Meeting rooms
     private class Interval {
         int start;
         int end;
     }
-
     public boolean canAttendMeetings(Interval[] intervals) {
         int len=intervals.length;
-        if(len==0){
-            return true;
-        }
+        if(len==0) return true;
         int[]begin=new int[len];
         int[]stop=new int[len];
         for(int i=0;i<len;i++){
@@ -463,14 +380,10 @@ public class EasyQuestion {
         Arrays.sort(begin);
         Arrays.sort(stop);
         for(int i=1;i<len;i++){
-            if(begin[i]<stop[i-1]){
-                return false;
-            }
+            if(begin[i]<stop[i-1]) return false;
         }
         return true;
     }
-
-
 
     // 266 return true if permutation of string can be a palindrome
     public boolean canPermutePalindrome(String s) {
@@ -485,10 +398,6 @@ public class EasyQuestion {
         }
         return h.size() < 2;
     }
-
-
-
-
 
     // 278
     private boolean isBadVersion(int n) {
@@ -507,7 +416,6 @@ public class EasyQuestion {
         }
         return low;
     }
-
 
     // 290 Word Pattern
     public boolean wordPattern(String pattern, String str) {
@@ -680,33 +588,11 @@ public class EasyQuestion {
 
         return res;
     }
-
     private int getDistance(int[] a, int[] b) {
         int dx = a[0] - b[0];
         int dy = a[1] - b[1];
 
         return dx*dx + dy*dy;
-    }
-
-    // 459 Repeated Substring pattern
-    public boolean repeatedSubstringPattern(String s) {
-        final int length = s.length();
-        for (int i = length / 2; i >= 1; i--) {
-            if (length % i == 0) {
-                final int m = length / i;
-                final String subS = s.substring(0, i);
-                int j;
-                for (j = 1; j < m; j++) {
-                    if (!subS.equals(s.substring(j * i, i + j * i))) {
-                        break;
-                    }
-                }
-                if (j == m) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     // 461 Hamming distance
@@ -746,12 +632,6 @@ public class EasyQuestion {
     public int findComplement(int num) {
         return (largest_power(num) << 1) - 1 - num;
     }
-
-    public int findComplement2(int num) {
-        // highestOneBit(n) returns 2^m, where 2^m < n < 2^(m+1)
-        return ~num & ((Integer.highestOneBit(num) << 1) - 1);
-    }
-
     // Equal to highestOneBit
     private int largest_power(int N) {
         //changing all right side bits to 1.
@@ -763,42 +643,8 @@ public class EasyQuestion {
         return (N + 1) >> 1;
     }
 
-
-    // 520 Detect Capital
-    public boolean detectCapitalUse(String word) {
-        int numUpper = 0;
-        for (int i = 0; i < word.length(); i++) {
-            if (Character.isUpperCase(word.charAt(i))) {
-                numUpper++;
-            }
-        }
-        if (numUpper == 1) {
-            return Character.isUpperCase(word.charAt(0));
-        }
-        return numUpper == 0 || numUpper == word.length();
-    }
-
-
-
-    // 557
-    public String reverseWords(String s) {
-        char[] ca = s.toCharArray();
-        for (int i = 0; i < ca.length; i++) {
-            if (ca[i] != ' ') {   // when i is a non-space
-                int j = i;
-                while (j + 1 < ca.length && ca[j + 1] != ' ') { j++; } // move j to the end of the word
-                reverse(ca, i, j);
-                i = j;
-            }
-        }
-        return new String(ca);
-    }
-
-    private void reverse(char[] ca, int i, int j) {
-        for (; i < j; i++, j--) {
-            char tmp = ca[i];
-            ca[i] = ca[j];
-            ca[j] = tmp;
-        }
+    public int findComplement2(int num) {
+        // highestOneBit(n) returns 2^m, where 2^m < n < 2^(m+1)
+        return ~num & ((Integer.highestOneBit(num) << 1) - 1);
     }
 }
