@@ -268,12 +268,14 @@ public class TreeQuestion {
     // 257. Binary Tree Paths: return all root-to-leaf paths
     public List<String> binaryTreePaths(TreeNode root) {
         List<String> res = new ArrayList<>();
-        binaryTreePathsHelper(root, res);
+        binaryTreePathsHelper(root, "", res);
         return res;
     }
 
-    private void binaryTreePathsHelper(TreeNode root, List<String> res) {
-
+    private void binaryTreePathsHelper(TreeNode root, String curString, List<String> res) {
+        if (root.left == null && root.right == null) res.add(curString + root.val);
+        if (root.left != null) binaryTreePathsHelper(root.left, curString + root.val + "->", res);
+        if (root.right != null) binaryTreePathsHelper(root.right, curString + root.val + "->", res);
     }
 
     // 270 Closest Binary Search Tree Value
@@ -458,6 +460,4 @@ public class TreeQuestion {
         if (right == -1) return left;
         return Math.min(left, right);
     }
-
-
 }
