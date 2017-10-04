@@ -39,25 +39,6 @@ public class MediumQuestion {
 
 
 
-    // 139 Word Break
-    public boolean wordBreak(String s, List<String> wordDict) {
-        boolean[] d = new boolean[s.length()];
-        Arrays.fill(d, false);
-        d[0] = wordDict.contains(String.valueOf(s.charAt(0)));
-        for (int i = 1; i < d.length; i++) {
-            if (wordDict.contains(s.substring(0, i + 1))) {
-                d[i] = true;
-            } else {
-                for (int j = 0; j < i; j++) {
-                    if (d[j] && wordDict.contains(s.substring(j + 1, i + 1))) {
-                        d[i] = true;
-                    }
-                }
-            }
-        }
-        return d[d.length - 1];
-    }
-
 
     // 148. Sort List
 

@@ -647,7 +647,6 @@ public class ArrayQuestion {
     }
 
     // 496 Next Greater Element
-
     /**
      * Use a stack to store a decreasing subsequence, and pop all items that is smaller than the
      * next item
@@ -765,6 +764,21 @@ public class ArrayQuestion {
             res[i / c][i % c] = nums[i / y][i % y];
         }
         return res;
+    }
+
+    // 575. Distribution Candies
+    /**
+     * return the max kind of candies one can get
+     */
+    public int distributeCandies(int[] candies) {
+        final Set<Integer> set = new HashSet<Integer>();
+        for (int i : candies) {
+            set.add(i);
+            if (set.size() == candies.length / 2) {
+                return candies.length / 2;
+            }
+        }
+        return set.size();  // smaller than half
     }
 
     // 581 Shortest Unsorted Continuous Subarray

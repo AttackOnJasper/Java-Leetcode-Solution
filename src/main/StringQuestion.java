@@ -21,6 +21,18 @@ public class StringQuestion {
         return result.toString();
     }
 
+    // 67
+    public String addBinary(String a, String b) {
+        String res = "";
+        int i = a.length() - 1, j = b.length() - 1, c = 0;
+        while (i >= 0 || j >= 0 || c == 1) {
+            int temp = (i >= 0 ? (a.charAt(i--) - '0') : 0) + (j >= 0 ? (b.charAt(j--) - '0') : 0) + c;
+            res = temp % 2 + res;
+            c = temp / 2;
+        }
+        return res;
+    }
+
     // 459 Repeated Substring pattern
     public boolean repeatedSubstringPattern(String s) {
         final int length = s.length();
