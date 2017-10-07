@@ -140,6 +140,13 @@ public class TreeQuestion {
         return res;
     }
 
+    public int minPathSum(TreeNode root) {
+        if (root == null) return 0;
+        if (root.left == null) return minPathSum(root.right) + root.val;
+        if (root.right == null) return minPathSum(root.left) + root.val;
+        return Math.min(minPathSum(root.left), minPathSum(root.right)) + root.val;
+    }
+
     // 100
     public boolean isSameTree(TreeNode p, TreeNode q) {
         if (p == null || q == null) return p == q;

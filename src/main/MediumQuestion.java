@@ -3,6 +3,28 @@ package main;
 import java.util.*;
 
 public class MediumQuestion {
+    public static ListNode reverseSecondHalfList(ListNode head) {
+        if (head == null) return null;
+        ListNode fast = head, slow = head, prev = head;
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            prev = slow;
+            slow = slow.next;
+        }
+        prev.next = reverse(slow);
+        return head;
+    }
+
+    private static ListNode reverse(ListNode head) {
+        ListNode prev = null;
+        while (head != null) {
+            ListNode next = head.next;
+            head.next = prev;
+            prev = head;
+            head = next;
+        }
+        return prev;
+    }
 
     // 2. Add Two Numbers Linked List
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {

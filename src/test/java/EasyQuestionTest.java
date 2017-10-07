@@ -33,7 +33,6 @@ public class EasyQuestionTest {
   @Test
   public void testReverseString() {
     assertEquals("hello", easyQuestion.reverseString("olleh"));
-    assertEquals("hello", easyQuestion.reverseString2("olleh"));
   }
 
 

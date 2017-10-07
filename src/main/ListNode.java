@@ -1,16 +1,19 @@
 package main;
 
-public class ListNode {
-    int val;
-    ListNode next;
-    ListNode(int x) { val = x; }
+import java.util.ArrayDeque;
 
-//    class test {
-//
-//    }
-//
-//    public static void main(String[] args) {
-//        ListNode l = new ListNode(1);
-//        ListNode.test t = l.new test();
-//    }
+public class ListNode {
+    public int val;
+    public ListNode next;
+
+    ListNode(int x) { val = x; }
+    ListNode(int x, ListNode next) {
+        this.val = x;
+        this.next = next;
+    }
+
+    public static ListNode listNodeFactory(ArrayDeque<Integer> vals) {
+        if (vals.size() == 0) return null;
+        return new ListNode(vals.pollFirst(), listNodeFactory(vals));
+    }
 }
