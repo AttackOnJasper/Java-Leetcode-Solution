@@ -71,20 +71,30 @@ public class EasyQuestion {
 
     // 83
     public ListNode deleteDuplicates(ListNode head) {
+        if (head == null) return null;
         ListNode list = head;
-
-        while(list != null) {
-            if (list.next == null) {
-                break;
-            }
+        while(list.next != null) {
             if (list.val == list.next.val) {
                 list.next = list.next.next;
             } else {
                 list = list.next;
             }
         }
-
         return head;
+    }
+
+    // 118
+    public List<List<Integer>> generatePascal(int n) {
+        List<List<Integer>> res = new ArrayList<>();
+        List<Integer> row = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            row.add(0, 1);
+            for (int j = 1; j < row.size(); j++) {
+                row.add(j, row.get(j) + row.get(j+1));
+            }
+            res.add(row);
+        }
+        return res;
     }
 
     // 125
@@ -243,30 +253,16 @@ public class EasyQuestion {
         return head.val == val ? head.next : head;
     }
     public ListNode removeElements2(ListNode head, int val) {
-        ListNode fakeHead = new ListNode(-1);
-        fakeHead.next = head;
-        ListNode curr = head, prev = fakeHead;
-        while (curr != null) {
-            if (curr.val == val) {
-                prev.next = curr.next;
+        if (head == null) return head;
+        ListNode curr = head;
+        while (curr.next != null) {
+            if (curr.next.val == val) {
+                curr.next = curr.next.next;
             } else {
-                prev = prev.next;
-            }
-            curr = curr.next;
-        }
-        return fakeHead.next;
-    }
-    public ListNode removeElements3(ListNode head, int val) {
-        if (head == null) return null;
-        ListNode cur = head;
-        while (cur.next != null) {
-            if (cur.next.val == val) {
-                cur.next = cur.next.next;
-            } else {
-                cur = cur.next;
+                curr = curr.next;
             }
         }
-        return head.val == val ? head.next : head;
+        return head.val == val? head.next : head;
     }
 
     // 204 Count Primes
@@ -282,22 +278,6 @@ public class EasyQuestion {
             }
         }
         return res;
-    }
-
-    // 205 Isomorphic (Yext interview)
-    public boolean isIsomorphic(String s, String t) {
-        int sLen = s.length(), tLen = t.length();
-        if (sLen != tLen) return false;
-        int[] cs = new int[128], ct = new int[128];
-        for (int i = 0; i < sLen; i++) {
-            /** check if the first index of corresponding char matches */
-            if (cs[s.charAt(i)] != ct[t.charAt(i)]) return false;
-            if (cs[s.charAt(i)] == 0) {
-                cs[s.charAt(i)] = i;
-                ct[t.charAt(i)] = i;
-            }
-        }
-        return true;
     }
 
     // 206 Reverse Linked List
@@ -470,8 +450,7 @@ public class EasyQuestion {
             num -= i;
         return num == 0;
     }
-
-    // binary search
+    // binary search to find the square root
     public boolean isPerfectSquare1(int num) {
         if (num < 1) return false;
         long left = 1, right = num;// long type to avoid 2147483647 case
@@ -487,11 +466,9 @@ public class EasyQuestion {
                 return true;
             }
         }
-
         return false;
     }
-
-    // newton's method
+    // newton's method to find the square root
     boolean isPerfectSquare2(int num) {
         if (num < 1) return false;
         if (num == 1) return true;
@@ -502,8 +479,6 @@ public class EasyQuestion {
         return t * t == num;
     }
 
-
-    
     // 371 Get Sum
     // Implement sum without +
     public int getSum(int a, int b) {
@@ -529,7 +504,7 @@ public class EasyQuestion {
         String result = "";
         while(num != 0){
             result = map[(num & 15)] + result;
-            num = (num >>> 4);
+            num = (num >>> 4); // >> is arithmetic shift right, >>> is logical shift right
         }
         return result;
     }
@@ -564,25 +539,25 @@ public class EasyQuestion {
     }
 
     // 447
+
+    /**
+     * find the number of 2 points that have same distance towards one point
+     */
     public int numberOfBoomerangs(int[][] points) {
         int res = 0;
         // store the distance & number of coordinates for that distance
         Map<Integer, Integer> map = new HashMap<>();
         for(int i=0; i<points.length; i++) {
             for(int j=0; j<points.length; j++) {
-                if(i == j)
-                    continue;
-
+                if(i == j) continue;
                 int d = getDistance(points[i], points[j]);
                 map.put(d, map.getOrDefault(d, 0) + 1);
             }
-
             for(int val : map.values()) {
                 res += val * (val-1);
             }
             map.clear();
         }
-
         return res;
     }
     private int getDistance(int[] a, int[] b) {

@@ -339,7 +339,6 @@ public class ArrayQuestion {
     }
 
     // 219
-
     /**
      * Given an array of integers and an integer k, find out whether there are two distinct indices
      * i and j in the array such that nums[i] = nums[j] and the absolute difference between i and j
@@ -418,7 +417,7 @@ public class ArrayQuestion {
         return rets;
     }
 
-    // 268 the Missing Number from 0 to n in a n-size array
+    // 268 the Missing Number from 0 to n in a n-size array (Yext)
     public int missingNumber(int[] nums) {
         int res = 0;
         for (int i = 0; i < nums.length; i++) {
@@ -840,6 +839,22 @@ public class ArrayQuestion {
         return Math.max(tasks.length, (c[25] - 1) * (n + 1) + 25 - i);
     }
 
+    // 621 variation
+    public static int taskScheduler(char[] tasks, int interval) {
+        Map<Character, Integer> map = new HashMap<>();
+        int res = 0;
+        for (int i = 0; i < tasks.length; i++, res++) {
+            while (map.containsKey(tasks[i])) {
+                if (res - interval > map.get(tasks[i])) {
+                    break;
+                }
+                res++;
+            }
+            map.put(tasks[i], res);
+        }
+        return res;
+    }
+
     // 628. Maximum Product of Three Numbers
     public int maximumProduct(int[] nums) {
         Arrays.sort(nums);
@@ -879,7 +894,8 @@ public class ArrayQuestion {
         return new int[] {duplicate, (int)sum + duplicate};
     }
 
-    // 665
+    // 665 Check if it is possible to change one element to make the array non-descending
+    // Greedy: try to change i-1 first; if can't, change i
     public boolean checkPossibility(int[] nums) {
         int count = 0;
         for (int i = 1; i < nums.length && count <= 1; i++) {
@@ -912,5 +928,28 @@ public class ArrayQuestion {
             res += arr.get(i);
         }
         return res;
+    }
+
+    // 695
+    public int maxAreaOfIsland(int[][] grid) {
+        if (grid == null || grid.length == 0 || grid[0].length == 0) return 0;
+        int res = 0, row = grid.length, col = grid[0].length;
+
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                if (grid[i][j] == 1) {
+                    res = Math.max(res, AreaOfIsland(grid, i, j));
+                }
+            }
+        }
+        return res;
+    }
+    // dfs
+    private int AreaOfIsland(int[][] grid, int i, int j){
+        if( i >= 0 && i < grid.length && j >= 0 && j < grid[0].length && grid[i][j] == 1){
+            grid[i][j] = 0;
+            return 1 + AreaOfIsland(grid, i+1, j) + AreaOfIsland(grid, i-1, j) + AreaOfIsland(grid, i, j-1) + AreaOfIsland(grid, i, j+1);
+        }
+        return 0;
     }
 }

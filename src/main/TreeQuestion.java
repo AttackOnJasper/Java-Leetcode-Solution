@@ -366,7 +366,7 @@ public class TreeQuestion {
     private int pathSumHelper(TreeNode root, int currSum, int target, HashMap<Integer, Integer> preSum) {
         if (root == null) return 0;
         currSum += root.val;
-        int res = preSum.getOrDefault(currSum - target, 0);
+        int res = preSum.getOrDefault(currSum - target, 0);  // find if the difference between currSum & one of presum is target
         preSum.put(currSum, preSum.getOrDefault(currSum, 0) + 1);
 
         res += pathSumHelper(root.left, currSum, target, preSum) + pathSumHelper(root.right, currSum, target, preSum);
@@ -467,4 +467,6 @@ public class TreeQuestion {
         if (right == -1) return left;
         return Math.min(left, right);
     }
+
+    // 687. Longest Univalue Path
 }

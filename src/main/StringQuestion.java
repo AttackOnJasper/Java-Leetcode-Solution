@@ -1,6 +1,8 @@
 package main;
 
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 public class StringQuestion {
     // 14
@@ -21,6 +23,23 @@ public class StringQuestion {
         return result.toString();
     }
 
+    // 17 Letter Combinations of a Phone Number
+    public List<String> letterCombinations(String digits) {
+        LinkedList<String> ans = new LinkedList<String>();
+        if (digits == null || digits.length() == 0) return ans;
+        String[] mapping = new String[] {"0", "1", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        ans.add("");
+        for(int i =0; i<digits.length();i++){
+            int x = Character.getNumericValue(digits.charAt(i));
+            while(ans.peek().length()==i){
+                String t = ans.remove();
+                for(char s : mapping[x].toCharArray())
+                    ans.add(t+s);
+            }
+        }
+        return ans;
+    }
+
     // 67
     public String addBinary(String a, String b) {
         String res = "";
@@ -31,6 +50,22 @@ public class StringQuestion {
             c = temp / 2;
         }
         return res;
+    }
+
+    // 205 Isomorphic Strings (Yext)
+    public boolean isIsomorphic(String s, String t) {
+        int sLen = s.length(), tLen = t.length();
+        if (sLen != tLen) return false;
+        int[] cs = new int[128], ct = new int[128];
+        for (int i = 0; i < sLen; i++) {
+            /** check if the first index of corresponding char matches */
+            if (cs[s.charAt(i)] != ct[t.charAt(i)]) return false;
+            if (cs[s.charAt(i)] == 0) {
+                cs[s.charAt(i)] = i + 1;  // prevents 0
+                ct[t.charAt(i)] = i + 1;
+            }
+        }
+        return true;
     }
 
     // 459 Repeated Substring pattern

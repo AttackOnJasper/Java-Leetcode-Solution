@@ -52,4 +52,11 @@ public class ArrayQuestionTest {
         assertEquals(27, arrayQuestion.calPoints(ops));
     }
 
+    // 621
+    @Test
+    public void testTaskScheduler() {
+        char[] ops = new char[]{'A', 'B', 'A', 'A', 'B'};
+        int res = ArrayQuestion.taskScheduler(ops, 2);
+        assertEquals(8, res);
+    }
 }
