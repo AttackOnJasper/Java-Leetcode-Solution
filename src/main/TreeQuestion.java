@@ -34,7 +34,6 @@ public class TreeQuestion {
         }
         return res;
     }
-
     public List<Integer> preorderTraversal2(TreeNode root) {
         List<Integer> res = new ArrayList<Integer>();
         Stack<TreeNode> s = new Stack<TreeNode>();
@@ -49,7 +48,6 @@ public class TreeQuestion {
         }
         return res;
     }
-
     // dfs
     public List<Integer> preorderTraversal3(TreeNode root) {
         List<Integer> res = new ArrayList<Integer>();
@@ -90,7 +88,6 @@ public class TreeQuestion {
         }
         return res;
     }
-
     public List<Integer> postorderTraversal2(TreeNode root) {
         LinkedList<Integer> res = new LinkedList<>();
         if (root == null) return res;
@@ -123,7 +120,6 @@ public class TreeQuestion {
         }
         return res;
     }
-
     public List<Integer> inorderTraversal2(TreeNode root) {
         List<Integer> res = new ArrayList<>();
         ArrayDeque<TreeNode> stack = new ArrayDeque<>();
@@ -140,6 +136,7 @@ public class TreeQuestion {
         return res;
     }
 
+    // return the minimum path sum
     public int minPathSum(TreeNode root) {
         if (root == null) return 0;
         if (root.left == null) return minPathSum(root.right) + root.val;
@@ -173,9 +170,8 @@ public class TreeQuestion {
         if (num.length == 0) return null;
         return sortedArrayToBSTHelper(num, 0, num.length - 1);
     }
-
     /**
-     * watch out the use of low & high to avoid extra space used because of splitting array
+     * watch out the use of low & high in params to avoid extra space used because of splitting array
      */
     private TreeNode sortedArrayToBSTHelper(int[] num, int low, int high) {
         if (low > high) {
@@ -195,7 +191,6 @@ public class TreeQuestion {
     public boolean isBalanced(TreeNode root) {
         return isBalancedHelper(root) != -1;
     }
-
     private int isBalancedHelper(TreeNode root) {
         if (root == null) return 0;
         int left = isBalancedHelper(root.left);
@@ -230,17 +225,14 @@ public class TreeQuestion {
         root.right = null;
         return newRoot;
     }
-
     public TreeNode upsideDownBinaryTree2(TreeNode root) {
         TreeNode curr = root;
-        TreeNode next = null;
+        TreeNode next;
         TreeNode temp = null;
         TreeNode prev = null;
 
         while(curr != null) {
             next = curr.left;
-
-            // swapping nodes now, need temp to keep the previous right child
             curr.left = temp;
             temp = curr.right;
             curr.right = prev;
@@ -278,7 +270,6 @@ public class TreeQuestion {
         binaryTreePathsHelper(root, "", res);
         return res;
     }
-
     private void binaryTreePathsHelper(TreeNode root, String curString, List<String> res) {
         if (root.left == null && root.right == null) res.add(curString + root.val);
         if (root.left != null) binaryTreePathsHelper(root.left, curString + root.val + "->", res);
@@ -301,7 +292,6 @@ public class TreeQuestion {
         longestConsecutiveHelper(root, 0, root.val);
         return max;
     }
-
     private static void longestConsecutiveHelper(TreeNode root, int cur, int target){
         if(root == null) return;
         cur = (root.val == target)? cur + 1 : 1;
@@ -318,7 +308,6 @@ public class TreeQuestion {
             findLeavesHelper(root);
             return res;
         }
-
         private int findLeavesHelper(TreeNode root) {
             if (root == null) return -1;
             final int level = 1 + Math.max(findLeavesHelper(root.left), findLeavesHelper(root.right));
@@ -362,7 +351,6 @@ public class TreeQuestion {
         preSum.put(0,1);
         return pathSumHelper(root, 0, sum, preSum);
     }
-
     private int pathSumHelper(TreeNode root, int currSum, int target, HashMap<Integer, Integer> preSum) {
         if (root == null) return 0;
         currSum += root.val;
@@ -378,7 +366,6 @@ public class TreeQuestion {
         if (root == null) return 0;
         return pathSumFrom(root, sum) + pathSum2(root.left, sum) + pathSum2(root.right, sum);
     }
-
     private int pathSumFrom(TreeNode node, int sum) {
         if (node == null) return 0;
         return (node.val == sum ? 1 : 0)
@@ -434,7 +421,6 @@ public class TreeQuestion {
         }
         return false;
     }
-
     private void inorder(TreeNode root, List<Integer> l) {
         if (root == null) return;
         inorder(root.left, l);
@@ -449,7 +435,6 @@ public class TreeQuestion {
         HashSet<Integer> set = new HashSet<>();
         return dfs(root, set, k);
     }
-
     private boolean dfs(TreeNode root, HashSet<Integer> set, int k){
         if(root == null)return false;
         if(set.contains(k - root.val))return true;
@@ -469,4 +454,36 @@ public class TreeQuestion {
     }
 
     // 687. Longest Univalue Path
+    public int longestUnivaluePath(TreeNode root) {
+        if (root == null) return 0;
+        helper(root);
+        return max;
+    }
+    private int helper(TreeNode root, int parentVal) {
+        if (root == null) return 0;
+        int left = helper(root.left, root.val);
+        int right = helper(root.right, root.val);
+        max = Math.max(max, left + right);
+        return parentVal == root.val ? Math.max(left, right) : 0;
+    }
+
+    // binary tree to double linked list
+    private TreeNode head, prev = null;
+    public TreeNode binaryTreeToDoubleLinkedList(TreeNode root) {
+        if (root == null) return null;
+        helper(root);
+        return head;
+    }
+    private void helper(TreeNode root) {
+        if (root == null) return;
+        helper(root.left);
+        if (prev == null)
+            head = root;
+        else {
+            root.left = prev;
+            prev.right = root;
+        }
+        prev = root;
+        helper(root.right);
+    }
 }
