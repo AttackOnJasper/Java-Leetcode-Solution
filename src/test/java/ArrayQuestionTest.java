@@ -59,4 +59,13 @@ public class ArrayQuestionTest {
         int res = ArrayQuestion.taskScheduler(ops, 2);
         assertEquals(8, res);
     }
+
+    // 697
+    @Test
+    public void testFindShortestSubArray() {
+        int[] arr = new int[]{1,2,2,3,1};
+        int res = ArrayQuestion.findShortestSubArray(arr);
+        assertEquals(2, res);
+        assertEquals("aaa", "aaa".split(" ")[0]);
+    }
 }

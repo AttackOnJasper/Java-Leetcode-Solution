@@ -167,23 +167,6 @@ public class ArrayQuestion {
         return res;
     }
 
-    // 78 Subsets
-    public List<List<Integer>> subsets(int[] nums) {  // backtracking
-        final List<List<Integer>> list = new ArrayList<>();
-        Arrays.sort(nums);
-        backtrack(list, new ArrayList<>(), nums, 0);
-        return list;
-    }
-
-    private void backtrack(List<List<Integer>> list , List<Integer> tempList, int [] nums, int start){
-        list.add(new ArrayList<>(tempList));
-        for(int i = start; i < nums.length; i++){
-            tempList.add(nums[i]);
-            backtrack(list, tempList, nums, i + 1);
-            tempList.remove(tempList.size() - 1);
-        }
-    }
-
     // 88 Merge Sorted Arrays
     public void merge1(int[] nums1, int m, int[] nums2, int n) {
         int i = 0, j = 0, newIndex = 0;
@@ -308,33 +291,6 @@ public class ArrayQuestion {
             nums[end] = temp;
             start++;
             end--;
-        }
-    }
-
-    // 216 Combination Sum
-    /**
-     * Find all possible combinations of k numbers that add up to a number n,
-     * given that only numbers from 1 to 9 can be used and each combination should be a unique set of numbers.
-     */
-    public List<List<Integer>> combinationSum3(int k, int n) {
-        List<List<Integer>> res = new ArrayList<>();
-        combination(res, new ArrayList<>(), k, 1, n);
-        return res;
-    }
-
-    private void combination(List<List<Integer>> ans, List<Integer> comb, int k,  int start, int n) {
-        if (comb.size() > k) {
-            return;
-        }
-        if (comb.size() == k && n == 0) {
-            List<Integer> li = new ArrayList<>(comb);
-            ans.add(li);
-            return;
-        }
-        for (int i = start; i <= n && i<=9; i++) {
-            comb.add(i);
-            combination(ans, comb, k, i+1, n-i);
-            comb.remove(comb.size() - 1);
         }
     }
 
@@ -543,6 +499,26 @@ public class ArrayQuestion {
             res[i] += res[i - 1];
         }
         return res;
+    }
+
+    // 406 Queue Reconstruction by height
+    public int[][] reconstructQueue(int[][] people) {
+        /**
+          pick up the tallest guy first
+          when insert the next tall guy, just need to insert him into kth position
+          repeat until all people are inserted into list
+         */
+        Arrays.sort(people,new Comparator<int[]>(){
+            @Override
+            public int compare(int[] o1, int[] o2){
+                return o1[0]!=o2[0]?-o1[0]+o2[0]:o1[1]-o2[1];
+            }
+        });
+        List<int[]> res = new LinkedList<>();
+        for(int[] cur : people){
+            res.add(cur[1],cur);
+        }
+        return res.toArray(new int[people.length][]);
     }
 
     // 442. Find All Duplicates in an Array
@@ -825,6 +801,26 @@ public class ArrayQuestion {
         return count == n;
     }
 
+    /**
+     * 611 valid triangle numbers
+     * note the reduction of calculation of sums of 2 numbers
+     */
+    public int triangleNumber(int[] nums) {
+        Arrays.sort(nums);
+        int count = 0, n = nums.length;
+        for (int i=n-1;i>=2;i--) {
+            int l = 0, r = i-1;
+            while (l < r) {
+                if (nums[l] + nums[r] > nums[i]) {
+                    count += r-l;
+                    r--;
+                }
+                else l++;
+            }
+        }
+        return count;
+    }
+
     // 621
     public int leastInterval(char[] tasks, int n) {
         int[] c = new int[26];
@@ -951,5 +947,36 @@ public class ArrayQuestion {
             return 1 + AreaOfIsland(grid, i+1, j) + AreaOfIsland(grid, i-1, j) + AreaOfIsland(grid, i, j-1) + AreaOfIsland(grid, i, j+1);
         }
         return 0;
+    }
+
+    // 697
+    public static int findShortestSubArray(int[] nums) {
+        Map<Integer, Integer> m = new HashMap<Integer, Integer>(), first = new HashMap<Integer, Integer>(), last = new HashMap<Integer, Integer>();
+        for (int i = 0; i < nums.length; i++) {
+            if (!first.containsKey(nums[i])) {
+                first.put(nums[i], i);
+            }
+            last.put(nums[i], i);
+            m.put(nums[i], m.getOrDefault(nums[i], 0) + 1);
+        }
+        int max = 0;
+        HashSet<Integer> set = new HashSet<Integer>();
+        for (int k : m.keySet()) {
+            int v = m.get(k);
+            if (v >= max) {
+                if (v > max) {
+                    set.clear();
+                    max = v;
+                }
+                set.add(k);
+            }
+        }
+        int res = Integer.MAX_VALUE;
+        Iterator<Integer> it = set.iterator();
+        while (it.hasNext()) {
+            int temp = it.next();
+            res = Math.min(res, last.get(temp) - first.get(temp));
+        }
+        return res + 1;
     }
 }

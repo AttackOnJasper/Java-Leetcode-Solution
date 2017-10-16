@@ -372,6 +372,23 @@ public class TreeQuestion {
             + pathSumFrom(node.left, sum - node.val) + pathSumFrom(node.right, sum - node.val);
     }
 
+    // 513 Find Bottom Left Tree Value
+    /**
+     * note the order of left & right
+     */
+    public int findBottomLeftValue(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            root = queue.poll();
+            if (root.right != null)
+                queue.add(root.right);
+            if (root.left != null)
+                queue.add(root.left);
+        }
+        return root.val;
+    }
+
     // 617 Merge two trees
     public TreeNode mergeTrees(TreeNode t1, TreeNode t2) {
         if (t1 == null) return t2;
