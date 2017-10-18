@@ -30,6 +30,51 @@ public class DPQuestion {
         return maxSub;
     }
 
+    // 53 Max subarray
+    // DP dp[i]: max subarray that ends with nums[i]
+    public int maxSubArray(int[] nums) {
+        if (nums.length == 0) {
+            return 0;
+        }
+        int[] dp = new int[nums.length];
+        dp[0] = nums[0];
+        int res = dp[0];
+        for (int i = 1; i < nums.length; i++) {
+            dp[i] = nums[i] + (dp[i - 1] > 0 ? dp[i - 1] : 0);
+            res = Math.max(res, dp[i]);
+        }
+        return res;
+    }
+    // another dp
+    public int maxSubArray1(int[] nums) {
+        int curMax = nums[0], maxSoFar = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            curMax = nums[i] + (curMax > 0 ? curMax : 0);
+            maxSoFar = Math.max(curMax, maxSoFar);
+        }
+        return maxSoFar;
+    }
+    // Greedy
+    /**
+     * find the largest difference between the sums when summing up the array from left to right
+     */
+    public int maxSubArray3(int[] nums) {
+        if (nums.length == 0) {
+            return 0;
+        }
+        int sum = 0, min = 0, res = nums[0];
+        for (int i = 0; i < nums.length; i++) {
+            sum += nums[i];
+            if (sum - min > res) {
+                res = sum - min;
+            }
+            if (sum < min) {
+                min = sum;
+            }
+        }
+        return res;
+    }
+
     // 120. Triangle
     public int minimumTotal(List<List<Integer>> triangle) {
         int[] A = new int[triangle.size()+1];
@@ -58,7 +103,9 @@ public class DPQuestion {
         return d[prices.length - 1];
     }
     /**
-     * Kadane's algorithm
+     * Kadane's Algorithm: the logic is to calculate the difference (maxCur += prices[i] - prices[i-1])
+     * of the original array, and find a contiguous subarray giving maximum profit.
+     * If the difference falls below 0, reset it to zero.
      */
     public int maxProfit2(int[] prices) {
         int maxCur = 0, maxSoFar = 0;

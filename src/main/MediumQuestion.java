@@ -57,64 +57,10 @@ public class MediumQuestion {
 
     // 12. Integer to Roman
 
-    // 106 Construct Binary Tree from Inorder and Postorder Traversal
-    /**
-     * The the basic idea is to take the last element in postorder array as the root,
-     * find the position of the root in the inorder array; then locate the range for left sub-tree
-     * and right sub-tree and do recursion. Use a HashMap to record the index of root in the inorder array.
-     */
-    public static TreeNode buildTree(int[] inorder, int[] postorder) {
-        if (inorder == null || postorder == null || inorder.length != postorder.length)
-            return null;
-        HashMap<Integer, Integer> hm = new HashMap<Integer,Integer>();
-        for (int i=0;i<inorder.length;++i)
-            hm.put(inorder[i], i);
-        return buildTreePostIn(inorder, 0, inorder.length-1, postorder, 0,
-            postorder.length-1,hm);
-    }
-    private static TreeNode buildTreePostIn(
-        int[] inorder,
-        int is,
-        int ie,
-        int[] postorder,
-        int ps,
-        int pe,
-        HashMap<Integer,Integer> hm
-    ){
-        if (ps>pe || is>ie) return null;
-        TreeNode root = new TreeNode(postorder[pe]);
-        int ri = hm.get(postorder[pe]);
-        TreeNode leftchild = buildTreePostIn(inorder, is, ri-1, postorder, ps, ps+ri-is-1, hm);
-        TreeNode rightchild = buildTreePostIn(inorder,ri+1, ie, postorder, ps+ri-is, pe-1, hm);
-        root.left = leftchild;
-        root.right = rightchild;
-        return root;
-    }
 
     // 148. Sort List
 
 
-
-    // 245 Shortest Word Distance III
-    public static int shortestWordDistance(String[] words, String word1, String word2) {
-        int i = 0, index1 = -1, index2 = -1, res = Integer.MAX_VALUE;
-        boolean flag = word1.equals(word2);
-        while (i < words.length) {
-            if (words[i].equals(word1)) {
-                if (flag) {
-                    index2 = index1;
-                }
-                index1 = i;
-            } else if (words[i].equals(word2)) {
-                index2 = i;
-            }
-            if (index1 != -1 && index2 != -1) {
-                res = Math.min(res, Math.abs(index1 - index2));
-            }
-            i++;
-        }
-        return res;
-    }
 
     // 246 Same after rotatign 180 degrees
     public boolean isStrobogrammatic(String num) {
@@ -137,13 +83,11 @@ public class MediumQuestion {
 
     // 250 Count Univalue Subtrees
     int res = 0;
-
     public int countUnivalSubtrees(TreeNode root) {
         if (root == null) return 0;
         countUnivalSubtreesHelper(root, root.val);
         return res;
     }
-
     private boolean countUnivalSubtreesHelper(TreeNode root, int val) {
         if (root == null) return true;
         // use | here for explicit comparison
@@ -163,7 +107,6 @@ public class MediumQuestion {
         Set<String> winSet = new HashSet<String>();
         return canWin(s, winSet);
     }
-
     private boolean canWin(String s, Set<String> winSet){
         if(winSet.contains(s)) return true;
 
@@ -231,7 +174,6 @@ public class MediumQuestion {
         }
         return n;
     }
-
     private int find(int[] roots, int id) {
         while(roots[id] != id) {
             roots[id] = roots[roots[id]];  // optional: path compression
@@ -284,8 +226,10 @@ public class MediumQuestion {
 
 
     // 364
-    /** Instead of multiplying by depth, add integers multiple times (by going level by level and adding the unweighted sum to the weighted sum after each level) */
-    // Input [[1, 1], 2, [1, 1]] -> output 8 (4 * 1 + 2 * 2)
+    /** Instead of multiplying by depth, add integers multiple times (by going level by level and
+     * adding the unweighted sum to the weighted sum after each level)
+     * Input [[1, 1], 2, [1, 1]] -> output 8 (4 * 1 + 2 * 2)
+     * */
 //    public int depthSumInverse(List<NestedInteger> nestedList) {
 //        int unweighted = 0, weighted = 0;
 //        while (!nestedList.isEmpty()) {
@@ -466,7 +410,6 @@ public class MediumQuestion {
         }
         return A + "/" + B;
     }
-
     private int gcd(int a, int b) {
         return a != 0 ? gcd(b % a, a) : Math.abs(b);
     }

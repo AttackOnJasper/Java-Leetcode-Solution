@@ -23,7 +23,8 @@ public class BackTrackQuestion {
         return ans;
     }
 
-    // 39 Combination Sum
+    // 39 Combination Sum I
+    /** Each number can be used infinite number of times */
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
         List<List<Integer>> res = new LinkedList<List<Integer>>();
         return res;
