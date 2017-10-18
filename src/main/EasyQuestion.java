@@ -98,7 +98,7 @@ public class EasyQuestion {
     }
 
     // 125
-    public boolean isPalindrome(String s) {
+    public static boolean isPalindrome(String s) {
         String temp = s.replaceAll("[^A-Za-z0-9]", "").toLowerCase();
         String reversed = new StringBuffer(temp).reverse().toString();
         return reversed.equals(temp);

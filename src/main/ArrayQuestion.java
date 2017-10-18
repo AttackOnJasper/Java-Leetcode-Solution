@@ -681,7 +681,7 @@ public class ArrayQuestion {
         return count;
     }
 
-    // 560 Subarray Sum Equals k
+    // 560 Subarray Sum Equals k: Given an array and an integer k, find # of continuous subarrays whose sum equals to k.
     public int subarraySum(int[] nums, int k) {
         int result = 0, sum = 0;
         Map<Integer, Integer> preSum = new HashMap<Integer, Integer>();
@@ -736,6 +736,9 @@ public class ArrayQuestion {
         }
         int[][] res = new int[r][c];
         for (int i = 0; i < r * c; i++) {
+            /**
+             * note the indexing of matrices
+             */
             res[i / c][i % c] = nums[i / y][i % y];
         }
         return res;

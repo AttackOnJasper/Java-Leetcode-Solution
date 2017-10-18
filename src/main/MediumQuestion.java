@@ -14,7 +14,6 @@ public class MediumQuestion {
         prev.next = reverse(slow);
         return head;
     }
-
     private static ListNode reverse(ListNode head) {
         ListNode prev = null;
         while (head != null) {

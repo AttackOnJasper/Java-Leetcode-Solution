@@ -6,6 +6,23 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class BackTrackQuestion {
+    // 17 Letter Combinations of a Phone Number
+    public List<String> letterCombinations(String digits) {
+        LinkedList<String> ans = new LinkedList<String>();
+        if (digits == null || digits.length() == 0) return ans;
+        String[] mapping = new String[] {"0", "1", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        ans.add("");
+        for(int i =0; i<digits.length();i++){
+            int x = Character.getNumericValue(digits.charAt(i));
+            while(ans.peek().length()==i){
+                String t = ans.remove();
+                for(char s : mapping[x].toCharArray())
+                    ans.add(t+s);
+            }
+        }
+        return ans;
+    }
+
     // 39 Combination Sum
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
         List<List<Integer>> res = new LinkedList<List<Integer>>();
@@ -28,6 +45,28 @@ public class BackTrackQuestion {
             /** use i as start to re-use same element */
             combinationSumHelper(i, temp, res, candidates, target - candidates[i]);
             temp.remove(temp.size() - 1);
+        }
+    }
+
+    // 40 Combination Sum: each element can only be used once, no duplicated combinations
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        Arrays.sort(candidates);
+        List<List<Integer>> res = new ArrayList<>();
+        combinationSum2Helper(res, candidates, target, new ArrayList<>(), 0);
+        return res;
+    }
+    private void combinationSum2Helper(List<List<Integer>> res, int[] candidates, int target, List<Integer> temp, int start) {
+        if (target <= 0) {
+            if (target == 0)
+                res.add(new ArrayList<>(temp));
+            return;
+        }
+        for (int i = start; i < candidates.length; i++) {
+            if (i == start || candidates[i] != candidates[i - 1]) {
+                temp.add(candidates[i]);
+                combinationSum2Helper(res, candidates, target - candidates[i], temp, i + 1);
+                temp.remove(temp.size() - 1);
+            }
         }
     }
 
@@ -93,7 +132,6 @@ public class BackTrackQuestion {
         subsetsWithDupHelper(nums, res, new ArrayList<>(), 0);
         return res;
     }
-
     private void subsetsWithDupHelper(int[] nums, List<List<Integer>> res, List<Integer> temp, int start) {
         res.add(new ArrayList<>(temp));
         for (int i = start; i < nums.length; i++) {
@@ -103,6 +141,33 @@ public class BackTrackQuestion {
                 temp.remove(temp.size() - 1);
             }
         }
+    }
+
+    // 131 Palindrome partitioning (Uber interview)
+    public List<List<String>> partition(String s) {
+        List<List<String>> res = new ArrayList<>();
+        partitionHelper(s, res, new ArrayList<>(), 0);
+        return res;
+    }
+    private void partitionHelper(String s, List<List<String>> res, List<String> temp, int start) {
+        if (temp.size() > 0 && start >= s.length()) {
+            res.add(new ArrayList<>(temp));
+        }
+        for (int i = start; i < s.length(); i++) {
+            if (isPalindrome(s, start, i)) {
+                temp.add(s.substring(start, i + 1));
+                partitionHelper(s, res, temp, i + 1);
+                temp.remove(temp.size() - 1);
+            }
+        }
+    }
+    private boolean isPalindrome(String str, int l, int r){
+        if(l==r) return true;
+        while(l<r){
+            if(str.charAt(l)!=str.charAt(r)) return false;
+            l++;r--;
+        }
+        return true;
     }
 
     // 216 Combination Sum

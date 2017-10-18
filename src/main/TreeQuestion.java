@@ -160,6 +160,32 @@ public class TreeQuestion {
         return isSymmetricHelper(left.left, right.right) && isSymmetricHelper(right.left, left.right);
     }
 
+    // 103 Binary Tree Zigzag Level Order Traversal
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> res = new LinkedList<List<Integer>>();
+        LinkedList<TreeNode> q = new LinkedList<TreeNode>();
+        if (root == null) return res;
+        q.add(root);
+        boolean flag = true;
+        while (!q.isEmpty()) {
+            int size = q.size();
+            List<Integer> temp = new LinkedList<>();
+            for(int i = 0; i < size; i++){
+                root = q.poll();
+                if(flag){
+                    temp.add(root.val);
+                }else{
+                    temp.add(0, root.val);
+                }
+                if(root.left != null) q.offer(root.left);
+                if(root.right != null) q.offer(root.right);
+            }
+            flag = !flag;
+            res.add(new LinkedList<>(temp));
+        }
+        return res;
+    }
+
     // 104
     public int maxDepth(TreeNode root) {
         return root == null? 0 : 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
@@ -370,6 +396,35 @@ public class TreeQuestion {
         if (node == null) return 0;
         return (node.val == sum ? 1 : 0)
             + pathSumFrom(node.left, sum - node.val) + pathSumFrom(node.right, sum - node.val);
+    }
+
+    // 501 find mode(s) in duplicated BST
+    private Integer prevVal = null;
+    private int count = 1;
+    private int modeCount = 0;
+    public int[] findMode(TreeNode root) {
+        if (root == null) return new int[0];
+        List<Integer> list = new ArrayList<>();
+        traverse(root, list);
+        return list.stream().mapToInt(i -> i).toArray();
+    }
+
+    private void traverse(TreeNode root, List<Integer> list) {
+        if (root == null) return;
+        traverse(root.left, list);
+        if (prevVal != null) {
+            if (root.val == prevVal) count++;
+            else count = 1;
+        }
+        if (count > modeCount) {
+            modeCount = count;
+            list.clear();
+            list.add(root.val);
+        } else if (count == modeCount) {
+            list.add(root.val);
+        }
+        prevVal = root.val;
+        traverse(root.right, list);
     }
 
     // 513 Find Bottom Left Tree Value
