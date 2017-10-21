@@ -13,15 +13,14 @@ import java.util.List;
 public class EasyQuestion {
     // 9
     public boolean isPalindrome(int x) {
-        if (x < 0 || (x != 0 && x % 10 == 0)) {
-            return false;
+        if(x < 0) return false;
+        int y = x;
+        int res = 0;
+        while(y != 0) {
+            res = res * 10 + y % 10;
+            y /= 10;
         }
-        int rev = 0;
-        while (x > rev) {
-            rev = rev * 10 + x % 10;
-            x = x / 10;
-        }
-        return (x == rev || x == rev / 10);
+        return x == res;
     }
 
     // 20 Valid Parenthesis
@@ -266,6 +265,7 @@ public class EasyQuestion {
     }
 
     // 204 Count Primes
+    /** semi-dp idea */
     public int countPrimes(int n) {
         int res = 0;
         boolean[] notPrime = new boolean[n];
@@ -303,21 +303,6 @@ public class EasyQuestion {
             head = next;
         }
         return newHead;
-    }
-
-    // 344
-    public String reverseString(String s) {
-        char[] arr = s.toCharArray();
-        int start = 0;
-        int end = arr.length - 1;
-        while (start < end) {
-            char temp = arr[start];
-            arr[start] = arr[end];
-            arr[end] = temp;
-            start++;
-            end--;
-        }
-        return String.valueOf(arr);
     }
 
     // 234  Palindrome Linked List (in O(n) time and O(1) space)

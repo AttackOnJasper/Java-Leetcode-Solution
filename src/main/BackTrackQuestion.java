@@ -27,6 +27,7 @@ public class BackTrackQuestion {
     /** Each number can be used infinite number of times */
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
         List<List<Integer>> res = new LinkedList<List<Integer>>();
+        combinationSumHelper(0, new ArrayList<>(), res, candidates, target);
         return res;
     }
     private void combinationSumHelper(

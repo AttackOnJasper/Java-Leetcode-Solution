@@ -345,6 +345,36 @@ public class ArrayQuestion {
         return res.toArray(new int[people.length][]);
     }
 
+    // 413: Arithmetic slices: return # of subarray that forms arithmetic sequence
+    public int numberOfArithmeticSlices(int[] A) {
+        if (A.length < 3) return 0;
+        int res = 0, difference = Integer.MAX_VALUE, count = 0;
+        for (int i = 1; i < A.length; i++) {
+            int curDiff = A[i] - A[i-1];
+            if (curDiff == difference) {
+                count++;
+                res += count; /** note the way to accumulate res */
+            } else {
+                count = 0;
+                difference = curDiff;
+            }
+        }
+        return res;
+    }
+
+    // 419: Battleships in a board
+    public int countBattleships(char[][] board) {
+        int res = 0;
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                char temp = board[i][j];
+                /** only add the first X appeared */
+                if (temp == 'X') res += ((i > 0 && board[i-1][j] == temp)||(j > 0 && board[i][j-1] == temp)) ? 0 : 1;
+            }
+        }
+        return res;
+    }
+
     // 442. Find All Duplicates in an Array
     /**
      * Given an array of integers, 1 ≤ a[i] ≤ n (n = size of array), some elements appear twice and others appear once.

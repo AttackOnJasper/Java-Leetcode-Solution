@@ -1,8 +1,6 @@
 package main;
 
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
 public class StringQuestion {
     // 14
@@ -88,7 +86,7 @@ public class StringQuestion {
         }
     }
 
-    // 680
+    // 680 Palindrome 2: can have one character difference
     public boolean validPalindrome(String s) {
         int i = -1, j = s.length();
         while (++i < --j) {

@@ -144,6 +144,25 @@ public class TreeQuestion {
         return Math.min(minPathSum(root.left), minPathSum(root.right)) + root.val;
     }
 
+    // 98 is BST
+    public boolean isValidBST(TreeNode root) {
+        if (root == null) return true;
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode pre = null;
+        while (root != null || !stack.isEmpty()) {
+            if (root != null) {
+                stack.push(root);
+                root = root.left;
+            } else {
+                root = stack.pop();
+                if(pre != null && root.val <= pre.val) return false;
+                pre = root;
+                root = root.right;
+            }
+        }
+        return true;
+    }
+
     // 100
     public boolean isSameTree(TreeNode p, TreeNode q) {
         if (p == null || q == null) return p == q;
