@@ -191,7 +191,8 @@ public class DPQuestion {
     }
 
     // 712 find the lowest ASCII sum of deleted characters to make two strings equal
-    public int minimumDeleteSum(String s1, String s2) {
+    /** similar to edit distance */
+    public static int minimumDeleteSum(String s1, String s2) {
         int[][] count = new int[s1.length() + 1][s2.length() + 1];
         for(int i = 1; i < count.length; i++){
             count[i][0] = count[i-1][0] + s1.charAt(i-1);
@@ -207,5 +208,16 @@ public class DPQuestion {
             }
         }
         return count[s1.length()][s2.length()];
+    }
+
+    // 714 Best Time to Buy and Sell Stock with Transaction Fee
+    public static int maxProfit(int[] prices, int fee) {
+        int s0 = 0, s1 = Integer.MIN_VALUE;
+        for (int p : prices) {
+            int tmp = s0;
+            s0 = Math.max(s0, s1 + p);
+            s1 = Math.max(s1, tmp - p - fee);
+        }
+        return s0;
     }
 }

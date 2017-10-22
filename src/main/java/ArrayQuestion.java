@@ -852,15 +852,4 @@ public class ArrayQuestion {
         }
         return res + 1;
     }
-
-    // 714 Best Time to Buy and Sell Stock with Transaction Fee
-    public int maxProfit(int[] prices, int fee) {
-        int s0 = 0, s1 = Integer.MIN_VALUE;
-        for (int p : prices) {
-            int tmp = s0;
-            s0 = Math.max(s0, s1 + p);
-            s1 = Math.max(s1, tmp - p - fee);
-        }
-        return s0;
-    }
 }
