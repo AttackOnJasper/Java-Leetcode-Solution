@@ -1,4 +1,4 @@
-package main;
+package main.java;
 
 import java.util.*;
 
@@ -52,7 +52,7 @@ public class ArrayQuestion {
             nums1[newIndex++] = nums2[j++];
         }
     }
-    public void merge2(int[] nums1, int m, int[] nums2, int n) {
+    protected void merge2(int[] nums1, int m, int[] nums2, int n) {
         while (n > 0) {
             nums1[m + n - 1] = (m == 0 || nums2[n - 1] > nums1[m - 1]) ? nums2[--n] : nums1[--m];
         }
@@ -155,6 +155,24 @@ public class ArrayQuestion {
         for (int i = len - 1; i >= 0; i--) {
             res[i] *= right;
             right *= nums[i];
+        }
+        return res;
+    }
+
+    // 243 shorest word distance: given an array and two strings, find the minimum distance of the
+    // two strings in that array
+    public int shortestDistance(String[] words, String word1, String word2) {
+        int i1 = -1, i2 = -1, res = Integer.MAX_VALUE;
+        for (int i = 0, length = words.length; i < length; i++) {
+            String s = words[i];
+            if (s.equals(word1)) {
+                i1 = i;
+            } else if (s.equals(word2)) {
+                i2 = i;
+            }
+            if (i1 != -1 && i2 != -1) {
+                res = Math.min(res, Math.abs(i1 - i2));
+            }
         }
         return res;
     }
@@ -833,5 +851,16 @@ public class ArrayQuestion {
             res = Math.min(res, last.get(temp) - first.get(temp));
         }
         return res + 1;
+    }
+
+    // 714 Best Time to Buy and Sell Stock with Transaction Fee
+    public int maxProfit(int[] prices, int fee) {
+        int s0 = 0, s1 = Integer.MIN_VALUE;
+        for (int p : prices) {
+            int tmp = s0;
+            s0 = Math.max(s0, s1 + p);
+            s1 = Math.max(s1, tmp - p - fee);
+        }
+        return s0;
     }
 }

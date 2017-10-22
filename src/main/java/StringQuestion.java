@@ -1,6 +1,8 @@
-package main;
+package main.java;
 
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 public class StringQuestion {
     // 14
@@ -68,6 +70,15 @@ public class StringQuestion {
             }
         }
         return false;
+    }
+
+    // 293 Flip game: replace two "++" with "--"
+    public List<String> generatePossibleNextMoves(String s) {
+        List<String> res = new LinkedList<>();
+        for (int i=-1; (i = s.indexOf("++", i+1)) >= 0; ) {
+            res.add(s.substring(0, i) + "--" + s.substring(i+2));
+        }
+        return res;
     }
 
     // 647 Palindrome substring: return # of palindromes in string

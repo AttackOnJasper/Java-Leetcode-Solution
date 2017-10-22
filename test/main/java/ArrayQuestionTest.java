@@ -1,11 +1,8 @@
-package test.java;
+package main.java;
 
-import static junit.framework.Assert.assertTrue;
 import static junit.framework.TestCase.assertEquals;
-import static org.junit.Assert.assertFalse;
 
 import java.util.List;
-import main.ArrayQuestion;
 import org.junit.Test;
 
 public class ArrayQuestionTest {
