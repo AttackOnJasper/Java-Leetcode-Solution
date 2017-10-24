@@ -2,6 +2,7 @@ package main.java;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -349,6 +350,18 @@ public class EasyQuestion {
         }
         return true;
     }
+    public boolean canAttendMeetings2(Interval[] intervals) {
+        if (intervals == null)
+            return false;
+        // Sort the intervals by start time
+        Arrays.sort(intervals, new Comparator<Interval>() {
+            public int compare(Interval a, Interval b) { return a.start - b.start; }
+        });
+        for (int i = 1; i < intervals.length; i++)
+            if (intervals[i].start < intervals[i - 1].end)
+                return false;
+        return true;
+    }
 
     // 266 return true if permutation of string can be a palindrome
     public boolean canPermutePalindrome(String s) {
@@ -498,7 +511,7 @@ public class EasyQuestion {
         return sb.reverse().toString();
     }
 
-    // 422 Valid Word Square
+    // 422 Valid Word Square: verify that the transpose of matrix is the same as matrix
     public boolean validWordSquare(List<String> words) {
         for (int i = 0, size = words.size(); i < size; i++) {
             String temp = words.get(i);

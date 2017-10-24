@@ -135,34 +135,29 @@ public class DPQuestion {
         return d[d.length - 1];
     }
 
-    // 256. Paint House
+    // 256. Paint House: each house can be painted from one of the three colours & each adjacent
+    // house cannot share the same colour
+    /** reduction of space complexity by keeping only prev & curr values */
     public int minCost(int[][] costs) {
-        int n = costs.length;
-        if (n == 0) {
-            return 0;
+        if (costs == null || costs.length == 0 || costs[0].length == 0) return 0;
+        int n = costs.length, r = 0, g = 0, b = 0;
+        for (int i = 0; i < n; i++) {
+            int rr = r, bb = b, gg = g;
+            r = costs[i][0] + Math.min(bb, gg);
+            b = costs[i][1] + Math.min(rr, gg);
+            g = costs[i][2] + Math.min(rr, bb);
         }
-        int[][] d = new int[n][3];
-        d[0] = costs[0];
-        for (int i = 1; i < n; i++) {
-            d[i][0] = costs[i][0] + Math.min(d[i - 1][1], d[i - 1][2]);
-            d[i][1] = costs[i][1] + Math.min(d[i - 1][0], d[i - 1][2]);
-            d[i][2] = costs[i][2] + Math.min(d[i - 1][0], d[i - 1][1]);
-        }
-        return Math.min(d[n - 1][0], Math.min(d[n - 1][1], d[n - 1][2]));
+        return Math.min(r, Math.min(g, b));
     }
 
-    // 276 Faint Fence
+    // 276 Paint Fence
     /**
      * Return the total number of ways to paint n posts given k colors s.t. no more than 2 adjacent
      * posts have the same color
      */
     public int numWays(int n, int k) {
-        if (n == 0) {
-            return 0;
-        }
-        if (n == 1) {
-            return k;
-        }
+        if (n == 0) return 0;
+        if (n == 1) return k;
         int diffColorCounts = k * (k - 1);
         int sameColorCounts = k;
         for (int i = 2; i < n; i++) {
@@ -188,6 +183,36 @@ public class DPQuestion {
             }
         }
         return dp[0][s.length() - 1];
+    }
+
+    // 416 Partition Equal Subset Sum
+    /** knapsack */
+    public boolean canPartition(int[] nums) {
+        int sum = 0;
+
+        for (int num : nums) {
+            sum += num;
+        }
+
+        if ((sum & 1) == 1) {
+            return false;
+        }
+        sum /= 2;
+
+        int n = nums.length;
+        boolean[] dp = new boolean[sum+1];
+        Arrays.fill(dp, false);
+        dp[0] = true;
+
+        for (int num : nums) {
+            for (int i = sum; i > 0; i--) {
+                if (i >= num) {
+                    dp[i] = dp[i] || dp[i-num];
+                }
+            }
+        }
+
+        return dp[sum];
     }
 
     // 712 find the lowest ASCII sum of deleted characters to make two strings equal
