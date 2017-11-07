@@ -528,6 +528,35 @@ public class EasyQuestion {
         return ("x " + s).split(" +").length - 1;
     }
 
+    // 443
+    public static int compress(char[] chars) {
+        int newLength = 1, count = 1;
+        for (int i = 1; i < chars.length + 1; i++) {
+            if (i != chars.length && chars[i] != chars[i-1]) {
+                count++;
+            } else {
+                if (count > 1) {
+                    int low = newLength;
+                    for (; count > 0; count /= 10) {
+                        chars[newLength++] = (char)(count%10 + '0');
+                    }
+                    int high = newLength;
+                    reverse(chars, low, high);
+                }
+                chars[newLength++] = chars[i];
+                count = 1;
+            }
+        }
+        return newLength;
+    }
+    private static void reverse(char[] chars, int low, int high) {
+        for (int i = low, j = high - 1; i < j; i++, j--) {
+            char temp = chars[i];
+            chars[i] = chars[j];
+            chars[j] = temp;
+        }
+    }
+
     // 447
 
     /**

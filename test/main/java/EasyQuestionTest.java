@@ -43,6 +43,13 @@ public class EasyQuestionTest {
     l.add("b");
     assertFalse(easyQuestion.validWordSquare(l));
   }
+
+  // 443
+  @Test
+  public void test() {
+    assertEquals(4, EasyQuestion.compress(new char[]{'a','b','b','b','b','b','b','b','b','b','b','b','b'}));
+  }
+
   // 461
   @Test
   public void testHammingDistance() {

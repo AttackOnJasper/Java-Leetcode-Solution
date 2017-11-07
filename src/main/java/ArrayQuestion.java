@@ -852,4 +852,27 @@ public class ArrayQuestion {
         }
         return res + 1;
     }
+
+    // 720
+    public String longestWord(String[] words) {
+        if (words == null || words.length == 0) return "";
+        Arrays.sort(words);
+        int max = 0;
+        String res = words[0];
+        Set<String> set = new HashSet<String>();
+        for (String word : words) {
+            set.add(word);
+            int i = 1, len = word.length();
+            for (; i < len; i++) {
+                if (!set.contains(word.substring(0,i))) {
+                    break;
+                }
+            }
+            if (i == len && len > max) {
+                max = len;
+                res = word;
+            }
+        }
+        return res;
+    }
 }
