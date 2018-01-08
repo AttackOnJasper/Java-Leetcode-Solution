@@ -29,6 +29,37 @@ public class StringQuestion {
         }
     }
 
+    // Cipher
+    public static String cipherEncode(final String text, final int shift) {
+        final StringBuilder sb = new StringBuilder();
+        final char[] arr = text.toCharArray();
+        for (final char c : arr) {
+            if (Character.isUpperCase(c)) {
+                sb.append((char) ((c + shift - 65) % 26 + 65));
+            } else if (Character.isLowerCase(c)) {
+                sb.append((char) ((c + shift - 97) % 26 + 97));
+            } else {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
+    }
+
+    public static String cipherDecode(final String text, final int shift) {
+        final StringBuilder sb = new StringBuilder();
+        final char[] arr = text.toCharArray();
+        for (final char c : arr) {
+            if (Character.isUpperCase(c)) {
+                sb.append((char) (c - shift - 65 >= 0 ? c - shift : c - shift + 26));
+            } else if (Character.isLowerCase(c)) {
+                sb.append((char) (c - shift - 97 >= 0 ? c - shift : c - shift + 26));
+            } else {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
+    }
+
     // 14
     public String longestCommonPrefix(String[] strs) {
         if (strs == null || strs.length == 0) return "";

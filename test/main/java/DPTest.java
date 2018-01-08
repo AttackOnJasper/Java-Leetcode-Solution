@@ -30,4 +30,10 @@ public class DPTest {
     public void testFindLength() {
         assertEquals(2, DPQuestion.findLength(new int[]{0,1,1,1,1}, new int[]{1,0,1,0,1}));
     }
+
+    @Test
+    public void testDeleteAndEarn() {
+        assertEquals(6, DPQuestion.deleteAndEarn(new int[]{3,4,2}));
+        assertEquals(9, DPQuestion.deleteAndEarn(new int[]{2, 2, 3, 3, 3, 4}));
+    }
 }

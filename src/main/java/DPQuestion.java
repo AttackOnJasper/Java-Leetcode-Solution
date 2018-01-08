@@ -3,9 +3,12 @@ package main.java;
 import java.util.*;
 
 public class DPQuestion {
+
     // 5. Longest Palindromic Substring
     public String longestPalindrome(String s) {
-        if (s == null || s.length() <= 1) return s;
+        if (s == null || s.length() <= 1) {
+            return s;
+        }
         boolean[][] dp = new boolean[s.length()][s.length()];
         char[] w = s.toCharArray();
         int maxLen = 0;
@@ -219,13 +222,16 @@ public class DPQuestion {
     /** similar to edit distance */
     public static int minimumDeleteSum(String s1, String s2) {
         int m = s1.length(), n = s2.length();
+        /**
+         * dp[i][j]: the minimum delete sum for s1[0 - i] & s2[0 - j]
+         */
         int[][] dp = new int[m + 1][n + 1];
         for (int j = 1; j <= n; j++) dp[0][j] = dp[0][j-1]+ s2.charAt(j-1);
         for (int i = 1; i <= m; i++) {
             dp[i][0] = dp[i-1][0]+ s1.charAt(i-1);
             for (int j = 1; j <= n; j++)
                 dp[i][j] = s1.charAt(i-1) == s2.charAt(j-1)? dp[i-1][j-1] :
-                    Math.min(dp[i-1][j]+ s1.charAt(i-1), dp[i][j-1] + s2.charAt(j-1));
+                    Math.min(dp[i-1][j] + s1.charAt(i-1), dp[i][j-1] + s2.charAt(j-1));
         }
         return dp[m][n];
     }
@@ -262,5 +268,29 @@ public class DPQuestion {
             }
         }
         return res;
+    }
+
+    public static int deleteAndEarn(int[] nums) {
+        Arrays.sort(nums);
+        List<Integer> temp = new ArrayList<>();
+        int count = 1;
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] == nums[i-1]) {
+                count++;
+            } else {
+                temp.add(nums[i-1] * count);
+                count = 1;
+            }
+        }
+        temp.add(nums[nums.length-1] * count);
+        int[] dp = new int[temp.size()];
+        for (int i = 0; i < temp.size(); i++) {
+            if (i < 2) {
+                dp[i] = temp.get(i);
+            } else {
+                dp[i] = Integer.max(dp[i - 1], dp[i - 2] + temp.get(i));
+            }
+        }
+        return dp[temp.size() - 1];
     }
 }

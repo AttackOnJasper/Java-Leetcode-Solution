@@ -875,4 +875,19 @@ public class ArrayQuestion {
         }
         return res;
     }
+
+    // 739
+    public int[] dailyTemperatures(int[] temperatures) {
+        if (temperatures.length == 0) return new int[0];
+        int[] res = new int[temperatures.length];
+        for (int i = 0; i < temperatures.length; i++) {
+            for (int j = i + 1; j < temperatures.length; j++) {
+                if (temperatures[i] < temperatures[j]) {
+                    res[i] = j;
+                    break;
+                }
+            }
+        }
+        return res;
+    }
 }
