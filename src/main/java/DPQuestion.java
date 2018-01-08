@@ -270,27 +270,19 @@ public class DPQuestion {
         return res;
     }
 
-    public static int deleteAndEarn(int[] nums) {
-        Arrays.sort(nums);
-        List<Integer> temp = new ArrayList<>();
-        int count = 1;
-        for (int i = 1; i < nums.length; i++) {
-            if (nums[i] == nums[i-1]) {
-                count++;
-            } else {
-                temp.add(nums[i-1] * count);
-                count = 1;
-            }
+    // 740
+    // The length of nums is at most 20000. Each element nums[i] is an integer in the range [1, 10000]
+    public int deleteAndEarn(int[] nums) {
+        final int[] values = new int[10001];  // values array stores sums of buckets
+        for (int num : nums) {
+            values[num] += num;
         }
-        temp.add(nums[nums.length-1] * count);
-        int[] dp = new int[temp.size()];
-        for (int i = 0; i < temp.size(); i++) {
-            if (i < 2) {
-                dp[i] = temp.get(i);
-            } else {
-                dp[i] = Integer.max(dp[i - 1], dp[i - 2] + temp.get(i));
-            }
+        int take = 0, skip = 0;
+        for (final int value : values) {
+            final int temp = Math.max(skip + value, take);
+            skip = take;
+            take = temp;
         }
-        return dp[temp.size() - 1];
+        return take;
     }
 }
