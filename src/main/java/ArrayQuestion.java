@@ -58,6 +58,20 @@ public class ArrayQuestion {
         }
     }
 
+    // 118
+    public List<List<Integer>> generatePascal(int n) {
+        List<List<Integer>> res = new ArrayList<>();
+        List<Integer> row = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            row.add(0, 1);
+            for (int j = 1; j < row.size(); j++) {
+                row.set(j, row.get(j) + row.get(j+1)); // keep mutating the same row
+            }
+            res.add(row);
+        }
+        return res;
+    }
+
     // 119 Pascal Triangle
     public List<Integer> getRow(int rowIndex) {
         List<Integer> res = new ArrayList<>();
@@ -887,6 +901,16 @@ public class ArrayQuestion {
                     break;
                 }
             }
+        }
+        return res;
+    }
+
+    // 769. Max Chunks To Make Sorted I
+    public int maxChunksToSorted(int[] arr) {
+        int curLen = 0, res = 0;
+        for (int i = 0; i < arr.length; i++) {
+            curLen = Math.max(curLen, arr[i]);
+            if (i == curLen) res++;
         }
         return res;
     }

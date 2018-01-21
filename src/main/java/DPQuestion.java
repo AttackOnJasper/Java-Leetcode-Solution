@@ -272,7 +272,7 @@ public class DPQuestion {
 
     // 740
     // The length of nums is at most 20000. Each element nums[i] is an integer in the range [1, 10000]
-    public int deleteAndEarn(int[] nums) {
+    public static int deleteAndEarn(int[] nums) {
         final int[] values = new int[10001];  // values array stores sums of buckets
         for (int num : nums) {
             values[num] += num;

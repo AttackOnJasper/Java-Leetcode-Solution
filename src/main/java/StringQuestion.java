@@ -173,4 +173,20 @@ public class StringQuestion {
     public String nextClosestTime(String time) {
         return "";
     }
+
+    // 767. Reorganize string
+    public String reorganizeString(String S) {
+        char[] temp = S.toCharArray();
+        Arrays.sort(temp);
+        int cur = 1, max = 0;
+        for (int i = 1; i < temp.length; i++) {
+            if (temp[i] != temp[i-1]) {
+                max = Math.max(max, cur);
+                cur = 1;
+            } else {
+                cur++;
+            }
+        }
+        return max <= (temp.length + 1) / 2 ? "" : "";
+    }
 }

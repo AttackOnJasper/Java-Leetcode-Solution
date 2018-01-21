@@ -83,20 +83,6 @@ public class EasyQuestion {
         return head;
     }
 
-    // 118
-    public List<List<Integer>> generatePascal(int n) {
-        List<List<Integer>> res = new ArrayList<>();
-        List<Integer> row = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            row.add(0, 1);
-            for (int j = 1; j < row.size(); j++) {
-                row.add(j, row.get(j) + row.get(j+1));
-            }
-            res.add(row);
-        }
-        return res;
-    }
-
     // 125
     public static boolean isPalindrome(String s) {
         String temp = s.replaceAll("[^A-Za-z0-9]", "").toLowerCase();
