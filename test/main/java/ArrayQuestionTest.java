@@ -3,10 +3,16 @@ package main.java;
 import static junit.framework.TestCase.assertEquals;
 
 import java.util.List;
+import org.junit.Before;
 import org.junit.Test;
 
 public class ArrayQuestionTest {
-    final ArrayQuestion arrayQuestion = new ArrayQuestion();
+    private ArrayQuestion arrayQuestion;
+
+    @Before
+    public void setUp() {
+        arrayQuestion = new ArrayQuestion();
+    }
 
     // 88
     @Test
@@ -64,5 +70,17 @@ public class ArrayQuestionTest {
         int res = ArrayQuestion.findShortestSubArray(arr);
         assertEquals(2, res);
         assertEquals("aaa", "aaa".split(" ")[0]);
+    }
+
+    // 724
+    @Test
+    public void testFindPivotIndex() {
+        int[] arr1 = new int[]{1, 7, 3, 6, 5, 6};
+        int index1 = arrayQuestion.pivotIndex(arr1);
+        assertEquals(3, index1);
+
+        int[] arr2 = new int[]{-1,-1,-1,-1,-1,0};
+        int index2 = arrayQuestion.pivotIndex(arr2);
+        assertEquals(2, index2);
     }
 }

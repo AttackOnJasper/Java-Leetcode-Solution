@@ -3,6 +3,21 @@ package main.java;
 import java.util.*;
 
 public class ArrayQuestion {
+    // 1
+    public int[] twoSum(int[] nums, int target) {
+        HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+        int[] result = new int[2];
+        for (int i = 0; i < nums.length; i++) {
+            if (map.containsKey(target - nums[i])) {
+                result[1] = i;
+                result[0] = map.get(target - nums[i]);
+                return result;
+            }
+            map.put(nums[i], i);
+        }
+        return result;
+    }
+
     // 26 Remove Duplicates
     public int removeDuplicates(int[] nums) {
         if (nums.length == 1) {
@@ -867,6 +882,17 @@ public class ArrayQuestion {
         return res + 1;
     }
 
+    // 717
+    /** one bit '0', 2 bit '10' or '11' */
+    public boolean isOneBitCharacter(int[] bits) {
+        int n = bits.length, i = 0;
+        while (i < n - 1) {
+            if (bits[i] == 0) i++;
+            else i += 2;
+        }
+        return i == n - 1;
+    }
+
     // 720
     public String longestWord(String[] words) {
         if (words == null || words.length == 0) return "";
@@ -888,6 +914,19 @@ public class ArrayQuestion {
             }
         }
         return res;
+    }
+
+    // 724 Find Pivot Index
+    /** find index where LHS sum == RHS sum */
+    public int pivotIndex(int[] nums) {
+        int sum = 0, half = 0;
+        for (int n : nums) sum += n;
+
+        for (int i = 0; i < nums.length; i++) {
+            if (sum == half * 2 + nums[i]) return i;
+            half += nums[i];
+        }
+        return -1;
     }
 
     // 739
