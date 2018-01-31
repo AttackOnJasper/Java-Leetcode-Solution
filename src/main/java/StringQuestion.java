@@ -1,8 +1,10 @@
 package main.java;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class StringQuestion {
     // 5 Longest Palindrome Substring
@@ -188,5 +190,19 @@ public class StringQuestion {
             }
         }
         return max <= (temp.length + 1) / 2 ? "" : "";
+    }
+
+    // 771
+    public int numJewelsInStones(String J, String S) {
+        List<Character> chars = J.chars().mapToObj(e->(char)e).collect(Collectors.toList());
+        HashSet<Character> jewels = new HashSet<Character>(chars);
+        char[] stones = S.toCharArray();
+        int res = 0;
+        for (int i = 0; i < stones.length; i++) {
+            if (jewels.contains(stones[i])) {
+                res++;
+            }
+        }
+        return res;
     }
 }

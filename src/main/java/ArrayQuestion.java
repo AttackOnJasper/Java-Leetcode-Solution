@@ -79,7 +79,7 @@ public class ArrayQuestion {
         List<Integer> row = new ArrayList<>();
         for (int i = 0; i < n; i++) {
             row.add(0, 1);
-            for (int j = 1; j < row.size(); j++) {
+            for (int j = 1; j < row.size() - 1; j++) { // changing from 2nd element to (n-1)th element
                 row.set(j, row.get(j) + row.get(j+1)); // keep mutating the same row
             }
             res.add(row);
@@ -664,8 +664,8 @@ public class ArrayQuestion {
         for (int i = 1; i < len; i++) {
             min = Math.min(min, A[len - 1 - i]);
             max = Math.max(max, A[i]);
-            if (A[i] < max) end = i; // if the index is not max, unsorted, move end to this index
-            if (A[len - 1 - i] > min) start = len - 1 - i; // if the index is not min, unsorted, move start to this index
+            if (A[i] < max) end = i; // if the index is not the current max -> unsorted -> move end to this index
+            if (A[len - 1 - i] > min) start = len - 1 - i; // if the index is not the current min -> unsorted -> move start to this index
         }
         return end - start + 1;
     }
@@ -686,6 +686,7 @@ public class ArrayQuestion {
 
     // 605
     // place flowers s.t. no flowers are adjacent to each other
+    /** greedy */
     public boolean canPlaceFlowers(int[] flowerbed, int n) {
         int count = 0;
         for (int i = 0; i < flowerbed.length && count < n; i++) {
@@ -793,7 +794,7 @@ public class ArrayQuestion {
     }
 
     // 665 Check if it is possible to change one element to make the array non-descending
-    // Greedy: try to change i-1 first; if can't, change i
+    /** Greedy: try to decrease i-1 first; if can't, increase i */
     public boolean checkPossibility(int[] nums) {
         int count = 0;
         for (int i = 1; i < nums.length && count <= 1; i++) {
@@ -844,7 +845,7 @@ public class ArrayQuestion {
     }
     // dfs
     private int AreaOfIsland(int[][] grid, int i, int j){
-        if( i >= 0 && i < grid.length && j >= 0 && j < grid[0].length && grid[i][j] == 1){
+        if(i >= 0 && i < grid.length && j >= 0 && j < grid[0].length && grid[i][j] == 1) {
             grid[i][j] = 0;
             return 1 + AreaOfIsland(grid, i+1, j) + AreaOfIsland(grid, i-1, j) + AreaOfIsland(grid, i, j-1) + AreaOfIsland(grid, i, j+1);
         }
@@ -853,33 +854,26 @@ public class ArrayQuestion {
 
     // 697
     public static int findShortestSubArray(int[] nums) {
-        Map<Integer, Integer> m = new HashMap<Integer, Integer>(), first = new HashMap<Integer, Integer>(), last = new HashMap<Integer, Integer>();
+        Map<Integer, int[]> map = new HashMap<>();
         for (int i = 0; i < nums.length; i++) {
-            if (!first.containsKey(nums[i])) {
-                first.put(nums[i], i);
-            }
-            last.put(nums[i], i);
-            m.put(nums[i], m.getOrDefault(nums[i], 0) + 1);
-        }
-        int max = 0;
-        HashSet<Integer> set = new HashSet<Integer>();
-        for (int k : m.keySet()) {
-            int v = m.get(k);
-            if (v >= max) {
-                if (v > max) {
-                    set.clear();
-                    max = v;
-                }
-                set.add(k);
+            if (!map.containsKey(nums[i])){
+                map.put(nums[i], new int[]{1, i, i});  // the first element in array is degree, second is first index of this key, third is last index of this key
+            } else {
+                int[] temp = map.get(nums[i]);
+                temp[0]++;
+                temp[2] = i;
             }
         }
-        int res = Integer.MAX_VALUE;
-        Iterator<Integer> it = set.iterator();
-        while (it.hasNext()) {
-            int temp = it.next();
-            res = Math.min(res, last.get(temp) - first.get(temp));
+        int res = Integer.MAX_VALUE, degree = 0;
+        for (int[] value : map.values()) {
+            if (value[0] > degree) {
+                degree = value[0];
+                res = value[2] - value[1] + 1;
+            } else if (value[0] == degree){
+                res = Math.min(value[2] - value[1] + 1, res);
+            }
         }
-        return res + 1;
+        return res;
     }
 
     // 717
@@ -952,5 +946,10 @@ public class ArrayQuestion {
             if (i == curLen) res++;
         }
         return res;
+    }
+
+    // 775. Global and Local Inversions
+    public boolean isIdealPermutation(int[] A) {
+        return true;
     }
 }
