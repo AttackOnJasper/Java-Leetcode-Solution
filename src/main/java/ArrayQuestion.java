@@ -49,6 +49,20 @@ public class ArrayQuestion {
         return low;
     }
 
+    // 66
+    public int[] plusOne(int[] digits) {
+        for (int i = digits.length - 1 ; i >= 0; i--) {
+            if (digits[i] != 9) {
+                digits[i]++;
+                return digits;
+            }
+            digits[i] = 0;
+        }
+        int[] newNumber = new int[digits.length+1];
+        newNumber[0] = 1;
+        return newNumber;
+    }
+
     // 88 Merge Sorted Arrays
     public void merge1(int[] nums1, int m, int[] nums2, int n) {
         int i = 0, j = 0, newIndex = 0;
@@ -247,7 +261,7 @@ public class ArrayQuestion {
         return rets;
     }
 
-    // 268 the Missing Number from 0 to n in a n-size array (Yext)
+    // 268 the Missing Number from 0 to n in a n-size array
     public int missingNumber(int[] nums) {
         int res = 0;
         for (int i = 0; i < nums.length; i++) {
