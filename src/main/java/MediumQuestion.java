@@ -429,12 +429,8 @@ public class MediumQuestion {
     }
 
     public int kthGrammar(int N, int K) {
-        if (K == 1) return 0;
         if (N == 1) return 0;
-        int prev = kthGrammar(N - 1, (K + 1) / 2);
-        if (prev == 0) {
-            return K % 2 == 0 ? 1 : 0;
-        }
-        return K % 2 == 0 ? 0 : 1;
+        if (K % 2 == 0) return (kthGrammar(N - 1, K / 2) == 0) ? 1 : 0;
+        return (kthGrammar(N - 1, (K + 1) / 2) == 0) ? 0 : 1;
     }
 }
