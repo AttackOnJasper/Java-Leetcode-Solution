@@ -49,6 +49,8 @@ public class ArrayQuestion {
         return low;
     }
 
+    // 59 Spiral Matrix II
+    /** Idea: Generate matrix in increasing order; generate a circle in each while loop */
     // 66
     public int[] plusOne(int[] digits) {
         for (int i = digits.length - 1 ; i >= 0; i--) {
@@ -436,7 +438,7 @@ public class ArrayQuestion {
         return res;
     }
 
-    // 442. Find All Duplicates in an Array
+    // 442. Find All Duplicates in an Array (yext)
     /**
      * Given an array of integers, 1 ≤ a[i] ≤ n (n = size of array), some elements appear twice and others appear once.
      * Find all the elements that appear twice in this array.
@@ -964,6 +966,9 @@ public class ArrayQuestion {
 
     // 775. Global and Local Inversions
     public boolean isIdealPermutation(int[] A) {
+        for (int i = 0; i < A.length; i++) {
+            if (Math.abs(A[i] - i) > 1) return false;
+        }
         return true;
     }
 }

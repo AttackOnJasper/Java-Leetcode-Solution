@@ -427,4 +427,14 @@ public class MediumQuestion {
     private int gcd(int a, int b) {
         return a != 0 ? gcd(b % a, a) : Math.abs(b);
     }
+
+    public int kthGrammar(int N, int K) {
+        if (K == 1) return 0;
+        if (N == 1) return 0;
+        int prev = kthGrammar(N - 1, (K + 1) / 2);
+        if (prev == 0) {
+            return K % 2 == 0 ? 1 : 0;
+        }
+        return K % 2 == 0 ? 0 : 1;
+    }
 }

@@ -4,4 +4,6 @@ src/META-INF/MANIFEST.MF
 
 *.lst
 
-.idea/*.xml
+.idea/
+
+LeetCodeSolution.iml
