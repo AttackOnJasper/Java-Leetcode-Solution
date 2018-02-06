@@ -51,6 +51,7 @@ public class ArrayQuestion {
 
     // 59 Spiral Matrix II
     /** Idea: Generate matrix in increasing order; generate a circle in each while loop */
+
     // 66
     public int[] plusOne(int[] digits) {
         for (int i = digits.length - 1 ; i >= 0; i--) {
@@ -64,6 +65,27 @@ public class ArrayQuestion {
         newNumber[0] = 1;
         return newNumber;
     }
+
+    // 73. Set Matrix Zeroes
+    /** Given a m x n matrix, if an element is 0, set its entire row and column to 0. Do it in place. */
+    public void setZeroes(int[][] matrix) {
+        int col0 = 1, m = matrix.length, n = matrix[0].length;
+        for (int i = 0; i < m; i++) {
+            if (matrix[i][0] == 0) col0 = 0;
+            for (int j = 0; j < n; j++)
+                if (matrix[i][j] == 0)
+                    matrix[i][0] = matrix[0][j] = 0;
+        }
+        for (int i = m - 1; i >= 0; i--) {
+            for (int j = n - 1; j >= 1; j--)
+                if (matrix[i][0] == 0 || matrix[0][j] == 0)
+                    matrix[i][j] = 0;
+            if (col0 == 0) matrix[i][0] = 0;
+        }
+    }
+
+    // 74. Search a 2D Matrix
+    /** treat it as a sorted list */
 
     // 88 Merge Sorted Arrays
     public void merge1(int[] nums1, int m, int[] nums2, int n) {
@@ -187,6 +209,43 @@ public class ArrayQuestion {
             }
         }
         return false;
+    }
+
+    // 229. Majority Element II
+    public List<Integer> majorityElement(int[] nums) {
+        if (nums == null || nums.length == 0)
+            return new ArrayList<Integer>();
+        List<Integer> result = new ArrayList<Integer>();
+        int number1 = nums[0], number2 = nums[0], count1 = 0, count2 = 0, len = nums.length;
+        for (int i = 0; i < len; i++) {
+            if (nums[i] == number1)
+                count1++;
+            else if (nums[i] == number2)
+                count2++;
+            else if (count1 == 0) {
+                number1 = nums[i];
+                count1 = 1;
+            } else if (count2 == 0) {
+                number2 = nums[i];
+                count2 = 1;
+            } else {
+                count1--;
+                count2--;
+            }
+        }
+        count1 = 0;
+        count2 = 0;
+        for (int i = 0; i < len; i++) {
+            if (nums[i] == number1)
+                count1++;
+            else if (nums[i] == number2)
+                count2++;
+        }
+        if (count1 > len / 3)
+            result.add(number1);
+        if (count2 > len / 3)
+            result.add(number2);
+        return result;
     }
 
     // 238. Product of Array Except Self
@@ -347,6 +406,7 @@ public class ArrayQuestion {
         }
         return -1;
     }
+    // Method 3: Negating the index of array (if array can be modified)
 
     // 347
     public static List<Integer> topKFrequent(int[] nums, int k) {

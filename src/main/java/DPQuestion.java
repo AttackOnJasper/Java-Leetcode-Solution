@@ -257,10 +257,10 @@ public class DPQuestion {
         return bits.length > 1 ? isValid[bits.length - 2] : isValid[bits.length - 1];
     }
 
-    // 718
+    // 718 find the length of longest subarray in both arrays
     public static int findLength(int[] A, int[] B) {
         int res = 0;
-        int[][] dp = new int[A.length][B.length]; // store the max sub array length for subarray ending with i & j
+        int[][] dp = new int[A.length][B.length]; // store the length for max subarray ending with i & j
         for (int i = 0; i < A.length; i++) {
             for (int j = 0; j < B.length; j++) {
                 dp[i][j] = A[i] == B[j] ? 1 + (i > 0 && j > 0 ? dp[i-1][j-1] : 0) : 0;
