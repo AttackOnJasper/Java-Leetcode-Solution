@@ -528,31 +528,23 @@ public class TreeQuestion {
 
     // 653 Two Sum IV - Input is a BST
     /** Method 1
-     *  Use in-order traversal to store input as an array -> two pointers
+     *  For each node, we check if k - node.val exists in this BST.
      */
     public boolean findTarget(TreeNode root, int k) {
-        List<Integer> l = new ArrayList<>();
-        inorder(root, l);
-        int start = 0, end = l.size() - 1;
-        while (start < end) {
-            if (l.get(start) + l.get(end) == k) {
-                return true;
-            }
-            if (l.get(start) + l.get(end) < k) {
-                start++;
-            } else {
-                end--;
-            }
-        }
-        return false;
-    }
-    private void inorder(TreeNode root, List<Integer> l) {
-        if (root == null) return;
-        inorder(root.left, l);
-        l.add(root.val);
-        inorder(root.right, l);
+        return dfs(root, root,  k);
     }
 
+    private boolean dfs(TreeNode root,  TreeNode cur, int k){
+        if(cur == null)return false;
+        return search(root, cur, k - cur.val) || dfs(root, cur.left, k) || dfs(root, cur.right, k);
+    }
+
+    private boolean search(TreeNode root, TreeNode cur, int value){
+        if(root == null)return false;
+        return (root.val == value) && (root != cur)
+            || (root.val < value) && search(root.right, cur, value)
+            || (root.val > value) && search(root.left, cur, value);
+    }
     /** Method 2
      * Use hashtable to store the values
      */
