@@ -24,31 +24,6 @@ public class EasyQuestion {
         return x == res;
     }
 
-    // 20 Valid Parenthesis
-    public boolean isValid(String s) {
-        char[] arr = s.toCharArray();
-        Stack<Character> stack = new Stack<Character>();
-        for (char c : arr) {
-            switch (c) {
-                case '(':
-                case '[':
-                case '{':
-                    stack.push(c);
-                    break;
-                case ')':
-                    if (stack.isEmpty() || stack.pop() != '(') return false;
-                    break;
-                case ']':
-                    if (stack.isEmpty() || stack.pop() != '[') return false;
-                    break;
-                case '}':
-                    if (stack.isEmpty() || stack.pop() != '{') return false;
-                    break;
-            }
-        }
-        return stack.isEmpty();
-    }
-
     // 28 IndexOf
     public int strStr(String haystack, String needle) {
         for (int i = 0; ; i++) {

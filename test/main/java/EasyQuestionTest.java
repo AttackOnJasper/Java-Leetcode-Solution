@@ -17,12 +17,6 @@ public class EasyQuestionTest {
   public void setUp() {
   }
 
-  // 20
-  @Test
-  public void testIsValid() {
-    assertTrue(easyQuestion.isValid("()"));
-  }
-
   // 290
   @Test
   public void testWordPattern() {

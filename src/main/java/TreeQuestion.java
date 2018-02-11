@@ -440,6 +440,9 @@ public class TreeQuestion {
      * 437 Path Sum:
      * return the number of paths from up to down whose values sum up to target (sum)
      */
+    /** Idea: map: store prefix sum and # of ways to get the prefix sum
+     *  find target by subtracting different prefix sums
+     */
     public int pathSum(TreeNode root, int sum) {
         HashMap<Integer, Integer> preSum = new HashMap();
         preSum.put(0,1);
@@ -455,7 +458,7 @@ public class TreeQuestion {
         preSum.put(currSum, preSum.get(currSum) - 1);
         return res;
     }
-
+    /** Recursion */
     public int pathSum2(TreeNode root, int sum) {
         if (root == null) return 0;
         return pathSumFrom(root, sum) + pathSum2(root.left, sum) + pathSum2(root.right, sum);
@@ -476,7 +479,6 @@ public class TreeQuestion {
         traverse(root, list);
         return list.stream().mapToInt(i -> i).toArray();
     }
-
     private void traverse(TreeNode root, List<Integer> list) {
         if (root == null) return;
         traverse(root.left, list);

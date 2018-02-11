@@ -1,13 +1,26 @@
 package main.java;
 
+import static junit.framework.Assert.assertTrue;
 import static junit.framework.TestCase.assertEquals;
 
+import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Created by jasperwang on 2017-11-27.
  */
 public class StringTest {
+    private StringQuestion stringQuestion;
+    @Before
+    public void setUp() {
+        stringQuestion = new StringQuestion();
+    }
+    // 20
+    @Test
+    public void testIsValid() {
+        assertTrue(stringQuestion.isValid("()"));
+    }
+
     @Test
     public void testCipherEncode() {
         String s = "w3579";

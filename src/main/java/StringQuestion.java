@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
 import java.util.stream.Collectors;
 
 public class StringQuestion {
@@ -78,6 +79,31 @@ public class StringQuestion {
             }
         }
         return result.toString();
+    }
+
+    // 20 Valid Parenthesis
+    public boolean isValid(String s) {
+        char[] arr = s.toCharArray();
+        Stack<Character> stack = new Stack<Character>();
+        for (char c : arr) {
+            switch (c) {
+                case '(':
+                case '[':
+                case '{':
+                    stack.push(c);
+                    break;
+                case ')':
+                    if (stack.isEmpty() || stack.pop() != '(') return false;
+                    break;
+                case ']':
+                    if (stack.isEmpty() || stack.pop() != '[') return false;
+                    break;
+                case '}':
+                    if (stack.isEmpty() || stack.pop() != '{') return false;
+                    break;
+            }
+        }
+        return stack.isEmpty();
     }
 
     // 67
