@@ -10,11 +10,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class EasyQuestionTest {
-
-  final EasyQuestion easyQuestion = new EasyQuestion();
+  private EasyQuestion easyQuestion;
 
   @Before
   public void setUp() {
+    easyQuestion = new EasyQuestion();
   }
 
   // 290

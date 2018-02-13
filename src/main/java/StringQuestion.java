@@ -106,6 +106,17 @@ public class StringQuestion {
         return stack.isEmpty();
     }
 
+    // 28 IndexOf
+    public int strStr(String haystack, String needle) {
+        for (int i = 0; ; i++) {
+            for (int j = 0; ; j++) {
+                if (j == needle.length()) return i;
+                if (i + j == haystack.length()) return -1;
+                if (needle.charAt(j) != haystack.charAt(i + j)) break;
+            }
+        }
+    }
+
     // 67
     public String addBinary(String a, String b) {
         String res = "";
@@ -116,6 +127,13 @@ public class StringQuestion {
             c = temp / 2;
         }
         return res;
+    }
+
+    // 125
+    public static boolean isPalindrome(String s) {
+        String temp = s.replaceAll("[^A-Za-z0-9]", "").toLowerCase();
+        String reversed = new StringBuffer(temp).reverse().toString();
+        return reversed.equals(temp);
     }
 
     // 205 Isomorphic Strings (Yext)
@@ -200,6 +218,22 @@ public class StringQuestion {
     // 681. Next Closest Time
     public String nextClosestTime(String time) {
         return "";
+    }
+
+    // 696
+    public int countBinarySubstrings(String s) {
+        char[] arr = s.toCharArray();
+        int res = 0, prev = 0, curr = 1;
+        for (int i = 1; i < arr.length; i++) {
+            if (arr[i] == arr[i-1]) {
+                curr++;
+            } else {
+                prev = curr;
+                curr = 1;
+            }
+            if (prev >= curr) res++;
+        }
+        return res;
     }
 
     // 767. Reorganize string

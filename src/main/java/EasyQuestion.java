@@ -1,6 +1,5 @@
 package main.java;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -24,17 +23,6 @@ public class EasyQuestion {
         return x == res;
     }
 
-    // 28 IndexOf
-    public int strStr(String haystack, String needle) {
-        for (int i = 0; ; i++) {
-            for (int j = 0; ; j++) {
-                if (j == needle.length()) return i;
-                if (i + j == haystack.length()) return -1;
-                if (needle.charAt(j) != haystack.charAt(i + j)) break;
-            }
-        }
-    }
-
     // 69
     /** Newton's method */
     public int mySqrt(int x) {
@@ -56,13 +44,6 @@ public class EasyQuestion {
             }
         }
         return head;
-    }
-
-    // 125
-    public static boolean isPalindrome(String s) {
-        String temp = s.replaceAll("[^A-Za-z0-9]", "").toLowerCase();
-        String reversed = new StringBuffer(temp).reverse().toString();
-        return reversed.equals(temp);
     }
 
     // 155 Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
