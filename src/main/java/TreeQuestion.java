@@ -590,15 +590,16 @@ public class TreeQuestion {
     // 687. Longest Univalue Path
     public int longestUnivaluePath(TreeNode root) {
         if (root == null) return 0;
-        helper(root);
+        longestUnivaluePathHelper(root, root.val);
         return max;
     }
-    private int helper(TreeNode root, int parentVal) {
+    private int longestUnivaluePathHelper(TreeNode root, int parentVal) {
         if (root == null) return 0;
-        int left = helper(root.left, root.val);
-        int right = helper(root.right, root.val);
+        /** left, right: max path length in which all nodes' val == parentVal */
+        int left = longestUnivaluePathHelper(root.left, root.val);
+        int right = longestUnivaluePathHelper(root.right, root.val);
         max = Math.max(max, left + right);
-        return parentVal == root.val ? Math.max(left, right) : 0;
+        return parentVal == root.val ? Math.max(left, right) + 1 : 0;
     }
 
     // binary tree to double linked list
