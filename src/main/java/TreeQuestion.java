@@ -244,6 +244,22 @@ public class TreeQuestion {
         return root;
     }
 
+    // 107 Level Order Traversal II
+    public List<List<Integer>> levelOrderBottom(TreeNode root) {
+        List<List<Integer> > res = new LinkedList<>();
+        levelOrderBottomHelper(res, 0, root);
+        return res;
+    }
+    private void levelOrderBottomHelper(List<List<Integer>> res, int level, TreeNode root) {
+        if (root == null) return;
+        if (res.size() <= level) {
+            res.add(0, new LinkedList<>());
+        }
+        levelOrderBottomHelper(res, level + 1, root.right);
+        levelOrderBottomHelper(res, level + 1, root.left);
+        res.get(res.size()-level-1).add(root.val);
+    }
+
     // 108 Sorted Array to BST
     public TreeNode sortedArrayToBST(int[] num) {
         if (num.length == 0) return null;
@@ -281,16 +297,11 @@ public class TreeQuestion {
     }
 
     // 111
+    /** pay attention to the case where either left or right is null */
     public int minDepth(TreeNode root) {
-        if (root == null) {
-            return 0;
-        }
-        if (root.left == null) {
-            return minDepth(root.right) + 1;
-        }
-        if (root.right == null) {
-            return minDepth(root.left) + 1;
-        }
+        if (root == null) return 0;
+        if (root.left == null) return minDepth(root.right) + 1;
+        if (root.right == null) return minDepth(root.left) + 1;
         return Math.min(minDepth(root.left), minDepth(root.right)) + 1;
     }
 
@@ -437,8 +448,8 @@ public class TreeQuestion {
     }
 
     /**
-     * 437 Path Sum:
-     * return the number of paths from up to down whose values sum up to target (sum)
+     * 437 Path Sum 3:
+     * return the number of paths from up to down whose values sum up to target
      */
     /** Idea: map: store prefix sum and # of ways to get the prefix sum
      *  find target by subtracting different prefix sums
@@ -579,9 +590,8 @@ public class TreeQuestion {
     // 671
     public int findSecondMinimumValue(TreeNode root) {
         if (root == null || root.left == null) return -1;
-        int left = root.left.val, right = root.right.val;
-        if (left == root.val) left = findSecondMinimumValue(root.left);
-        if (right == root.val) right = findSecondMinimumValue(root.right);
+        final int left = (root.left.val == root.val) ? findSecondMinimumValue(root.left) : root.left.val;
+        final int right = (root.right.val == root.val) ? findSecondMinimumValue(root.right) : root.right.val;
         if (left == -1) return right;
         if (right == -1) return left;
         return Math.min(left, right);
