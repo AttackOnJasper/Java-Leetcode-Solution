@@ -152,6 +152,29 @@ public class StringQuestion {
         return true;
     }
 
+    // 266 return true if permutation of string can be a palindrome
+    public boolean canPermutePalindrome(String s) {
+        HashSet<Character> h = new HashSet<Character>();
+        char[] arr = s.toCharArray();
+        for (char c : arr) {
+            if (h.contains(c)) {
+                h.remove(c);
+            } else {
+                h.add(c);
+            }
+        }
+        return h.size() < 2;
+    }
+
+    // 293 Flip game: replace two "++" with "--"
+    public List<String> generatePossibleNextMoves(String s) {
+        List<String> res = new LinkedList<>();
+        for (int i=-1; (i = s.indexOf("++", i+1)) >= 0; ) {
+            res.add(s.substring(0, i) + "--" + s.substring(i+2));
+        }
+        return res;
+    }
+
     // 459 Repeated Substring pattern
     public boolean repeatedSubstringPattern(String s) {
         final int length = s.length();
@@ -171,15 +194,6 @@ public class StringQuestion {
             }
         }
         return false;
-    }
-
-    // 293 Flip game: replace two "++" with "--"
-    public List<String> generatePossibleNextMoves(String s) {
-        List<String> res = new LinkedList<>();
-        for (int i=-1; (i = s.indexOf("++", i+1)) >= 0; ) {
-            res.add(s.substring(0, i) + "--" + s.substring(i+2));
-        }
-        return res;
     }
 
     // 647 Palindrome substring: return # of palindromes in string

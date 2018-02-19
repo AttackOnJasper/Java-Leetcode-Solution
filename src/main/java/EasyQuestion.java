@@ -32,20 +32,6 @@ public class EasyQuestion {
         return (int) r;
     }
 
-    // 83
-    public ListNode deleteDuplicates(ListNode head) {
-        if (head == null) return null;
-        ListNode list = head;
-        while(list.next != null) {
-            if (list.val == list.next.val) {
-                list.next = list.next.next;
-            } else {
-                list = list.next;
-            }
-        }
-        return head;
-    }
-
     // 155 Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
     /**
      * push the difference between min & the # to be pushed
@@ -94,7 +80,7 @@ public class EasyQuestion {
             return (int) min;
         }
     }
-
+    /** Push the original min value when min is updated */
     class MinStack2 {
         int min = Integer.MAX_VALUE;
         Stack<Integer> stack = new Stack<Integer>();
@@ -169,7 +155,7 @@ public class EasyQuestion {
         return count;
     }
 
-    // 202
+    // 202 is happy number
     public boolean isHappy(int n) {
         int i1 = n, i2 = next(n);
         while (i2 != i1) {
@@ -188,25 +174,6 @@ public class EasyQuestion {
         return res;
     }
 
-    // 203 Remove Linked List Elements
-    public ListNode removeElements(ListNode head, int val) {
-        if (head == null) return null;
-        head.next = removeElements(head.next, val);
-        return head.val == val ? head.next : head;
-    }
-    public ListNode removeElements2(ListNode head, int val) {
-        if (head == null) return head;
-        ListNode curr = head;
-        while (curr.next != null) {
-            if (curr.next.val == val) {
-                curr.next = curr.next.next;
-            } else {
-                curr = curr.next;
-            }
-        }
-        return head.val == val? head.next : head;
-    }
-
     // 204 Count Primes
     /** semi-dp idea */
     public int countPrimes(int n) {
@@ -221,54 +188,6 @@ public class EasyQuestion {
             }
         }
         return res;
-    }
-
-    // 206 Reverse Linked List
-    public ListNode reverseList1(ListNode head) {
-        return helper(head, null);
-    }
-    private ListNode helper(ListNode head, ListNode newHead) {
-        if (head == null) return newHead;
-        ListNode next = head.next;
-        head.next = newHead;
-        return helper(next, head);
-    }
-
-    public ListNode reverseList2(ListNode head) {
-    /* iterative solution */
-        ListNode newHead = null;
-        while (head != null) {
-            ListNode next = head.next;
-            // build new list from end to start
-            head.next = newHead;
-            newHead = head;
-            // move to next node
-            head = next;
-        }
-        return newHead;
-    }
-
-    // 234  Palindrome Linked List (in O(n) time and O(1) space)
-    public boolean isPalindrome(ListNode head) {
-        ListNode fast = head, slow = head;
-        while (fast != null && fast.next != null) {
-            fast = fast.next.next;
-            slow = slow.next;
-        }
-        if (fast != null) { // odd nodes: let right half smaller
-            slow = slow.next;
-        }
-        slow = reverseList1(slow);
-        fast = head;
-
-        while (slow != null) {
-            if (fast.val != slow.val) {
-                return false;
-            }
-            fast = fast.next;
-            slow = slow.next;
-        }
-        return true;
     }
 
     // 252 Meeting rooms
@@ -303,20 +222,6 @@ public class EasyQuestion {
             if (intervals[i].start < intervals[i - 1].end)
                 return false;
         return true;
-    }
-
-    // 266 return true if permutation of string can be a palindrome
-    public boolean canPermutePalindrome(String s) {
-        HashSet<Character> h = new HashSet<Character>();
-        char[] arr = s.toCharArray();
-        for (char c : arr) {
-            if (h.contains(c)) {
-                h.remove(c);
-            } else {
-                h.add(c);
-            }
-        }
-        return h.size() < 2;
     }
 
     // 278
@@ -500,7 +405,6 @@ public class EasyQuestion {
     }
 
     // 447
-
     /**
      * find the number of 2 points that have same distance towards one point
      */
