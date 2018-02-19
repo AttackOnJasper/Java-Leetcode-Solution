@@ -20,8 +20,8 @@ public class ArrayQuestion {
 
     // 26 Remove Duplicates
     public int removeDuplicates(int[] nums) {
-        if (nums.length == 1) {
-            return 1;
+        if (nums.length <= 1) {
+            return nums.length;
         }
         int newLength = 1;
         for (int i = 1; i < nums.length; i++) {
@@ -50,7 +50,7 @@ public class ArrayQuestion {
     }
 
     // 59 Spiral Matrix II
-    /** Idea: Generate matrix in increasing order; generate a circle in each while loop */
+    /** Idea: Generate matrix in increasing number order; generate a circle in each while loop */
 
     // 66
     public int[] plusOne(int[] digits) {
@@ -66,8 +66,8 @@ public class ArrayQuestion {
         return newNumber;
     }
 
-    // 73. Set Matrix Zeroes
-    /** Given a m x n matrix, if an element is 0, set its entire row and column to 0. Do it in place. */
+    // 73. Set Matrix Zeroes: Given a m x n matrix, if an element is 0, set its entire row and column to 0. Do it in place.
+    /** Idea: use first index of a col or row to keep track if the col or row should be converted to 0 */
     public void setZeroes(int[][] matrix) {
         int col0 = 1, m = matrix.length, n = matrix[0].length;
         for (int i = 0; i < m; i++) {
@@ -106,12 +106,12 @@ public class ArrayQuestion {
         }
     }
     protected void merge2(int[] nums1, int m, int[] nums2, int n) {
-        while (n > 0) {
+        while (n > 0)
             nums1[m + n - 1] = (m == 0 || nums2[n - 1] > nums1[m - 1]) ? nums2[--n] : nums1[--m];
-        }
     }
 
     // 75 sort array of 0, 1, 2
+    /** Use low and high to keep track of index of 0 and 2 to be inserted */
     public void sortColors(int[] nums) {
         if(nums==null || nums.length<2) return;
         int low = 0;
@@ -122,7 +122,8 @@ public class ArrayQuestion {
                 int temp = nums[i];
                 nums[i] = nums[low];
                 nums[low]=temp;
-                i++;low++;
+                i++;
+                low++;
             }else if(nums[i]==2) {
                 //swap A[i] and A[high] and high--;
                 int temp = nums[i];
@@ -135,7 +136,7 @@ public class ArrayQuestion {
         }
     }
 
-    // 118
+    // 118 Generate pascal triangle for first n rows
     public List<List<Integer>> generatePascal(int n) {
         List<List<Integer>> res = new ArrayList<>();
         List<Integer> row = new ArrayList<>();
@@ -166,14 +167,13 @@ public class ArrayQuestion {
     // 136
     public int singleNumber(int[] nums) {
         int res = 0;
-        for (int i : nums) {
+        for (int i : nums)
             res ^= i;
-        }
         return res;
     }
 
     // 152. Maximum Product Subarray
-    int maxProduct(int[] A) {
+    public int maxProduct(int[] A) {
         // store the result that is the max we have found so far
         int r = A[0];
 
