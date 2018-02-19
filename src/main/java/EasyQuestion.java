@@ -322,42 +322,30 @@ public class EasyQuestion {
         return true;
     }
 
-    // 443
-    public static int compress(char[] chars) {
-        int newLength = 1, count = 1;
-        for (int i = 1; i < chars.length + 1; i++) {
-            if (i != chars.length && chars[i] != chars[i-1]) {
+    // 443 String Compression: ["a","a","b","b","c","c","c"] -> ["a","2","b","2","c","3"]
+    public int compress(char[] chars) {
+        int indexAns = 0, index = 0;
+        while(index < chars.length){
+            char currentChar = chars[index];
+            int count = 0;
+            while(index < chars.length && chars[index] == currentChar){
+                index++;
                 count++;
-            } else {
-                if (count > 1) {
-                    int low = newLength;
-                    for (; count > 0; count /= 10) {
-                        chars[newLength++] = (char)(count%10 + '0');
-                    }
-                    int high = newLength;
-                    reverse(chars, low, high);
-                }
-                chars[newLength++] = chars[i];
-                count = 1;
             }
+            chars[indexAns++] = currentChar;
+            if(count != 1)
+                for(char c : Integer.toString(count).toCharArray())
+                    chars[indexAns++] = c;
         }
-        return newLength;
-    }
-    private static void reverse(char[] chars, int low, int high) {
-        for (int i = low, j = high - 1; i < j; i++, j--) {
-            char temp = chars[i];
-            chars[i] = chars[j];
-            chars[j] = temp;
-        }
+        return indexAns;
     }
 
-    // 447
+    // 447 find the number of 2 points that have same distance towards one point
     /**
-     * find the number of 2 points that have same distance towards one point
+     * store the distance to point i & number of coordinates for that distance
      */
     public int numberOfBoomerangs(int[][] points) {
         int res = 0;
-        // store the distance & number of coordinates for that distance
         Map<Integer, Integer> map = new HashMap<>();
         for(int i=0; i<points.length; i++) {
             for(int j=0; j<points.length; j++) {

@@ -1,6 +1,5 @@
 package main.java;
 
-import static junit.framework.Assert.assertTrue;
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertFalse;
 
@@ -15,12 +14,6 @@ public class EasyQuestionTest {
   @Before
   public void setUp() {
     easyQuestion = new EasyQuestion();
-  }
-
-  // 290
-  @Test
-  public void testWordPattern() {
-    assertTrue(easyQuestion.wordPattern("abba", "dog cat cat dog"));
   }
 
   // 405
@@ -41,7 +34,7 @@ public class EasyQuestionTest {
   // 443
   @Test
   public void test() {
-    assertEquals(4, EasyQuestion.compress(new char[]{'a','b','b','b','b','b','b','b','b','b','b','b','b'}));
+    assertEquals(4, easyQuestion.compress(new char[]{'a','b','b','b','b','b','b','b','b','b','b','b','b'}));
   }
 
   // 461
