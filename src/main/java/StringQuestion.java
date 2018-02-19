@@ -1,6 +1,7 @@
 package main.java;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -166,6 +167,29 @@ public class StringQuestion {
         return h.size() < 2;
     }
 
+    // 290 Word Pattern
+    public boolean wordPattern(String pattern, String str) {
+        HashMap<Character, String> map = new HashMap<Character, String>();
+        String[] splited = str.split(" ");
+        char[] arr = pattern.toCharArray();
+        if (arr.length != splited.length) {
+            return false;
+        }
+        for (int i = 0; i < arr.length; i++) {
+            if (map.containsKey(arr[i])) {
+                if (!map.get(arr[i]).equals(splited[i])) {
+                    return false;
+                }
+            } else {
+                if (map.containsValue(splited[i])) {
+                    return false;
+                }
+                map.put(arr[i], splited[i]);
+            }
+        }
+        return true;
+    }
+
     // 293 Flip game: replace two "++" with "--"
     public List<String> generatePossibleNextMoves(String s) {
         List<String> res = new LinkedList<>();
@@ -173,6 +197,35 @@ public class StringQuestion {
             res.add(s.substring(0, i) + "--" + s.substring(i+2));
         }
         return res;
+    }
+
+    // 389 Find the Difference
+    public char findTheDifference(String s, String t) {
+        s += t;
+        char[] arr = s.toCharArray();
+        char res = 0;
+        for (char c : arr) {
+            res ^= c;
+        }
+        return res;
+    }
+
+    // 415 Add two Strings
+    public String addStrings(String num1, String num2) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = num1.length() - 1, j = num2.length() - 1, carry = 0 ; i >= 0 || j >= 0 || carry == 1; i++, j++) {
+            int d1 = i < 0? 0 : num1.charAt(i) - '0';
+            int d2 = j < 0? 0 : num2.charAt(j) - '0';
+            sb.append((d1 + d2 + carry) % 10);
+            carry = (d1 + d2 + carry) / 10;
+        }
+        return sb.reverse().toString();
+    }
+
+    // 434
+    /** " a b c" split -> "" "a" "b" "c" */
+    public int countSegments(String s) {
+        return ("x " + s).split(" +").length - 1;
     }
 
     // 459 Repeated Substring pattern

@@ -242,29 +242,6 @@ public class EasyQuestion {
         return low;
     }
 
-    // 290 Word Pattern
-    public boolean wordPattern(String pattern, String str) {
-        HashMap<Character, String> map = new HashMap<Character, String>();
-        String[] splited = str.split(" ");
-        char[] arr = pattern.toCharArray();
-        if (arr.length != splited.length) {
-            return false;
-        }
-        for (int i = 0; i < arr.length; i++) {
-            if (map.containsKey(arr[i])) {
-                if (!map.get(arr[i]).equals(splited[i])) {
-                    return false;
-                }
-            } else {
-                if (map.containsValue(splited[i])) {
-                    return false;
-                }
-                map.put(arr[i], splited[i]);
-            }
-        }
-        return true;
-    }
-
     // 326 Power of Three
     public boolean isPowerOfThree(int n) {
         // 1162261467 is 3^19,  3^20 is bigger than int
@@ -322,20 +299,8 @@ public class EasyQuestion {
         return b == 0 ? a : getSum(a ^ b, (a & b) << 1);
     }
 
-    // 389 Find the Difference
-    public char findTheDifference(String s, String t) {
-        s += t;
-        char[] arr = s.toCharArray();
-        char res = 0;
-        for (char c : arr) {
-            res ^= c;
-        }
-        return res;
-    }
-
     // 405 Num to Hex
     private char[] map = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
-
     public String toHex(int num) {
         if(num == 0) return "0";
         String result = "";
@@ -344,18 +309,6 @@ public class EasyQuestion {
             num = (num >>> 4); // >> is arithmetic shift right, >>> is logical shift right
         }
         return result;
-    }
-
-    // 415 Add two Strings
-    public String addStrings(String num1, String num2) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = num1.length() - 1, j = num2.length() - 1, carry = 0 ; i >= 0 || j >= 0 || carry == 1; i++, j++) {
-            int d1 = i < 0? 0 : num1.charAt(i) - '0';
-            int d2 = j < 0? 0 : num2.charAt(j) - '0';
-            sb.append((d1 + d2 + carry) % 10);
-            carry = (d1 + d2 + carry) / 10;
-        }
-        return sb.reverse().toString();
     }
 
     // 422 Valid Word Square: verify that the transpose of matrix is the same as matrix
@@ -367,12 +320,6 @@ public class EasyQuestion {
             }
         }
         return true;
-    }
-
-    // 434
-    /** " a b c" split -> "" "a" "b" "c" */
-    public int countSegments(String s) {
-        return ("x " + s).split(" +").length - 1;
     }
 
     // 443
