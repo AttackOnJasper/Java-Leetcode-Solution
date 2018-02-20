@@ -23,6 +23,25 @@ public class BackTrackQuestion {
         return ans;
     }
 
+    // 22 Generate Parentheses: get combinations of n pairs of parentheses
+    public List<String> generateParentheses(int n) {
+        List<String> res = new ArrayList<>();
+        generateParenthesesHelper("", res, 0, 0, n);
+        return res;
+    }
+    private void generateParenthesesHelper(String cur, List<String> res, int left, int right, int max) {
+        if (cur.length() == max * 2) {
+            res.add(cur);
+            return;
+        }
+        if (left > right) {
+            generateParenthesesHelper(cur + ')', res, left, right + 1, max);
+        }
+        if (left < max) {
+            generateParenthesesHelper(cur + '(', res, left + 1, right, max);
+        }
+    }
+
     // 39 Combination Sum I
     /** Each number can be used infinite number of times */
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
@@ -196,6 +215,37 @@ public class BackTrackQuestion {
             combination(ans, comb, k, i+1, n-i);
             comb.remove(comb.size() - 1);
         }
+    }
+
+    // 401. Binary Watch
+    public List<String> readBinaryWatch(int num) {
+        List<String> res = new ArrayList<>();
+        int[] nums1 = new int[]{8, 4, 2, 1}, nums2 = new int[]{32, 16, 8, 4, 2, 1};
+        for(int i = 0; i <= num; i++) {
+            List<Integer> list1 = generateDigit(nums1, i);
+            List<Integer> list2 = generateDigit(nums2, num - i);
+            for(int num1: list1) {
+                if(num1 >= 12) continue;
+                for(int num2: list2) {
+                    if(num2 >= 60) continue;
+                    res.add(num1 + ":" + (num2 < 10 ? "0" + num2 : num2));
+                }
+            }
+        }
+        return res;
+    }
+    private List<Integer> generateDigit(int[] nums, int count) {
+        List<Integer> res = new ArrayList<>();
+        generateDigitHelper(nums, count, 0, 0, res);
+        return res;
+    }
+    private void generateDigitHelper(int[] nums, int count, int pos, int sum, List<Integer> res) {
+        if(count == 0) {
+            res.add(sum);
+            return;
+        }
+        for(int i = pos; i < nums.length; i++)
+            generateDigitHelper(nums, count - 1, i + 1, sum + nums[i], res);
     }
 
     // 526 Beatiful arrangement: arrange the array of 1 .. N numbers s.t. num[i] % i == 0 || i % num[i] == 0
