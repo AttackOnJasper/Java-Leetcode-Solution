@@ -273,6 +273,7 @@ public class ArrayQuestion {
     }
 
     // 238. Product of Array Except Self
+    /** Keep track of left sub-product & right sub-product */
     public int[] productExceptSelf(int[] nums) {
         int len = nums.length, right = 1;
         int[] res = new int[len];
@@ -324,7 +325,7 @@ public class ArrayQuestion {
         return res;
     }
 
-    // 260 2 single numbers
+    // 260 2 single numbers: find the distinct 2 single numbers in a list
     public int[] singleNumbers(int[] nums) {
         // Pass 1 :
         // Get the XOR of the two numbers we need to find
@@ -363,33 +364,19 @@ public class ArrayQuestion {
         return sum;
     }
 
-    // 280
-    /**
-     * Given an unsorted array nums, reorder it in-place such that nums[0] <= nums[1] >= nums[2] <= nums[3]....
-     */
+    // 280 Given an unsorted array nums, reorder it in-place such that nums[0] <= nums[1] >= nums[2] <= nums[3]....
     public void wiggleSort(int[] nums) {
-        // swap between 2 consecutive numbers
-        // if odd index & prev > curr, swap
-        // if even index & prev < curr, swap
+        /**
+         *  swap between 2 consecutive numbers
+         *  if odd index & prev > curr, swap
+         *  if even index & prev < curr, swap
+         */
         for (int i = 1; i < nums.length; i++) {
             int a = nums[i - 1];
             if ((i % 2 == 1) == (a > nums[i])) {
                 nums[i - 1] = nums[i];
                 nums[i] = a;
             }
-        }
-    }
-
-    // 283. Move Zero
-    public void moveZeroes(int[] nums) {
-        int i = 0;
-        for (int n : nums) {
-            if (n != 0) {
-                nums[i++] = n;
-            }
-        }
-        for (; i < nums.length; i++) {
-            nums[i] = 0;
         }
     }
 
@@ -536,20 +523,6 @@ public class ArrayQuestion {
             nums[index] = -nums[index];
         }
         return res;
-    }
-
-    // 455 Cookie
-    public int findContentChildren(int[] g, int[] s) {
-        if (s.length == 0 || g.length == 0) return 0;
-        Arrays.sort(g);
-        Arrays.sort(s);
-        int i = 0;
-        for (int j = 0; i < g.length && j < s.length; j++) {
-            if (g[i] <= s[j]) {
-                i++;
-            }
-        }
-        return i;
     }
 
     // 447
