@@ -271,4 +271,23 @@ public class BackTrackQuestion {
             }
         }
     }
+
+    // 784 Letter Case Permutation
+    public List<String> letterCasePermutation(String S) {
+        List<String> res = new LinkedList<>();
+        helper(res, S.toCharArray(), 0);
+        return res;
+    }
+    private void helper(List<String> res, char[] arr, int index) {
+        if (index == arr.length) {
+            res.add(new String(arr));
+        } else {
+            if (Character.isLetter(arr[index])) {
+                arr[index] = Character.toUpperCase(arr[index]);
+                helper(res, arr, index + 1);
+                arr[index] = Character.toLowerCase(arr[index]);
+            }
+            helper(res, arr, index + 1);
+        }
+    }
 }

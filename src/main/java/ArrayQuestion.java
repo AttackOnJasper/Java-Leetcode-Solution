@@ -341,7 +341,7 @@ public class ArrayQuestion {
         for (int num : nums) {
             if ((num & diff) == 0) // the bit is not set
                 rets[0] ^= num;
-             else // the bit is set
+            else // the bit is set
                 rets[1] ^= num;
         }
         return rets;
@@ -381,7 +381,7 @@ public class ArrayQuestion {
     }
 
     // 287. Find the Duplicate Number (Yext Interview)
-    // Method 1: divide-and-conquer
+    /** Method 1: divide-and-conquer */
     public int findDuplicate(int[] nums) {
         int start = 1, end = nums.length - 1;
         while (start < end) {
@@ -400,7 +400,7 @@ public class ArrayQuestion {
         }
         return start;
     }
-    // Method 2: Linked list cycle 2
+    /** Method 2: Linked list cycle 2 */
     public int findDuplicate2(int[] nums) {
         if (nums.length > 1) {
             int slow = nums[0], fast = nums[nums[0]];
@@ -417,7 +417,7 @@ public class ArrayQuestion {
         }
         return -1;
     }
-    // Method 3: Negating the index of array (if array can be modified)
+    /** Method 3: Negating the index of array (if array can be modified) */
 
     // 347
     public static List<Integer> topKFrequent(int[] nums, int k) {
@@ -596,7 +596,7 @@ public class ArrayQuestion {
     // 496 Next Greater Element
     /**
      * Use a stack to store a decreasing subsequence, and pop all items that is smaller than the
-     * next item
+     * next item to put in the next greater element map
      */
     public int[] nextGreaterElement(int[] findNums, int[] nums) {
         Map<Integer, Integer> map = new HashMap<>();  // store the integer and its next greater integer
@@ -655,6 +655,7 @@ public class ArrayQuestion {
     }
 
     // 560 Subarray Sum Equals k: Given an array and an integer k, find # of continuous subarrays whose sum equals to k.
+    /** store all the presums and occurrences */
     public int subarraySum(int[] nums, int k) {
         int result = 0, sum = 0;
         Map<Integer, Integer> preSum = new HashMap<Integer, Integer>();
@@ -716,9 +717,9 @@ public class ArrayQuestion {
         return res;
     }
 
-    // 575. Distribution Candies
+    // 575. Distribution Candies: return the max kind of candies one can get
     /**
-     * return the max kind of candies one can get
+     * Use set to return number of distinct numbers
      */
     public int distributeCandies(int[] candies) {
         final Set<Integer> set = new HashSet<Integer>();
