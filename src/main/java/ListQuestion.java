@@ -1,9 +1,76 @@
 package main.java;
 
+import java.util.Comparator;
+import java.util.PriorityQueue;
+
 /**
  * Created by jasperwang on 2018-02-18.
  */
 public class ListQuestion {
+    // 23 Merge K lists (Wish interview)
+    public ListNode mergeKLists(ListNode[] lists) {
+        if (lists == null || lists.length == 0) return null;
+        if (lists.length == 1) return lists[0];
+        return mergeKListsHelper(lists, 0, lists.length - 1);
+    }
+    private ListNode mergeKListsHelper(ListNode[] lists, int low, int high) {
+        if (low < high) {
+            int mid = low + (high - low) / 2;
+            ListNode head1 = mergeKListsHelper(lists, low, mid);
+            ListNode head2 = mergeKListsHelper(lists, mid + 1, high);
+            return merge(head1, head2);
+        }
+        return lists[low];
+    }
+    private ListNode merge(ListNode l1,ListNode l2){
+        if(l1==null) return l2;
+        if(l2==null) return l1;
+        if(l1.val<l2.val){
+            l1.next=merge(l1.next,l2);
+            return l1;
+        }else{
+            l2.next=merge(l1,l2.next);
+            return l2;
+        }
+    }
+
+    public ListNode mergeKLists2(ListNode[] lists){
+        ListNode curr = null;
+        ListNode head = null;
+        if(lists == null || lists.length<1)
+            return null;
+        PriorityQueue<ListNode> q = new PriorityQueue<ListNode>(lists.length,new Comparator<ListNode>(){
+            public int compare(ListNode l1, ListNode l2){
+                return l1.val - l2.val;
+            }
+        });
+        // Add all the list nodes to the min heap
+        for(int i=0;i<lists.length;++i){
+            if(lists[i] != null){
+                q.offer(lists[i]);
+            }
+        }
+
+        // append all nodes to head in the sorted order
+        while(!q.isEmpty()){
+            ListNode tmp = q.poll();
+            if(head == null){
+
+                head = new ListNode(tmp.val);
+                curr = head;
+            } else {
+                ListNode p = new ListNode(tmp.val);
+                p.next = null;
+                curr.next = p;
+                curr = p;
+            }
+            if(tmp.next != null){
+                q.offer(tmp.next);
+            }
+        }
+        return head;
+    }
+
     // 83
     public ListNode deleteDuplicates(ListNode head) {
         if (head == null) return null;

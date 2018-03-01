@@ -63,6 +63,39 @@ public class ArrayQuestionTest {
         assertEquals(8, res);
     }
 
+    // 683 variation
+    @Test
+    public void testKEmptySlotsII() {
+        int[] arr = new int[]{1, 2, 3};
+        assertEquals(1, arrayQuestion.kEmptySlotsII(arr, 1));
+        assertEquals(2, arrayQuestion.kEmptySlotsII(arr, 2));
+
+        arr = new int[]{3, 1, 5, 4, 2};
+        assertEquals(4, arrayQuestion.kEmptySlotsII(arr, 1));
+        assertEquals(-1, arrayQuestion.kEmptySlotsII(arr, 2));
+        assertEquals(4, arrayQuestion.kEmptySlotsII(arr, 3));
+        assertEquals(-1, arrayQuestion.kEmptySlotsII(arr, 4));
+        assertEquals(5, arrayQuestion.kEmptySlotsII(arr, 5));
+
+        arr = new int[]{3, 7, 4, 1, 6, 2, 5};
+        assertEquals(5, arrayQuestion.kEmptySlotsII(arr, 1));
+        assertEquals(6, arrayQuestion.kEmptySlotsII(arr, 2));
+        assertEquals(-1, arrayQuestion.kEmptySlotsII(arr, 3));
+        assertEquals(6, arrayQuestion.kEmptySlotsII(arr, 4));
+        assertEquals(-1, arrayQuestion.kEmptySlotsII(arr, 5));
+        assertEquals(-1, arrayQuestion.kEmptySlotsII(arr, 6));
+        assertEquals(7, arrayQuestion.kEmptySlotsII(arr, 7));
+
+        arr = new int[]{3, 7, 4, 1, 6, 5, 2};
+        assertEquals(6, arrayQuestion.kEmptySlotsII(arr, 1));
+        assertEquals(5, arrayQuestion.kEmptySlotsII(arr, 2));
+        assertEquals(-1, arrayQuestion.kEmptySlotsII(arr, 3));
+        assertEquals(-1, arrayQuestion.kEmptySlotsII(arr, 4));
+        assertEquals(6, arrayQuestion.kEmptySlotsII(arr, 5));
+        assertEquals(-1, arrayQuestion.kEmptySlotsII(arr, 6));
+        assertEquals(7, arrayQuestion.kEmptySlotsII(arr, 7));
+    }
+
     // 697
     @Test
     public void testFindShortestSubArray() {

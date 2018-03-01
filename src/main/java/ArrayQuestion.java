@@ -903,6 +903,53 @@ public class ArrayQuestion {
         return res;
     }
 
+    // 683
+    // flowers[i] = x means the flower at pos x would be blooming on day i. Output the day where
+    // there are at least 2 flowers blooming, and the number of flowers between them is k, and those flowers are not blooming
+    public int kEmptySlots(int[] flowers, int k) {
+        int[] days = new int[flowers.length]; // days[i] record blooming day of flower in pos i+1
+        for (int i = 0; i < flowers.length; i++) {
+            days[flowers[i] - 1] = i + 1;
+        }
+        int res = Integer.MAX_VALUE;
+        for (int i = 0, left = 0, right = k + 1; right < flowers.length; i++) {
+            /** need to make sure days[i] > days[left] && days[i] > days[right] for i in left + 1 ... right - 1 */
+            if (days[i] < days[left] || days[i] <= days[right]) {
+                if (i == right) res = Math.min(res, Math.max(days[left], days[right])); // valid case
+                left = i;
+                right = k + 1 + i;
+            }
+        }
+        return res == Integer.MAX_VALUE ? -1 : res;
+    }
+
+    // 683 Variation
+    // flowers[i] = x means the flower at pos x would be blooming on day i. Output the day where
+    // there are k consecutive flowers blooming
+    public int kEmptySlotsII(int[] P, int K) {
+        if (K == P.length) return K;
+        int[] days = new int[P.length]; // days[i] record blooming day of flower in pos i+1
+        for (int i = 0; i < P.length; i++) days[P[i] - 1] = i + 1;
+        int res = Integer.MIN_VALUE;
+        for (int i = 0, left = -1, right = K; right <= P.length; i++) {
+            if (right == P.length) { // edge case
+                if (i == P.length - 1 && days[i] < days[left]) return Math.max(res, days[left] - 1);
+                if (days[i] > days[left]) break;
+            } else if (left == -1) { // edge case: do not need to compare left at the start
+                if (days[i] >= days[right]) {
+                    if (i == right) res = Math.max(res, days[right] - 1);
+                    left = i;
+                    right = K + i + 1;
+                }
+            } else if (days[i] > days[left] || days[i] >= days[right]) { // need to make sure blooming days from left + 1 to right - 1 are less than bloomingDays[left] and bloomingDays[right]
+                if (i == right) res = Math.max(res, Math.min(days[left], days[right]) - 1); // valid case
+                left = i;
+                right = K + i + 1;
+            }
+        }
+        return res == Integer.MIN_VALUE ? -1 : res;
+    }
+
     // 695
     public int maxAreaOfIsland(int[][] grid) {
         if (grid == null || grid.length == 0 || grid[0].length == 0) return 0;
