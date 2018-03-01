@@ -5,8 +5,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class StringQuestion {
     // 5 Longest Palindrome Substring
@@ -283,11 +286,54 @@ public class StringQuestion {
     }
 
     // 681. Next Closest Time
+    // Given a time "HH:MM", form the next closest time by re-using the current digits. No limit on number of times a digit is re-used
     public String nextClosestTime(String time) {
-        return "";
+        int[] arr = new int[]{time.charAt(0) - '0', time.charAt(1) - '0', time.charAt(3) - '0', time.charAt(4) - '0'};
+        Set<Integer> set = IntStream.of(arr).boxed().collect(Collectors.toSet());
+        int curTime = 60 * Integer.parseInt(time.substring(0, 2)) + Integer.parseInt(time.substring(3, 5));
+        while (true) {
+            curTime = (curTime + 1) % 1440;
+            int[] digits = new int[]{curTime / 60 / 10, curTime / 60 % 10, curTime % 60 / 10, curTime % 60 % 10};
+            for (int i = 0; ; i++) {
+                if (!set.contains(digits[i])) break;
+                if (i == digits.length - 1) return String.format("%02d:%02d", curTime / 60, curTime % 60);
+            }
+        }
     }
 
-    // 696
+    // 681. Next Closest Time variation
+    // Given a time "HH:MM", form the next closest time by re-using the current digits. each digit can be used once
+    public String nextClosestTimeII(String S) {
+        int minute = Integer.parseInt(S.substring(3, 5)), hour = Integer.parseInt(S.substring(0, 2));
+        int[] arr = new int[]{hour / 10, hour % 10, minute / 10, minute % 10};
+        HashMap<Integer, Integer> originalTimeMap = new HashMap<>();
+        for (int n : arr) {
+            originalTimeMap.put(n, originalTimeMap.getOrDefault(n, 0) + 1);
+        }
+        final int totalTime = 24 * 60;
+        int curTime = 60 * hour + minute;
+        while (true) {
+            curTime = (curTime + 1) % totalTime;
+            int[] digits = new int[]{curTime / 60 / 10, curTime / 60 % 10, curTime % 60 / 10, curTime % 60 % 10};
+            HashMap<Integer, Integer> curTimeMap = new HashMap<>();
+            for (int d : digits) {
+                if (!originalTimeMap.containsKey(d)) break;
+                curTimeMap.put(d, curTimeMap.getOrDefault(d, 0) + 1);
+            }
+            // test permutation
+            boolean isValidRes = true;
+            for (int key : originalTimeMap.keySet()) {
+                if (originalTimeMap.get(key) != curTimeMap.get(key)) {
+                    isValidRes = false;
+                    break;
+                }
+            }
+            if (isValidRes) return String.format("%02d:%02d", curTime / 60, curTime % 60);
+        }
+    }
+
+    // 696: Give a string s, count the number of non-empty (contiguous) substrings that have the
+    // same number of 0's and 1's, and all the 0's and all the 1's in these substrings are grouped consecutively.
     public int countBinarySubstrings(String s) {
         char[] arr = s.toCharArray();
         int res = 0, prev = 0, curr = 1;
