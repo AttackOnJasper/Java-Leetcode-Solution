@@ -32,6 +32,32 @@ public class ArrayQuestion {
         return newLength;
     }
 
+    // 33. Search in rotated sorted arry e.g. 5 6 7 1 2 3 4
+    /** Idea: find minimum then find target */
+
+    // 34. Search for range
+    /** do one binary search for lower bound and one for upper bound */
+    public int[] searchRange(int[] nums, int target) {
+        if (nums.length == 0) return new int[]{-1, -1};
+        int low = 0, high = nums.length - 1;
+        // left
+        while (low < high) {
+            int mid = (low + high) / 2;
+            if (nums[mid] >= target) high = mid;
+            else low = mid + 1;
+        }
+        if (nums[low] != target) return new int[]{-1, -1};
+        int left = low;
+        low = 0;
+        high = nums.length - 1;
+        while (low < high) {
+            int mid = (low + high) / 2 + 1; /** note the modification of mid to avoid 'low' stuck on the same value every time */
+            if (nums[mid] > target) high = mid - 1;
+            else low = mid;
+        }
+        return new int[]{left, low};
+    }
+
     // 35 binary search
     public int searchInsert(int[] A, int target) {
         int low = 0, high = A.length - 1;

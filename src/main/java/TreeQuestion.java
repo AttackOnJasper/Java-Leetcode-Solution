@@ -18,7 +18,7 @@ public class TreeQuestion {
         }
     }
 
-    // 144 Preorder Traversal
+    // 144 Preorder Traversal: val -> left -> right
     public List<Integer> preorderTraversal(TreeNode root) {
         List<Integer> res = new ArrayList<>();
         ArrayDeque<TreeNode> stack = new ArrayDeque<>();
@@ -48,7 +48,6 @@ public class TreeQuestion {
         }
         return res;
     }
-    // dfs
     public List<Integer> preorderTraversal3(TreeNode root) {
         List<Integer> res = new ArrayList<Integer>();
         Stack<TreeNode> s = new Stack<TreeNode>();
@@ -137,6 +136,7 @@ public class TreeQuestion {
     }
 
     // return the minimum path sum
+    /** watch out that only one child is null does not mean it's end of path */
     public int minPathSum(TreeNode root) {
         if (root == null) return 0;
         if (root.left == null) return minPathSum(root.right) + root.val;
@@ -145,6 +145,7 @@ public class TreeQuestion {
     }
 
     // 98 is BST
+    /** in order and then compare prev and curr */
     public boolean isValidBST(TreeNode root) {
         if (root == null) return true;
         Stack<TreeNode> stack = new Stack<>();
@@ -174,12 +175,14 @@ public class TreeQuestion {
         return root == null || isSymmetricHelper(root.left, root.right);
     }
     private boolean isSymmetricHelper(TreeNode left, TreeNode right) {
+        /** note the reduction of null cases */
         if (left == null || right == null) return left == right;
         if (left.val != right.val) return false;
         return isSymmetricHelper(left.left, right.right) && isSymmetricHelper(right.left, left.right);
     }
 
     // 103 Binary Tree Zigzag Level Order Traversal
+    /** bfs and add data with different orders by using a flag */
     public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
         List<List<Integer>> res = new LinkedList<List<Integer>>();
         LinkedList<TreeNode> q = new LinkedList<TreeNode>();
@@ -210,37 +213,56 @@ public class TreeQuestion {
         return root == null? 0 : 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
     }
 
+    // 105 Construct Binary Tree from Inorder and Preorder Traversal
+    private int pInorder;   // index of inorder array
+    private int pPreorder;  // index of preorder array
+    public TreeNode buildTreeFromInorderAndPreorder(int[] preorder, int[] inorder) {
+        pPreorder = pInorder = 0;
+        return buildTreeFromInorderAndPreorderHelper(preorder, inorder, null);
+    }
+    private TreeNode buildTreeFromInorderAndPreorderHelper(int[] preorder, int[] inorder, TreeNode start) {
+        if (pPreorder >= preorder.length) return null;
+        // root node
+        final TreeNode root = new TreeNode(preorder[pPreorder++]);
+        // left
+        if (inorder[pInorder] != root.val) {
+            root.left = buildTreeFromInorderAndPreorderHelper(preorder, inorder, root);
+        }
+        pInorder++;
+        // right
+        if (start == null || inorder[pInorder] != start.val) {
+            root.right = buildTreeFromInorderAndPreorderHelper(preorder, inorder, start);
+        }
+        return root;
+    }
+
     // 106 Construct Binary Tree from Inorder and Postorder Traversal
     /**
-     * The the basic idea is to take the last element in postorder array as the root,
+     * Idea: take the last element in postorder array as the root,
      * find the position of the root in the inorder array; then locate the range for left sub-tree
-     * and right sub-tree and do recursion. Use a HashMap to record the index of root in the inorder array.
+     * and right sub-tree and do recursion.
      */
-    public static TreeNode buildTree(int[] inorder, int[] postorder) {
-        if (inorder == null || postorder == null || inorder.length != postorder.length)
-            return null;
-        HashMap<Integer, Integer> hm = new HashMap<Integer,Integer>();
-        for (int i=0;i<inorder.length;++i)
-            hm.put(inorder[i], i);
-        return buildTreePostIn(inorder, 0, inorder.length-1, postorder, 0,
-            postorder.length-1,hm);
+    private int pPostorder; // index of postorder array
+    public TreeNode buildTree(int[] inorder, int[] postorder) {
+        pInorder = inorder.length - 1;
+        pPostorder = postorder.length - 1;
+        return buildTree(inorder, postorder, null);
     }
-    private static TreeNode buildTreePostIn(
-        int[] inorder,
-        int is,
-        int ie,
-        int[] postorder,
-        int ps,
-        int pe,
-        HashMap<Integer,Integer> hm
-    ){
-        if (ps>pe || is>ie) return null;
-        TreeNode root = new TreeNode(postorder[pe]);
-        int ri = hm.get(postorder[pe]);
-        TreeNode leftchild = buildTreePostIn(inorder, is, ri-1, postorder, ps, ps+ri-is-1, hm);
-        TreeNode rightchild = buildTreePostIn(inorder,ri+1, ie, postorder, ps+ri-is, pe-1, hm);
-        root.left = leftchild;
-        root.right = rightchild;
+    private TreeNode buildTree(int[] inorder, int[] postorder, TreeNode end) {
+        if (pPostorder < 0) return null;
+        // create root node
+        final TreeNode root = new TreeNode(postorder[pPostorder--]);
+
+        // if right node exist, create right subtree
+        if (inorder[pInorder] != root.val) {
+            root.right = buildTree(inorder, postorder, root);
+        }
+        pInorder--;
+
+        // if left node exist, create left subtree
+        if ((end == null) || (inorder[pInorder] != end.val)) {
+            root.left = buildTree(inorder, postorder, end);
+        }
         return root;
     }
 
@@ -258,6 +280,24 @@ public class TreeQuestion {
         levelOrderBottomHelper(res, level + 1, root.right);
         levelOrderBottomHelper(res, level + 1, root.left);
         res.get(res.size()-level-1).add(root.val);
+    }
+    public List<List<Integer>> levelOrderBottom2(TreeNode root) {
+        LinkedList<List<Integer>> res = new LinkedList<>();
+        if (root == null) return res;
+        LinkedList<TreeNode> q = new LinkedList<>();
+        q.add(root);
+        while (!q.isEmpty()) {
+            int size = q.size();
+            List<Integer> temp = new LinkedList<Integer>();
+            for (int i = 0; i < size; i++) {
+                root = q.pop();
+                temp.add(root.val);
+                if (root.left != null) q.offer(root.left);
+                if (root.right != null) q.offer(root.right);
+            }
+            res.addFirst(new LinkedList<>(temp));
+        }
+        return res;
     }
 
     // 108 Sorted Array to BST
