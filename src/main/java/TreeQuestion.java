@@ -345,6 +345,20 @@ public class TreeQuestion {
         return Math.min(minDepth(root.left), minDepth(root.right)) + 1;
     }
 
+    // 114 Flatten a binary tree in pre-order in place (arrange all nodes to the right of previous one)
+    /** post order traversal: build the tree from bottom up (last element to root) */
+    public void flatten(TreeNode root) {
+        flattenHelper(root, null);
+    }
+    private TreeNode flattenHelper(TreeNode root, TreeNode pre) {
+        if (root == null) return pre;
+        pre = flattenHelper(root.right, pre);
+        pre = flattenHelper(root.left, pre);
+        root.right = pre;
+        root.left = null;
+        return root;
+    }
+
     // 156 Binary Tree Upside Down
     public TreeNode upsideDownBinaryTree(TreeNode root) {
         if(root == null || root.left == null) return root;
