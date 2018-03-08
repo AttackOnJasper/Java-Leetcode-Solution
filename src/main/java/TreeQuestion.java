@@ -417,10 +417,18 @@ public class TreeQuestion {
      * Just walk down from the whole tree's root as long as both p and q are in the same subtree
      * (meaning their values are both smaller or both larger than root's)
      */
-    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    public TreeNode lowestCommonAncestorForBST(TreeNode root, TreeNode p, TreeNode q) {
         while ((root.val - p.val) * (root.val - q.val) > 0)
             root = p.val < root.val ? root.left : root.right;
         return root;
+    }
+
+    // 236. Lowest Common Ancestor in a binary tree
+    public TreeNode lowestCommonAncestorForBinaryTree(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null || root == p || root == q) return root;
+        final TreeNode left = lowestCommonAncestorForBinaryTree(root.left, p, q);
+        final TreeNode right = lowestCommonAncestorForBinaryTree(root.right, p, q);
+        return left == null ? right : right == null ? left : root;
     }
 
     // 257. Binary Tree Paths: return all root-to-leaf paths
