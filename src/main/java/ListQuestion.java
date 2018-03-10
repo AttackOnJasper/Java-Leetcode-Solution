@@ -85,6 +85,18 @@ public class ListQuestion {
         return head;
     }
 
+    // 160. Intersection of 2 lists
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        if (headA == null || headB == null) return null;
+        ListNode a = headA, b = headB;
+        /** note the change to headB when a == null; max iteration is length a + length b when the lengths of lists are different  */
+        while (a != b) {
+            a = a == null ? headB : a.next;
+            b = b == null ? headA : b.next;
+        }
+        return a;
+    }
+
     // 203 Remove Linked List Elements
     public ListNode removeElements(ListNode head, int val) {
         if (head == null) return null;
@@ -118,8 +130,8 @@ public class ListQuestion {
     /* iterative solution */
         ListNode newHead = null;
         while (head != null) {
-            ListNode next = head.next;
-            // build new list from end to start
+            ListNode next = head.next; // store the next node for next iteration
+            // append new list to the back of this node, and update the new head
             head.next = newHead;
             newHead = head;
             // move to next node
