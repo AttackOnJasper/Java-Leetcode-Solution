@@ -11,18 +11,6 @@ import java.util.Stack;
 import java.util.List;
 
 public class EasyQuestion {
-    // 9
-    public boolean isPalindrome(int x) {
-        if(x < 0) return false;
-        int y = x;
-        int res = 0;
-        while(y != 0) {
-            res = res * 10 + y % 10;
-            y /= 10;
-        }
-        return x == res;
-    }
-
     // 69
     /** Newton's method */
     public int mySqrt(int x) {
@@ -49,31 +37,23 @@ public class EasyQuestion {
                 stack.push(0L);
                 min = x;
             } else {
-                stack.push(
-                    x - min); // need to change to previous min during pop if x is smaller than min
-                if (x < min) {
+                stack.push(x - min); // need to change to previous min during pop if x is smaller than min
+                if (x < min)
                     min = x;
-                }
             }
         }
 
         public void pop() {
-            if (stack.isEmpty()) {
-                return;
-            }
+            if (stack.isEmpty()) return;
             final long pop = stack.pop();
-            if (pop < 0) {
+            if (pop < 0)
                 min = min - pop; // If negative, increase the min value
-            }
         }
 
         public int top() {
             final long top = stack.peek();
-            if (top > 0) {
-                return (int) (top + min);
-            } else {
-                return (int) (min);
-            }
+            if (top > 0) return (int) (top + min);
+            return (int) (min);
         }
 
         public int getMin() {
@@ -156,6 +136,7 @@ public class EasyQuestion {
     }
 
     // 202 is happy number
+    /** test cycle */
     public boolean isHappy(int n) {
         int i1 = n, i2 = next(n);
         while (i2 != i1) {
@@ -190,7 +171,7 @@ public class EasyQuestion {
         return res;
     }
 
-    // 252 Meeting rooms
+    // 252 Meeting rooms: check if can attend all meetings
     private class Interval {
         int start;
         int end;
@@ -214,7 +195,7 @@ public class EasyQuestion {
     public boolean canAttendMeetings2(Interval[] intervals) {
         if (intervals == null)
             return false;
-        // Sort the intervals by start time
+        /** Sort the intervals by start time */
         Arrays.sort(intervals, new Comparator<Interval>() {
             public int compare(Interval a, Interval b) { return a.start - b.start; }
         });
@@ -222,24 +203,6 @@ public class EasyQuestion {
             if (intervals[i].start < intervals[i - 1].end)
                 return false;
         return true;
-    }
-
-    // 278
-    private boolean isBadVersion(int n) {
-        return n % 2 == 0;
-    }
-    // binary search
-    public int firstBadVersion(int n) {
-        int low = 1, high = n;
-        while (low < high) {
-            int mid = low + (high - low) / 2;
-            if (isBadVersion(mid)) {
-                high = mid;
-            } else {
-                low = mid + 1;
-            }
-        }
-        return low;
     }
 
     // 326 Power of Three
@@ -257,14 +220,14 @@ public class EasyQuestion {
     }
 
     // 367 perfect square
-    // sequence 1 + 3 + 5 + 7
+    /** sequence 1 + 3 + 5 + 7 */
     public boolean isPerfectSquare(int num) {
         if (num < 1) return false;
         for (int i = 1; num > 0; i += 2)
             num -= i;
         return num == 0;
     }
-    // binary search to find the square root
+    /** binary search to find the square root */
     public boolean isPerfectSquare1(int num) {
         if (num < 1) return false;
         long left = 1, right = num;// long type to avoid 2147483647 case
@@ -282,7 +245,7 @@ public class EasyQuestion {
         }
         return false;
     }
-    // newton's method to find the square root
+    /** newton's method to find the square root */
     boolean isPerfectSquare2(int num) {
         if (num < 1) return false;
         if (num == 1) return true;
@@ -325,10 +288,10 @@ public class EasyQuestion {
     // 443 String Compression: ["a","a","b","b","c","c","c"] -> ["a","2","b","2","c","3"]
     public int compress(char[] chars) {
         int indexAns = 0, index = 0;
-        while(index < chars.length){
+        while (index < chars.length) {
             char currentChar = chars[index];
             int count = 0;
-            while(index < chars.length && chars[index] == currentChar){
+            while (index < chars.length && chars[index] == currentChar) {
                 index++;
                 count++;
             }
@@ -369,7 +332,7 @@ public class EasyQuestion {
 
     // 461 Hamming distance
     public int hammingDistance(int x, int y) {
-        /*
+        /**
         int bitCount(int n) {
             while(n) {
                 n = n & (n-1);
@@ -382,6 +345,9 @@ public class EasyQuestion {
     }
 
     // 463. Island Perimeter
+    /**
+     * watch out how to count neighbours
+     */
     public int islandPerimeter(int[][] grid) {
         int numOfIslands = 0, neighbours = 0;
         for (int i = 0; i < grid.length; i++) {
@@ -404,7 +370,7 @@ public class EasyQuestion {
     public int findComplement(int num) {
         return (largest_power(num) << 1) - 1 - num;
     }
-    // Equal to highestOneBit
+    /** Equal to highestOneBit */
     private int largest_power(int N) {
         //changing all right side bits to 1.
         N = N | (N >> 1);
@@ -414,9 +380,53 @@ public class EasyQuestion {
         N = N | (N >> 16);
         return (N + 1) >> 1;
     }
-
     public int findComplement2(int num) {
         // highestOneBit(n) returns 2^m, where 2^m < n < 2^(m+1)
         return ~num & ((Integer.highestOneBit(num) << 1) - 1);
     }
+
+    // 479. Largest Palindrome Product
+    public int largestPalindrome(int n) {
+        // if input is 1 then max is 9
+        if(n == 1) return 9;
+        // if n = 3 then upperBound = 999 and lowerBound = 99
+        int upperBound = (int) Math.pow(10, n) - 1, lowerBound = upperBound / 10;
+        long maxNumber = (long) upperBound * (long) upperBound;
+
+        // represents the first half of the maximum assumed palindrom.
+        // e.g. if n = 3 then maxNumber = 999 x 999 = 998001 so firstHalf = 998
+        int firstHalf = (int)(maxNumber / (long) Math.pow(10, n));
+
+        boolean palindromFound = false;
+        long palindrom = 0;
+
+        while (!palindromFound) {
+            // creates maximum assumed palindrom
+            // e.g. if n = 3 first time the maximum assumed palindrom will be 998 899
+            palindrom = createPalindrom(firstHalf);
+
+            // here i and palindrom/i forms the two factor of assumed palindrom
+            for (long i = upperBound; upperBound > lowerBound; i--) {
+                // if n= 3 none of the factor of palindrom  can be more than 999 or less than square root of assumed palindrom
+                if (palindrom / i > maxNumber || i * i < palindrom) {
+                    break;
+                }
+
+                // if two factors found, where both of them are n-digits,
+                if (palindrom % i == 0) {
+                    palindromFound = true;
+                    break;
+                }
+            }
+            firstHalf--;
+        }
+        return (int) (palindrom % 1337);
+    }
+    private long createPalindrom(long num) {
+        String str = num + new StringBuilder().append(num).reverse().toString();
+        return Long.parseLong(str);
+    }
+
+    // 690 Employee Importance
+    /** hashmap then stack */
 }
