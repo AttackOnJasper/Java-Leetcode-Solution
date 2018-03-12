@@ -18,20 +18,6 @@ public class ArrayQuestion {
         return result;
     }
 
-    // 26 Remove Duplicates
-    public int removeDuplicates(int[] nums) {
-        if (nums.length <= 1) {
-            return nums.length;
-        }
-        int newLength = 1;
-        for (int i = 1; i < nums.length; i++) {
-            if (nums[i] != nums[i - 1]) {
-                nums[newLength++] = nums[i];
-            }
-        }
-        return newLength;
-    }
-
     // 33. Search in rotated sorted arry e.g. 5 6 7 1 2 3 4
     /** Idea: find minimum then find target */
 
@@ -48,6 +34,7 @@ public class ArrayQuestion {
         }
         if (nums[low] != target) return new int[]{-1, -1};
         int left = low;
+        // right
         low = 0;
         high = nums.length - 1;
         while (low < high) {
@@ -58,27 +45,10 @@ public class ArrayQuestion {
         return new int[]{left, low};
     }
 
-    // 35 binary search
-    public int searchInsert(int[] A, int target) {
-        int low = 0, high = A.length - 1;
-        while (low <= high) {
-            int mid = (low + high) / 2;
-            if (A[mid] == target) {
-                return mid;
-            }
-            if (A[mid] > target) {
-                high = mid - 1;
-            } else {
-                low = mid + 1;
-            }
-        }
-        return low;
-    }
-
     // 59 Spiral Matrix II
     /** Idea: Generate matrix in increasing number order; generate a circle in each while loop */
 
-    // 66
+    // 66 Plus one
     public int[] plusOne(int[] digits) {
         for (int i = digits.length - 1 ; i >= 0; i--) {
             if (digits[i] != 9) {
@@ -166,12 +136,12 @@ public class ArrayQuestion {
     public List<List<Integer>> generatePascal(int n) {
         List<List<Integer>> res = new ArrayList<>();
         List<Integer> row = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            row.add(0, 1);
-            for (int j = 1; j < row.size() - 1; j++) { // changing from 2nd element to (n-1)th element
-                row.set(j, row.get(j) + row.get(j+1)); // keep mutating the same row
-            }
-            res.add(row);
+        for( int i = 0; i < n; i++) {
+            /** reverse the index to ensure previous value is not mutated yet */
+            for(int j = row.size() - 1; j > 0; j--) // changing from 2nd element to (n-1)th element
+                row.set(j, row.get(j)+row.get(j-1));
+            row.add(1);
+            res.add(new ArrayList<>(row));
         }
         return res;
     }
@@ -181,10 +151,8 @@ public class ArrayQuestion {
         List<Integer> res = new ArrayList<>();
         res.add(1);
         for (int i = 1; i < rowIndex; i++) {
-            for (int j = i - 1; j > 0; j--) {
-                int temp = res.get(j - 1) + res.get(j);
-                res.set(j, temp);
-            }
+            for (int j = i - 1; j > 0; j--)
+                res.set(j, res.get(j - 1) + res.get(j));
             res.add(1);
         }
         return res;
@@ -200,11 +168,9 @@ public class ArrayQuestion {
 
     // 152. Maximum Product Subarray
     public int maxProduct(int[] A) {
-        // store the result that is the max we have found so far
         int r = A[0];
 
-        // imax/imin stores the max/min product of
-        // subarray that ends with the current number A[i]
+        // imax/imin stores the max/min product of subarray that ends with the current number A[i]
         for (int i = 1, imax = r, imin = r; i < A.length; i++) {
             // multiplied by a negative makes big number smaller, small number bigger
             // so we redefine the extremums by swapping them
@@ -241,12 +207,9 @@ public class ArrayQuestion {
         }
     }
 
-    // 219
-    /**
-     * Given an array of integers and an integer k, find out whether there are two distinct indices
-     * i and j in the array such that nums[i] = nums[j] and the absolute difference between i and j
-     * is at most k.
-     */
+    // 219 Given an array of integers and an integer k, find out whether there are two distinct indices
+    // i and j in the array such that nums[i] = nums[j] and the absolute difference between i and j
+    // is at most k.
     public boolean containsNearbyDuplicate(int[] nums, int k) {
         Set<Integer> set = new HashSet<Integer>();
         for (int i = 0; i < nums.length; i++) {
@@ -254,19 +217,20 @@ public class ArrayQuestion {
             if (i > k) {
                 set.remove(nums[i - k - 1]);
             }
-            if (!set.add(nums[i])) {
+            if (!set.add(nums[i])) { /** no explicit comparison */
                 return true;
             }
         }
         return false;
     }
 
-    // 229. Majority Element II
+    // 229. Majority Element II: find all elements that occur more than n / 3 times
+    /** similar to majority element I */
     public List<Integer> majorityElement(int[] nums) {
-        if (nums == null || nums.length == 0)
-            return new ArrayList<Integer>();
+        if (nums == null || nums.length == 0) return new ArrayList<Integer>();
         List<Integer> result = new ArrayList<Integer>();
         int number1 = nums[0], number2 = nums[0], count1 = 0, count2 = 0, len = nums.length;
+        /** compute count of the 2 numbers, which are guaranteed to the 2 numbers if they occur more than n / 3 times */
         for (int i = 0; i < len; i++) {
             if (nums[i] == number1)
                 count1++;
@@ -283,6 +247,7 @@ public class ArrayQuestion {
                 count2--;
             }
         }
+        /** check if the 2 numbers occur more than n / 3 times */
         count1 = 0;
         count2 = 0;
         for (int i = 0; i < len; i++) {
@@ -301,20 +266,18 @@ public class ArrayQuestion {
     // 238. Product of Array Except Self
     /** Keep track of left sub-product & right sub-product */
     public int[] productExceptSelf(int[] nums) {
-        int len = nums.length, right = 1;
-        int[] res = new int[len];
+        int[] res = new int[nums.length];
         res[0] = 1;
-        for (int i = 1; i < len; i++) {
+        for (int i = 1; i < nums.length; i++)
             res[i] = res[i - 1] * nums[i - 1];
-        }
-        for (int i = len - 1; i >= 0; i--) {
+        for (int i = nums.length - 1, right = 1; i >= 0; i--) {
             res[i] *= right;
             right *= nums[i];
         }
         return res;
     }
 
-    // 243 shorest word distance: given an array and two strings, find the minimum distance of the
+    // 243 shortest word distance: given an array and two strings, find the minimum distance of the
     // two strings in that array
     public int shortestDistance(String[] words, String word1, String word2) {
         int i1 = -1, i2 = -1, res = Integer.MAX_VALUE;
@@ -322,31 +285,55 @@ public class ArrayQuestion {
             String s = words[i];
             if (s.equals(word1)) {
                 i1 = i;
-            } else if (s.equals(word2)) {
+            } else if (s.equals(word2))
                 i2 = i;
-            }
-            if (i1 != -1 && i2 != -1) {
+            if (i1 != -1 && i2 != -1)
                 res = Math.min(res, Math.abs(i1 - i2));
-            }
         }
         return res;
     }
 
-    // 245. shortest word distance 3
+    // 244. shortest word distance 2: use a class to optimize the method if it's called multiple times with the same word list
+    class WordDistance {
+        Map<String, List<Integer>> map;
+        public WordDistance(String[] words) {
+            map = new HashMap<>();
+            for (int i = 0; i < words.length; i++) {
+                List<Integer> temp = map.getOrDefault(words[i], new ArrayList<>());
+                temp.add(i);
+                map.put(words[i], temp);
+            }
+        }
+
+        public int shortest(String word1, String word2) {
+            List<Integer> list1 = map.get(word1), list2 = map.get(word2);
+            int res = Integer.MAX_VALUE;
+            for (int i = 0, j = 0; i < list1.size() && j < list2.size();) {
+                int index1 = list1.get(i), index2 = list2.get(j);
+                if (index1 > index2) {
+                    res = Math.min(res, index1 - index2);
+                    j++;
+                } else {
+                    res = Math.min(res, index2 - index1);
+                    i++;
+                }
+            }
+            return res;
+        }
+    }
+
+    // 245. shortest word distance 3: word1 can be the same as word2
     public int shortestWordDistance(String[] words, String word1, String word2) {
         int p1 = -1, p2 = -1, res = Integer.MAX_VALUE;
         for (int i = 0; i < words.length; i++) {
             if (words[i].equals(word1)) {
-                if (word1.equals(word2)) {
+                if (word1.equals(word2))
                     p2 = p1;
-                }
                 p1 = i;
-            } else if (words[i].equals(word2)) {
+            } else if (words[i].equals(word2))
                 p2 = i;
-            }
-            if (p1 != -1 && p2 != -1) {
+            if (p1 != -1 && p2 != -1)
                 res = Math.min(res, Math.abs(p1-p2));
-            }
         }
         return res;
     }
@@ -359,18 +346,20 @@ public class ArrayQuestion {
         for (int num : nums) {
             diff ^= num;
         }
-        // Get its last set bit
+        /** Get its last set bit (2 different numbers
+         * -> at least one 1 digit in XOR result
+         * -> only one number contribute to this 1
+         * -> divide all numbers into one group with this bit set and one with the bit not set) */
         diff &= -diff;
 
-        /** note the way to distinguish 2 numbers */
-        int[] rets = {0, 0}; // this array stores the two numbers we will return
+        int[] res = {0, 0}; // this array stores the two numbers we will return
         for (int num : nums) {
-            if ((num & diff) == 0) // the bit is not set
-                rets[0] ^= num;
+            if ((num & diff) == 0)
+                res[0] ^= num;
             else // the bit is set
-                rets[1] ^= num;
+                res[1] ^= num;
         }
-        return rets;
+        return res;
     }
 
     // 268 the Missing Number from 0 to n in a n-size array
@@ -407,22 +396,17 @@ public class ArrayQuestion {
     }
 
     // 287. Find the Duplicate Number (Yext Interview)
-    /** Method 1: divide-and-conquer */
+    /** Method 1: divide-and-conquer: compare median to nums[mid] */
     public int findDuplicate(int[] nums) {
         int start = 1, end = nums.length - 1;
         while (start < end) {
             int mid = start + (end - start) / 2;
             int count = 0;
-            for (int n : nums) {
-                if (n <= mid) {
+            for (int n : nums)
+                if (n <= mid)
                     count++;
-                }
-            }
-            if (count <= mid) {
-                start = mid + 1;
-            } else {
-                end = mid;
-            }
+            if (count <= mid) start = mid + 1;
+            else end = mid;
         }
         return start;
     }
@@ -445,43 +429,39 @@ public class ArrayQuestion {
     }
     /** Method 3: Negating the index of array (if array can be modified) */
 
-    // 347
+    // 347 return k most frequent numbers
+    /** Bucket Sort */
     public static List<Integer> topKFrequent(int[] nums, int k) {
-        List<Integer>[] buckets = new List[nums.length + 1];     // Bucket Sort
-        HashMap<Integer, Integer> m = new HashMap<Integer, Integer>();
-        for (int n : nums) {
+        List<Integer>[] buckets = new List[nums.length + 1];  // buckets[i] store the numbers that occur i times in the original list
+        HashMap<Integer, Integer> m = new HashMap<Integer, Integer>();  // map num to frequency
+        for (int n : nums)
             m.put(n, m.getOrDefault(n, 0) + 1);
-        }
         for (int key : m.keySet()) {
             int freq = m.get(key);
-            if (buckets[freq] == null) {
+            if (buckets[freq] == null)
                 buckets[freq] = new ArrayList<Integer>();
-            }
             buckets[freq].add(key);
         }
         List<Integer> res = new ArrayList<>();
-        for (int pos = buckets.length - 1; pos >= 0 && res.size() < k; pos--) {
-            if (buckets[pos] != null) {
+        for (int pos = buckets.length - 1; pos >= 0 && res.size() < k; pos--)
+            if (buckets[pos] != null)
                 res.addAll(buckets[pos]);
-            }
-        }
         return res;
     }
 
-    // 370
+    // 370. Each operation is represented as a triplet: [startIndex, endIndex, inc] which increments
+    // each element of subarray A[startIndex ... endIndex] (startIndex and endIndex inclusive) with inc.
     public int[] getModifiedArray(int length, int[][] updates) {
         // add val at the start index and -val at the end index
         int res[] = new int[length];
         for (int[] update : updates) {
             res[update[0]] += update[2];
             int end = update[1];
-            if (end < length - 1) {
+            if (end < length - 1)
                 res[end + 1] -= update[2];
-            }
         }
-        for (int i = 1; i < length; i++) {
+        for (int i = 1; i < length; i++)
             res[i] += res[i - 1];
-        }
         return res;
     }
 
@@ -499,9 +479,8 @@ public class ArrayQuestion {
             }
         });
         List<int[]> res = new LinkedList<>();
-        for(int[] cur : people){
+        for(int[] cur : people)
             res.add(cur[1],cur);
-        }
         return res.toArray(new int[people.length][]);
     }
 
@@ -999,7 +978,7 @@ public class ArrayQuestion {
         return 0;
     }
 
-    // 697
+    // 697 find the smallest possible length of a (contiguous) subarray of nums, that has the same degree as nums
     public static int findShortestSubArray(int[] nums) {
         Map<Integer, int[]> map = new HashMap<>();
         for (int i = 0; i < nums.length; i++) {
