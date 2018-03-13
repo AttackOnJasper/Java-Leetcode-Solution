@@ -3,6 +3,41 @@ package main.java;
 import java.util.*;
 
 public class DPQuestion {
+    private class Interval {
+        int start;
+        int end;
+        Interval() { start = 0; end = 0; }
+        Interval(int s, int e) { start = s; end = e; }
+    }
+
+    // weighted interval scheduling: schedule meetings s.t. total weight is maximized
+    public int weightedIntervalScheduling(Interval[] intervals, int[] weights) {
+        Arrays.sort(intervals, (a, b) -> a.end - b.end);
+        int[] lastFinishedIndexes = new int[intervals.length], dp = new int[intervals.length];
+        // get the last interval that finishes before the interval
+        lastFinishedIndexes[0] = -1;
+        for (int i = 1; i < intervals.length; i++) {
+            int start = intervals[i].start, low = 0, high = i;
+            while (low < high) {
+                int mid = (low + high) / 2;
+                if (intervals[mid].end == start) {
+                    low = mid;
+                    break;
+                } else if (intervals[mid].end > start) {
+                    high = mid;
+                } else {
+                    low = mid - 1;
+                }
+            }
+            lastFinishedIndexes[i] = intervals[low].end <= start ? low : -1;
+        }
+        // compute max weights
+        dp[0] = weights[0];
+        for (int i = 1; i < intervals.length; i++) {
+            dp[i] = Math.max(dp[i - 1], lastFinishedIndexes[i] == -1 ? weights[i] : weights[i] + dp[lastFinishedIndexes[i]]);
+        }
+        return dp[intervals.length - 1];
+    }
 
     // 5. Longest Palindromic Substring
     public String longestPalindrome(String s) {
@@ -34,7 +69,7 @@ public class DPQuestion {
     }
 
     // 53 Max subarray
-    // DP dp[i]: max subarray that ends with nums[i]
+    /** DP dp[i]: max subarray that ends with nums[i] */
     public int maxSubArray(int[] nums) {
         if (nums.length == 0) {
             return 0;
@@ -138,6 +173,41 @@ public class DPQuestion {
         return d[d.length - 1];
     }
 
+    // 221. Maximal Square: Given a 2D binary matrix filled with 0's and 1's, find the largest
+    // square containing only 1's and return its area.
+    public int maximalSquare(char[][] matrix) {
+        if(matrix.length == 0) return 0;
+        int m = matrix.length, n = matrix[0].length, result = 0;
+        int[][] b = new int[m+1][n+1];
+        for (int i = 1 ; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if(matrix[i-1][j-1] == '1') {
+                    b[i][j] = Math.min(Math.min(b[i][j-1] , b[i-1][j-1]), b[i-1][j]) + 1;
+                    result = Math.max(b[i][j], result); // update result
+                }
+            }
+        }
+        return result*result;
+    }
+
+    // 253. Meeting Rooms II. find the minimum meeting rooms required to fulfill all meetings
+    public int minMeetingRooms(Interval[] intervals) {
+        if (intervals.length == 0) return 0;
+        Arrays.sort(intervals, (a, b) -> a.start - b.start);
+        PriorityQueue<Interval> heap = new PriorityQueue<>(intervals.length, (a, b) -> a.end - b.end); // track minimum end time of merged intervals
+        heap.offer(intervals[0]);
+        for (int i = 1; i < intervals.length; i++) {
+            Interval interval = heap.poll();
+            if (intervals[i].start >= interval.end) {   // do not need a new room; merge 2 intervals into a larger one
+                interval.end = intervals[i].end;
+            } else {  // 2 meetings overlap; need a new room
+                heap.offer(intervals[i]);
+            }
+            heap.offer(interval);  // push the merged interval back to the priority queue
+        }
+        return heap.size();
+    }
+
     // 256. Paint House: each house can be painted from one of the three colours & each adjacent
     // house cannot share the same colour
     /** reduction of space complexity by keeping only prev & curr values */
@@ -237,14 +307,20 @@ public class DPQuestion {
     }
 
     // 714 Best Time to Buy and Sell Stock with Transaction Fee
+    /**
+     * notHoldStock represents the max profit of not holding a stock at price p
+     * holdStock represents the max profit of holding a stock at price p
+     * Update notHoldStock by selling the stock (bought at max profit while holding a stock i.e. holdStock) at price p, so profit = holdStock + p
+     * Update holdStock by buying the stock at p
+     * */
     public static int maxProfit(int[] prices, int fee) {
-        int s0 = 0, s1 = Integer.MIN_VALUE;
+        int notHoldStock = 0, holdStock = Integer.MIN_VALUE;
         for (int p : prices) {
-            int tmp = s0;
-            s0 = Math.max(s0, s1 + p);
-            s1 = Math.max(s1, tmp - p - fee);
+            int tmp = notHoldStock;
+            notHoldStock = Math.max(notHoldStock, holdStock + p);
+            holdStock = Math.max(holdStock, tmp - p - fee);
         }
-        return s0;
+        return notHoldStock;
     }
 
     // 717
