@@ -1,5 +1,6 @@
 package main.java;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
@@ -8,6 +9,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.Stack;
 import java.util.stream.Collectors;
@@ -18,9 +20,7 @@ public class StringQuestion {
     private int lo, maxLen;
     public String longestPalindrome(String s) {
         int len = s.length();
-        if (len < 2)
-            return s;
-
+        if (len < 2) return s;
         for (int i = 0; i < len-1; i++) {
             longestPalindromeHelper(s, i, i);  //assume odd length, try to extend Palindrome as possible
             longestPalindromeHelper(s, i, i+1); //assume even length.
@@ -71,20 +71,17 @@ public class StringQuestion {
 
     // 14
     public String longestCommonPrefix(String[] strs) {
-        if (strs == null || strs.length == 0) return "";
-        StringBuilder result = new StringBuilder();
-        Arrays.sort(strs);
-        char [] a = strs[0].toCharArray();
-        char [] b = strs[strs.length-1].toCharArray();
-
-        for (int i = 0; i < a.length; i ++){
-            if (b.length > i && b[i] == a[i]){
-                result.append(b[i]);
-            } else {
-                return result.toString();
+        if (strs.length == 0) return "";
+        String res = strs[0];
+        for (int i = 1; i < strs.length; i++) {
+            char[] temp = strs[i].toCharArray();
+            int j = 0;
+            for (; j < temp.length; j++) {
+                if (res.length() <= j || res.charAt(j) != temp[j]) break;
             }
+            res = res.substring(0, j);
         }
-        return result.toString();
+        return res;
     }
 
     // 20 Valid Parenthesis
@@ -123,6 +120,34 @@ public class StringQuestion {
         }
     }
 
+    // 43
+    /** 列竖式计算 ith digit * jth digit -> product lie on (i+j, j+i+1) */
+    public String multiply(String num1, String num2) {
+        int m = num1.length(), n = num2.length();
+        int[] product = new int[m + n];
+        for (int i = m - 1; i >= 0; i--) {
+            for (int j = n - 1; j >= 0; j--) {
+                int partialProduct = (num1.charAt(i) - '0') * (num2.charAt(j) - '0');
+                /** need to use partialSum as partial result might be larger than 10 */
+                int partialSum = partialProduct + product[i + j + 1];
+                product[i + j] += partialSum / 10;
+                product[i + j + 1] = partialSum % 10;
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int num : product)
+            if (num != 0 || sb.length() != 0)
+                sb.append(num);
+        return sb.length() == 0 ? "0" : sb.toString();
+    }
+
+    // 49 Group anagrams: Given an array of strings, group anagrams together
+    /** find a way to identify if anagram exists in the result (hint: sort) */
+    public List<List<String>> groupAnagrams(String[] strs) {
+        List<List<String>> res = new ArrayList<>();
+        return res;
+    }
+
     // 67
     public String addBinary(String a, String b) {
         String res = "";
@@ -140,6 +165,18 @@ public class StringQuestion {
         String temp = s.replaceAll("[^A-Za-z0-9]", "").toLowerCase();
         String reversed = new StringBuffer(temp).reverse().toString();
         return reversed.equals(temp);
+    }
+
+    // 161
+    public boolean isOneEditDistance(String s, String t) {
+        for (int i = 0; i < Math.min(s.length(), t.length()); i++) {
+            if (s.charAt(i) != t.charAt(i)) {
+                if (s.length() == t.length()) return s.substring(i + 1).equals(t.substring(i + 1));
+                if (s.length() < t.length()) return s.substring(i).equals(t.substring(i + 1));
+                return t.substring(i).equals(s.substring(i + 1));
+            }
+        }
+        return Math.abs(s.length() - t.length()) == 1;
     }
 
     // 205 Isomorphic Strings (Yext)
@@ -177,9 +214,7 @@ public class StringQuestion {
         HashMap<Character, String> map = new HashMap<Character, String>();
         String[] splited = str.split(" ");
         char[] arr = pattern.toCharArray();
-        if (arr.length != splited.length) {
-            return false;
-        }
+        if (arr.length != splited.length) return false;
         for (int i = 0; i < arr.length; i++) {
             if (map.containsKey(arr[i])) {
                 if (!map.get(arr[i]).equals(splited[i])) {
@@ -198,8 +233,24 @@ public class StringQuestion {
     // 293 Flip game: replace two "++" with "--"
     public List<String> generatePossibleNextMoves(String s) {
         List<String> res = new LinkedList<>();
-        for (int i=-1; (i = s.indexOf("++", i+1)) >= 0; ) {
+        for (int i=-1; (i = s.indexOf("++", i+1)) >= 0; )
             res.add(s.substring(0, i) + "--" + s.substring(i+2));
+        return res;
+    }
+
+    // 340. Get length of longest substring with at most K distinct characters
+    /** sliding window */
+    public int lengthOfLongestSubstringKDistinct(String s, int k) {
+        int res = 0, low = 0, numOfDistinctChars = 0;
+        int[] arr = new int[256];
+        for (int high = 0; high < s.length(); high++) {
+            if (arr[s.charAt(high)]++ == 0) numOfDistinctChars++;
+            if (numOfDistinctChars > k) {
+                /** while there is still this char in the window after removal, move on and remove the next one until a distinct char is removed */
+                while (--arr[s.charAt(low++)] > 0);
+                numOfDistinctChars--;
+            }
+            res = Math.max(res, high - low + 1);
         }
         return res;
     }
@@ -207,15 +258,32 @@ public class StringQuestion {
     // 345 Reverse Vowels
     /** two pointer */
 
-    // 389 Find the Difference
-    public char findTheDifference(String s, String t) {
-        s += t;
-        char[] arr = s.toCharArray();
-        char res = 0;
-        for (char c : arr) {
-            res ^= c;
+    // 394. Decode string: 3[a2[c]] -> accaccacc
+    public String decodeString(String s) {
+        Deque<Integer> intStack = new ArrayDeque<>();
+        Deque<StringBuilder> strStack = new ArrayDeque<>();
+        StringBuilder cur = new StringBuilder();
+        int num = 0;
+        for (char c : s.toCharArray()) {
+            if (Character.isDigit(c)) {
+                num = num * 10 + c - '0';
+            } else if (c == '[') {
+                intStack.push(num);
+                strStack.push(cur);
+                cur = new StringBuilder();
+                num = 0;
+            } else if (c == ']') {
+                int times = intStack.pop();
+                StringBuilder temp = cur;  // string inside [ ]
+                cur = strStack.pop();  // string before [ ]
+                while (times-- > 0) {
+                    cur.append(temp);
+                }
+            } else {
+                cur.append(c);
+            }
         }
-        return res;
+        return cur.toString();
     }
 
     // 415 Add two Strings
@@ -252,8 +320,7 @@ public class StringQuestion {
             //current hash value >= 1 means the character is existing in p
             if (hash[s.charAt(right++)]-- >= 1) count--;
 
-            //when the count is down to 0, means we found the right anagram
-            //then add window's left to result list
+            // found the right anagram
             if (count == 0) list.add(left);
 
             //if we find the window's size equals to p, then we have to move left (narrow the window) to find the new match window
@@ -265,7 +332,9 @@ public class StringQuestion {
         return list;
     }
 
-    // 439
+    // 439. Given a string representing arbitrarily nested ternary expressions, calculate the result of the expression
+    // e.g. "T?2:3" -> 2
+    /** Evaluate from right to left (hint: stack) */
     public static String parseTernary(String expression) {
         if (expression == null || expression.length() == 0) return "";
         Deque<Character> stack = new LinkedList<>();
@@ -409,18 +478,39 @@ public class StringQuestion {
 
     // 767. Reorganize string
     public String reorganizeString(String S) {
-        char[] temp = S.toCharArray();
-        Arrays.sort(temp);
-        int cur = 1, max = 0;
-        for (int i = 1; i < temp.length; i++) {
-            if (temp[i] != temp[i-1]) {
-                max = Math.max(max, cur);
-                cur = 1;
+        // Create map of each char to its count
+        Map<Character, Integer> map = new HashMap<>();
+        for (char c : S.toCharArray()) {
+            int count = map.getOrDefault(c, 0) + 1;
+            // Impossible to form a solution
+            if (count > (S.length() + 1) / 2) return "";
+            map.put(c, count);
+        }
+        // Greedy: fetch char of max count as next char in the result.
+        // Use PriorityQueue to store pairs of (char, count) and sort by count DESC.
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> b[1] - a[1]);
+        for (char c : map.keySet()) {
+            pq.add(new int[] {c, map.get(c)});
+        }
+        // Build the result.
+        StringBuilder sb = new StringBuilder();
+        while (!pq.isEmpty()) {
+            int[] first = pq.poll();
+            if (sb.length() == 0 || first[0] != sb.charAt(sb.length() - 1)) {
+                sb.append((char) first[0]);
+                if (--first[1] > 0) {
+                    pq.add(first);
+                }
             } else {
-                cur++;
+                int[] second = pq.poll();
+                sb.append((char) second[0]);
+                if (--second[1] > 0) {
+                    pq.add(second);
+                }
+                pq.add(first);
             }
         }
-        return max <= (temp.length + 1) / 2 ? "" : "";
+        return sb.toString();
     }
 
     // 771
@@ -429,11 +519,9 @@ public class StringQuestion {
         HashSet<Character> jewels = new HashSet<Character>(chars);
         char[] stones = S.toCharArray();
         int res = 0;
-        for (int i = 0; i < stones.length; i++) {
-            if (jewels.contains(stones[i])) {
+        for (int i = 0; i < stones.length; i++)
+            if (jewels.contains(stones[i]))
                 res++;
-            }
-        }
         return res;
     }
 }
