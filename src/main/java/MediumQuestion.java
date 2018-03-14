@@ -182,13 +182,6 @@ public class MediumQuestion {
         return id;
     }
 
-    // 338
-    public int[] countBits(int num) {
-        int[] res = new int[num + 1];
-        for (int i=1; i<=num; i++) res[i] = res[i >> 1] + (i & 1);
-        return res;
-    }
-
     // 357 e.g. 2 -> 91 numbers out of 100 that have unique digits
     public int countNumbersWithUniqueDigits(int n) {
         if (n == 0) return 1;

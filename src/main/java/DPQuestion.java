@@ -39,6 +39,27 @@ public class DPQuestion {
         return dp[intervals.length - 1];
     }
 
+    // Subset sum
+    /** D[i,k] -> if there exists a subset from 0 to i that sum up to k */
+    public boolean subsetSum(int[] nums, int k) {
+        boolean[][] dp = new boolean[nums.length][k + 1];
+        for (int i = 0; i < nums.length; i++)
+            dp[i][0] = true;
+        for (int i = 0; i < nums.length; i++)
+            for (int j = 0; j <= k; j++)
+                dp[i][j] = dp[i-1][j] || dp[i-1][k-nums[i]];
+        return dp[nums.length - 1][k];
+    }
+
+    // knapsack: each item has a weight and a value; return max value in a weight limit
+    public int knapsack(int[] weight, int[] value, int limit) {
+        int[][] dp = new int[weight.length][limit + 1]; // dp[i][w] represents max value from item 0 - i with limit w
+        for (int i = 1; i < weight.length; i++)
+            for (int j = weight[i]; j <= limit; j++)
+                dp[i][j] = Math.max(dp[i-1][j], dp[i-1][j-weight[i]] + value[i]);
+        return dp[weight.length - 1][limit];
+    }
+
     // 5. Longest Palindromic Substring
     public String longestPalindrome(String s) {
         if (s == null || s.length() <= 1) {
@@ -241,6 +262,29 @@ public class DPQuestion {
         return diffColorCounts + sameColorCounts;
     }
 
+    // 300
+    public int lengthOfLIS(int[] nums) {
+        if (nums.length == 0) return 0;
+        int[] dp = new int[nums.length];
+        for (int i = 0; i < dp.length; i++)
+            dp[i] = 1;
+        for (int i = 1; i < nums.length; i++)
+            for (int j = 0; j < i; j++)
+                if (nums[j] < nums[i])
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+        int res = 0;
+        for (int n : dp)
+            res = Math.max(n, res);
+        return res;
+    }
+
+    // 338
+    public int[] countBits(int num) {
+        int[] res = new int[num + 1];
+        for (int i=1; i<=num; i++) res[i] = res[i/2] + i%2;
+        return res;
+    }
+
     // 516 Longest Palindrome Subsequence
     public int longestPalindromeSubseq(String s) {
         int[][] dp = new int[s.length()][s.length()];
@@ -288,13 +332,26 @@ public class DPQuestion {
         return dp[sum];
     }
 
+    // 486. both players draw from either end of array; predict if player 1 wins
+    /** dp[i][j] -> how much more score player 1 has than player 2 from i to j */
+    public boolean PredictTheWinner(int[] nums) {
+        int[][] dp = new int[nums.length][nums.length];
+        for (int i = 0; i < nums.length; i++)
+            dp[i][i] = nums[i];
+        for (int len = 1; len < nums.length; len++) {
+            for (int i = 0; i < nums.length - len; i++) {
+                int j = i + len;
+                dp[i][j] = Math.max(nums[i] - dp[i + 1][j], nums[j] - dp[i][j - 1]);
+            }
+        }
+        return dp[0][nums.length - 1] >= 0;
+    }
+
     // 712 find the lowest ASCII sum of deleted characters to make two strings equal
     /** similar to edit distance */
-    public static int minimumDeleteSum(String s1, String s2) {
+    public int minimumDeleteSum(String s1, String s2) {
         int m = s1.length(), n = s2.length();
-        /**
-         * dp[i][j]: the minimum delete sum for s1[0 - i] & s2[0 - j]
-         */
+        /** dp[i][j]: the minimum delete sum for s1[0 - i] & s2[0 - j] */
         int[][] dp = new int[m + 1][n + 1];
         for (int j = 1; j <= n; j++) dp[0][j] = dp[0][j-1]+ s2.charAt(j-1);
         for (int i = 1; i <= m; i++) {
@@ -313,7 +370,7 @@ public class DPQuestion {
      * Update notHoldStock by selling the stock (bought at max profit while holding a stock i.e. holdStock) at price p, so profit = holdStock + p
      * Update holdStock by buying the stock at p
      * */
-    public static int maxProfit(int[] prices, int fee) {
+    public int maxProfit(int[] prices, int fee) {
         int notHoldStock = 0, holdStock = Integer.MIN_VALUE;
         for (int p : prices) {
             int tmp = notHoldStock;
@@ -334,7 +391,7 @@ public class DPQuestion {
     }
 
     // 718 find the length of longest subarray in both arrays
-    public static int findLength(int[] A, int[] B) {
+    public int findLength(int[] A, int[] B) {
         int res = 0;
         int[][] dp = new int[A.length][B.length]; // store the length for max subarray ending with i & j
         for (int i = 0; i < A.length; i++) {
@@ -348,7 +405,7 @@ public class DPQuestion {
 
     // 740
     // The length of nums is at most 20000. Each element nums[i] is an integer in the range [1, 10000]
-    public static int deleteAndEarn(int[] nums) {
+    public int deleteAndEarn(int[] nums) {
         final int[] values = new int[10001];  // values array stores sums of buckets
         for (int num : nums) {
             values[num] += num;

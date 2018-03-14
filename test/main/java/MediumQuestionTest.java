@@ -27,11 +27,6 @@ public class MediumQuestionTest {
     }
 
     @Test
-    public void testTernaryParser() {
-        assertEquals("F", MediumQuestion.parseTernary("T?T?F:5:3"));
-    }
-
-    @Test
     public void testKthGrammar() {
         assertEquals(1, mediumQuestion.kthGrammar(3, 3));
         assertEquals(1, mediumQuestion.kthGrammar(4, 5));

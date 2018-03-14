@@ -39,6 +39,11 @@ public class StringTest {
     }
 
     @Test
+    public void testTernaryParser() {
+        assertEquals("F", stringQuestion.parseTernary("T?T?F:5:3"));
+    }
+
+    @Test
     public void testNextClosetTimeII() {
         TestCase.assertTrue("23:59".equals(stringQuestion.nextClosestTimeII("23:59")));
         TestCase.assertTrue("16:59".equals(stringQuestion.nextClosestTimeII("19:56")));
