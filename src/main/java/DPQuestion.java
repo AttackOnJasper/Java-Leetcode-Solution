@@ -145,34 +145,31 @@ public class DPQuestion {
         return A[0];
     }
 
-    // 121 Best Time to buy & sell
-    public int maxProfit(int[] prices) {
-        if (prices.length == 0) {
-            return 0;
-        }
-        int[] d = new int[prices.length];
-        int min = prices[0];
-        d[0] = 0;
-        for (int i = 1; i < prices.length; i++) {
-            if (min >= prices[i]) {
-                min = prices[i];
-            }
-            d[i] = Math.max(d[i - 1], prices[i] - min);
-        }
-        return d[prices.length - 1];
-    }
+    // 121 Best Time to buy & sell (very similar to max subarray)
     /**
      * Kadane's Algorithm: the logic is to calculate the difference (maxCur += prices[i] - prices[i-1])
      * of the original array, and find a contiguous subarray giving maximum profit.
      * If the difference falls below 0, reset it to zero.
      */
-    public int maxProfit2(int[] prices) {
+    public int maxProfit(int[] prices) {
         int maxCur = 0, maxSoFar = 0;
         for (int i = 1; i < prices.length; i++) {
             maxCur = Math.max(0, maxCur + prices[i] - prices[i - 1]);
             maxSoFar = Math.max(maxCur, maxSoFar);
         }
         return maxSoFar;
+    }
+
+    // 123. do at most 2 transactions
+    public int maxProfit3(int[] prices) {
+        int hold0 = Integer.MIN_VALUE, sold0 = 0, hold1 = Integer.MIN_VALUE, sold1 = 0;
+        for (int p : prices) {
+            sold1 = Math.max(sold1, hold1 + p); // max profit after selling 2nd stock
+            hold1 = Math.max(hold1, sold0 - p); // max profit while holding 2nd stock
+            sold0 = Math.max(sold0, hold0 + p); // max profit after selling 1st stock
+            hold0 = Math.max(hold0, - p);   // max profit while holding 1st stock
+        }
+        return sold1;
     }
 
     // 139
@@ -192,6 +189,18 @@ public class DPQuestion {
             }
         }
         return d[d.length - 1];
+    }
+
+    // 198. House Robber
+    public int rob(int[] nums) {
+        int robbedPrev = 0, notRobbedPrev = 0;
+        for (int n : nums) {
+            int robbedCur = notRobbedPrev + n;
+            int notRobbedCur = Math.max(notRobbedPrev, robbedPrev);
+            robbedPrev = robbedCur;
+            notRobbedPrev = notRobbedCur;
+        }
+        return Math.max(robbedPrev, notRobbedPrev);
     }
 
     // 221. Maximal Square: Given a 2D binary matrix filled with 0's and 1's, find the largest
@@ -347,11 +356,14 @@ public class DPQuestion {
         return dp[0][nums.length - 1] >= 0;
     }
 
+    // 646
+    /** similar to longest increasing sequence */
+
     // 712 find the lowest ASCII sum of deleted characters to make two strings equal
     /** similar to edit distance */
     public int minimumDeleteSum(String s1, String s2) {
         int m = s1.length(), n = s2.length();
-        /** dp[i][j]: the minimum delete sum for s1[0 - i] & s2[0 - j] */
+        /** dp[i][j]: the minimum delete sum for s1[0 - i] & s2[0 - j], it has 1 extra length to account for delete sum from one string to null */
         int[][] dp = new int[m + 1][n + 1];
         for (int j = 1; j <= n; j++) dp[0][j] = dp[0][j-1]+ s2.charAt(j-1);
         for (int i = 1; i <= m; i++) {

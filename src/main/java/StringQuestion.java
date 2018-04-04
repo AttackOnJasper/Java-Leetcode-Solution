@@ -238,6 +238,28 @@ public class StringQuestion {
         return res;
     }
 
+    // 318. Given a string array words, find the maximum value of length(word[i]) * length(word[j])
+    // where the two words do not share common letters
+    public static int maxProduct(String[] words) {
+        if (words == null || words.length == 0) return 0;
+        int len = words.length;
+        int[] value = new int[len];
+        for (int i = 0; i < len; i++) {
+            String tmp = words[i];
+            value[i] = 0;
+            for (int j = 0; j < tmp.length(); j++)
+                /** put occurrence of each 26 char on 32 bit integer; bit set means occurred */
+                value[i] |= 1 << (tmp.charAt(j) - 'a');
+        }
+        int maxProduct = 0;
+        for (int i = 0; i < len; i++)
+            for (int j = i + 1; j < len; j++)
+                /** if 2 strings are differnt, & == 0 */
+                if ((value[i] & value[j]) == 0 && (words[i].length() * words[j].length() > maxProduct))
+                    maxProduct = words[i].length() * words[j].length();
+        return maxProduct;
+    }
+
     // 340. Get length of longest substring with at most K distinct characters
     /** sliding window */
     public int lengthOfLongestSubstringKDistinct(String s, int k) {
