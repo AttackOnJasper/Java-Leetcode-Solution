@@ -37,7 +37,7 @@ public class ArrayQuestionTest {
       String[] myStringArray = new String[]{"a","b","c"};
      */
         final int[] arr = {1, 2, 3, 4};
-        assertEquals(4, arrayQuestion.arrayPairSum(arr));
+        assertEquals(2, arrayQuestion.subarraySum(arr, 3));
     }
 
     @Test
@@ -49,19 +49,13 @@ public class ArrayQuestionTest {
         assertEquals(2, (int)res.get(1));
     }
 
-    @Test
-    public void testBaseballGame() {
-        String[] ops = new String[]{"5","-2","4","C","D","9","+","+"};
-        assertEquals(27, arrayQuestion.calPoints(ops));
-    }
-
     // 621
-    @Test
-    public void testTaskScheduler() {
-        char[] ops = new char[]{'A', 'B', 'A', 'A', 'B'};
-        int res = ArrayQuestion.taskScheduler(ops, 2);
-        assertEquals(8, res);
-    }
+//    @Test
+//    public void testTaskScheduler() {
+//        char[] ops = new char[]{'A', 'B', 'A', 'A', 'B'};
+//        int res = arrayQuestion.taskScheduler(ops, 2);
+//        assertEquals(8, res);
+//    }
 
     // 683 variation
     @Test

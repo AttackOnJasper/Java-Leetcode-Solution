@@ -7,6 +7,7 @@ import java.util.List;
 
 public class BackTrackQuestion {
     // 17 Letter Combinations of a Phone Number
+    /** every time use queue to poll, format, and push */
     public List<String> letterCombinations(String digits) {
         LinkedList<String> ans = new LinkedList<String>();
         if (digits == null || digits.length() == 0) return ans;

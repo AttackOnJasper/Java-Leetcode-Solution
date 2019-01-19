@@ -1,11 +1,15 @@
 out/
 
+target/
+
 src/META-INF/MANIFEST.MF
 
 *.lst
 
+*.iml
+
 .idea/
 
-LeetCodeSolution.iml
-
 test/main/java/MD5Test.java
+
+*.class

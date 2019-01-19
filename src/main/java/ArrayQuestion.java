@@ -385,10 +385,11 @@ public class ArrayQuestion {
          *  swap between 2 consecutive numbers
          *  if odd index & prev > curr, swap
          *  if even index & prev < curr, swap
+         *  relative order to previous value would be preserved (i.e. if a swap is needed, both i & i - 1 would smaller / greater than i - 2)
          */
         for (int i = 1; i < nums.length; i++) {
-            int a = nums[i - 1];
-            if ((i % 2 == 1) == (a > nums[i])) {
+            if ((i % 2 == 1) == (nums[i - 1] > nums[i])) {
+                int a = nums[i - 1];
                 nums[i - 1] = nums[i];
                 nums[i] = a;
             }
@@ -469,22 +470,17 @@ public class ArrayQuestion {
     public int[][] reconstructQueue(int[][] people) {
         /**
           pick up the tallest guy first
-          when insert the next tall guy, just need to insert him into kth position
+          when insert the next guy with same height, just need to insert him into kth position
           repeat until all people are inserted into list
          */
-        Arrays.sort(people,new Comparator<int[]>(){
-            @Override
-            public int compare(int[] o1, int[] o2){
-                return o1[0]!=o2[0]?-o1[0]+o2[0]:o1[1]-o2[1];
-            }
-        });
+        Arrays.sort(people, (o1, o2) -> o1[0] != o2[0] ? -o1[0] + o2[0] : o1[1] - o2[1]);
         List<int[]> res = new LinkedList<>();
         for(int[] cur : people)
             res.add(cur[1],cur);
         return res.toArray(new int[people.length][]);
     }
 
-    // 413: Arithmetic slices: return # of subarray that forms arithmetic sequence
+    // 413: Arithmetic slices: return # of subarray that forms arithmetic sequence (form sequence if at least 3 elements have the same diff)
     public int numberOfArithmeticSlices(int[] A) {
         if (A.length < 3) return 0;
         int res = 0, difference = Integer.MAX_VALUE, count = 0;
@@ -501,20 +497,20 @@ public class ArrayQuestion {
         return res;
     }
 
-    // 419: Battleships in a board
+    // 419: Battleships in a board (either vertical or horizontal X)
     public int countBattleships(char[][] board) {
         int res = 0;
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 char temp = board[i][j];
                 /** only add the first X appeared */
-                if (temp == 'X') res += ((i > 0 && board[i-1][j] == temp)||(j > 0 && board[i][j-1] == temp)) ? 0 : 1;
+                if (temp == 'X') res += ((i > 0 && board[i-1][j] == 'X')||(j > 0 && board[i][j-1] == 'X')) ? 0 : 1;
             }
         }
         return res;
     }
 
-    // 442. Find All Duplicates in an Array (yext)
+    // 442. Find All Duplicates in an Array
     /**
      * Given an array of integers, 1 ≤ a[i] ≤ n (n = size of array), some elements appear twice and others appear once.
      * Find all the elements that appear twice in this array.
@@ -535,9 +531,8 @@ public class ArrayQuestion {
         int total = 0, n = nums.length;
         for (int j = 0; j < 32; j++) {
             int bitCount = 0;
-            for (int i = 0; i < n; i++) {
+            for (int i = 0; i < n; i++)
                 bitCount += (nums[i] >> j) & 1;
-            }
             total += bitCount * (n - bitCount);
         }
         return total;
@@ -548,101 +543,71 @@ public class ArrayQuestion {
         List<Integer> res = new ArrayList<Integer>();
         for (int i = 0; i < nums.length; i++) {
             int val = Math.abs(nums[i]) - 1;
-            if (nums[val] > 0) {
+            if (nums[val] > 0)
                 nums[val] = -nums[val];
-            }
         }
-        for (int i = 0; i < nums.length; i++) {
-            if (nums[i] > 0) {
+        for (int i = 0; i < nums.length; i++)
+            if (nums[i] > 0)
                 res.add(i + 1);
-            }
-        }
         return res;
     }
 
-    // 454 4Sum II
+    // 454 4Sum II. Given four lists A, B, C, D of integer values, compute how many
+    // tuples (i, j, k, l) there are such that A[i] + B[j] + C[k] + D[l] is zero
     public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
         Map<Integer, Integer> map = new HashMap<>();
-
         for (int i = 0; i < C.length; i++) {
             for (int j = 0; j < D.length; j++) {
                 int sum = C[i] + D[j];
                 map.put(sum, map.getOrDefault(sum, 0) + 1);
             }
         }
-
         int res = 0;
-        for (int i = 0; i < A.length; i++) {
-            for (int j = 0; j < B.length; j++) {
+        for (int i = 0; i < A.length; i++)
+            for (int j = 0; j < B.length; j++)
                 res += map.getOrDefault(-1 * (A[i] + B[j]), 0);
-            }
-        }
-
         return res;
     }
 
-    // 485 Max Consecutive Ones
-    public int findMaxConsecutiveOnes(int[] nums) {
-        if (nums == null || nums.length == 0) {
-            return -1;
-        }
-        int maxSum = 0, curSum = 0;
-        for (int i = 0; i < nums.length + 1; i++) {
-            if (i < nums.length && nums[i] == 1) {
-                curSum++;
-            } else {
-                maxSum = Math.max(curSum, maxSum);
-                curSum = 0;
-            }
-        }
-        return maxSum;
-    }
-
-    // 496 Next Greater Element
+    // 496 Next Greater Element: 2 arrays nums1 and nums2 where nums1’s elements are subset of nums2.
+    // Find all the next greater numbers for nums1's elements in the corresponding places of nums2
     /**
      * Use a stack to store a decreasing subsequence, and pop all items that is smaller than the
      * next item to put in the next greater element map
      */
     public int[] nextGreaterElement(int[] findNums, int[] nums) {
         Map<Integer, Integer> map = new HashMap<>();  // store the integer and its next greater integer
-        Stack<Integer> s = new Stack<Integer>();
+        Stack<Integer> s = new Stack<>();
         for (int n : nums) {
-            while (!s.isEmpty() && s.peek() < n) {
+            while (!s.isEmpty() && s.peek() < n)
                 map.put(s.pop(), n);
-            }
             s.push(n);
         }
-        for (int i = 0; i < findNums.length; i++) {
+        for (int i = 0; i < findNums.length; i++)
             findNums[i] = map.getOrDefault(findNums[i], -1);
-        }
         return findNums;
     }
 
-    // 503
+    // 503: given a circular array, get index of next greater element
     public int[] nextGreaterElements(int[] nums) {
         Stack<Integer> s = new Stack<>();
         int n = nums.length;
         int[] res = new int[n];
         Arrays.fill(res, -1);
+        /** append an array at the back */
         for (int i = 0; i < 2 * n; i++) {
             int num = nums[i % n];
-            while (!s.isEmpty() && nums[s.peek()] < num) {
+            while (!s.isEmpty() && nums[s.peek()] < num)
                 res[s.pop()] = num;
-            }
-            if (i < n) {
+            if (i < n)
                 s.push(i);
-            }
         }
         return res;
     }
 
-    // 531 Find lonely pixels
-
-    /**
-     * A black lonely pixel is character 'B' that located at a specific position where the same row
-     * and same column don't have any other black pixels.
-     */
-    // record the number of Bs in each column & each row
+    // 531 Find lonely pixels : A black lonely pixel is character 'B' that located at a specific position where the same row
+    // and same column don't have any other black pixels
+    /** record the number of Bs in each column & each row */
     public int findLonelyPixel(char[][] picture) {
         int n = picture.length, m = picture[0].length;
 
@@ -655,7 +620,6 @@ public class ArrayQuestion {
         for (int i=0;i<n;i++)
             for (int j=0;j<m;j++)
                 if (picture[i][j] == 'B' && rowCount[i] == 1 && colCount[j] == 1) count++;
-
         return count;
     }
 
@@ -668,23 +632,11 @@ public class ArrayQuestion {
 
         for (int i = 0; i < nums.length; i++) {
             sum += nums[i];
-            if (preSum.containsKey(sum - k)) {
+            if (preSum.containsKey(sum - k))
                 result += preSum.get(sum - k);
-            }
             preSum.put(sum, preSum.getOrDefault(sum, 0) + 1);
         }
-
         return result;
-    }
-
-    // 561 Array Partition
-    public int arrayPairSum(int[] nums) {
-        Arrays.sort(nums);
-        int res = 0;
-        for (int i = 0; i < nums.length; i += 2) {
-            res += nums[i];
-        }
-        return res;
     }
 
     // 565 Array Nesting
@@ -695,7 +647,7 @@ public class ArrayQuestion {
         int res = 1;
         for (int i = 0; i < nums.length; i++) {
             int count = 0;
-            for (int k = i; nums[k] >= 0; count++) {
+            for (int k = i; nums[k] >= 0; count++) {  // watch out the condition
                 int ak = nums[k];
                 nums[k] = -1; // mark a[k] as visited; next time don't step on it because it would be a smaller cycle
                 k = ak;
@@ -709,30 +661,21 @@ public class ArrayQuestion {
     public int[][] matrixReshape(int[][] nums, int r, int c) {
         int x = nums.length;
         int y = nums[0].length;
-        if (x * y != r * c) {
-            return nums;
-        }
+        if (x * y != r * c) return nums;
         int[][] res = new int[r][c];
-        for (int i = 0; i < r * c; i++) {
-            /**
-             * note the indexing of matrices
-             */
+        for (int i = 0; i < r * c; i++)
+            /** note the indexing of matrices */
             res[i / c][i % c] = nums[i / y][i % y];
-        }
         return res;
     }
 
     // 575. Distribution Candies: return the max kind of candies one can get
-    /**
-     * Use set to return number of distinct numbers
-     */
+    /** Use set to return number of distinct numbers */
     public int distributeCandies(int[] candies) {
-        final Set<Integer> set = new HashSet<Integer>();
+        final Set<Integer> set = new HashSet<>();
         for (int i : candies) {
             set.add(i);
-            if (set.size() == candies.length / 2) {
-                return candies.length / 2;
-            }
+            if (set.size() == candies.length / 2) return candies.length / 2;
         }
         return set.size();  // smaller than half
     }
@@ -747,20 +690,6 @@ public class ArrayQuestion {
             if (A[len - 1 - i] > min) start = len - 1 - i; // if the index is not the current min -> unsorted -> move start to this index
         }
         return end - start + 1;
-    }
-
-    // 598. Range Addition II
-    public int maxCount(int m, int n, int[][] ops) {
-        if (ops == null || ops.length == 0) {
-            return m * n;
-        }
-        int row = Integer.MAX_VALUE, col = Integer.MAX_VALUE;
-        for (int[] op : ops) {
-            row = Math.min(row, op[0]);
-            col = Math.min(col, op[1]);
-        }
-
-        return row * col;
     }
 
     // 605
@@ -779,14 +708,11 @@ public class ArrayQuestion {
                 }
             }
         }
-
         return count == n;
     }
 
-    /**
-     * 611 valid triangle numbers
-     * note the reduction of calculation of sums of 2 numbers
-     */
+    // 611. valid triangle numbers:
+    /** note the reduction of calculation of sums of 2 numbers */
     public int triangleNumber(int[] nums) {
         Arrays.sort(nums);
         int count = 0, n = nums.length;
@@ -803,34 +729,20 @@ public class ArrayQuestion {
         return count;
     }
 
-    // 621
-    public int leastInterval(char[] tasks, int n) {
+    // 621. Task Scheduler
+    /** only consider most frequent tasks */
+    public int taskScheduler(char[] tasks, int n) {
         int[] c = new int[26];
-        for (char t : tasks) {
+        for(char t : tasks)
             c[t - 'A']++;
-        }
         Arrays.sort(c);
         int i = 25;
-        while (i >= 0 && c[i] == c[25]) {  // make most freq. numbers into frames with fixed order
-            i--;
-        }
+        while(i >= 0 && c[i] == c[25]) i--;
+        /** c[25] - 1: # of frames
+         * n + 1: frame size
+         * 25 - i: length of last frame
+         * */
         return Math.max(tasks.length, (c[25] - 1) * (n + 1) + 25 - i);
-    }
-
-    // 621 variation
-    public static int taskScheduler(char[] tasks, int interval) {
-        Map<Character, Integer> map = new HashMap<>();
-        int res = 0;
-        for (int i = 0; i < tasks.length; i++, res++) {
-            while (map.containsKey(tasks[i])) {
-                if (res - interval > map.get(tasks[i])) {
-                    break;
-                }
-                res++;
-            }
-            map.put(tasks[i], res);
-        }
-        return res;
     }
 
     // 628. Maximum Product of Three Numbers
@@ -872,8 +784,8 @@ public class ArrayQuestion {
         return new int[] {duplicate, (int)sum + duplicate};
     }
 
-    // 665 Check if it is possible to change one element to make the array non-descending
-    /** Greedy: try to decrease i-1 first; if can't, increase i */
+    // 665. Check if it is possible to change one element to make the array non-descending
+    /** Greedy: try to decrease i-1 to i first; if can't, increase i to i - 1 */
     public boolean checkPossibility(int[] nums) {
         int count = 0;
         for (int i = 1; i < nums.length && count <= 1; i++) {
@@ -887,25 +799,6 @@ public class ArrayQuestion {
             }
         }
         return count <= 1;
-    }
-
-    // 682
-    public int calPoints(String[] ops) {
-        int res = 0;
-        ArrayList<Integer> arr = new ArrayList<>();
-        for (int i = 0; i < ops.length; i++) {
-            if (ops[i].equals("C")) {
-                if (i > 0) arr.remove(arr.size()-1);
-            } else if (ops[i].matches("-?\\d+(\\.\\d+)?")) {
-                arr.add(Integer.valueOf(ops[i]));
-            } else if (ops[i].equals("D")) {
-                arr.add(arr.get(arr.size()-1) * 2);
-            } else arr.add(arr.get(arr.size()-1) + arr.get(arr.size()-2));
-        }
-        for (int i = 0; i < arr.size(); i++) {
-            res += arr.get(i);
-        }
-        return res;
     }
 
     // 683
@@ -960,13 +853,10 @@ public class ArrayQuestion {
         if (grid == null || grid.length == 0 || grid[0].length == 0) return 0;
         int res = 0, row = grid.length, col = grid[0].length;
 
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < col; j++) {
-                if (grid[i][j] == 1) {
+        for (int i = 0; i < row; i++)
+            for (int j = 0; j < col; j++)
+                if (grid[i][j] == 1)
                     res = Math.max(res, AreaOfIsland(grid, i, j));
-                }
-            }
-        }
         return res;
     }
     // dfs
@@ -979,6 +869,7 @@ public class ArrayQuestion {
     }
 
     // 697 find the smallest possible length of a (contiguous) subarray of nums, that has the same degree as nums
+    // degree: the maximum frequency of any one of its elements
     public static int findShortestSubArray(int[] nums) {
         Map<Integer, int[]> map = new HashMap<>();
         for (int i = 0; i < nums.length; i++) {
@@ -1002,35 +893,17 @@ public class ArrayQuestion {
         return res;
     }
 
-    // 717
-    /** one bit '0', 2 bit '10' or '11' */
-    public boolean isOneBitCharacter(int[] bits) {
-        int n = bits.length, i = 0;
-        while (i < n - 1) {
-            if (bits[i] == 0) i++;
-            else i += 2;
-        }
-        return i == n - 1;
-    }
-
-    // 720
+    // 720: ["w". "wo", "wor", "worl", "world", "wort", "worth"] -> "world"
+    /** sort */
     public String longestWord(String[] words) {
         if (words == null || words.length == 0) return "";
         Arrays.sort(words);
-        int max = 0;
-        String res = words[0];
-        Set<String> set = new HashSet<String>();
-        for (String word : words) {
-            set.add(word);
-            int i = 1, len = word.length();
-            for (; i < len; i++) {
-                if (!set.contains(word.substring(0,i))) {
-                    break;
-                }
-            }
-            if (i == len && len > max) {
-                max = len;
-                res = word;
+        Set<String> built = new HashSet<>();
+        String res = "";
+        for (String w : words) {
+            if (w.length() == 1 || built.contains(w.substring(0, w.length() - 1))) {
+                res = w.length() > res.length() ? w : res;
+                built.add(w);
             }
         }
         return res;
@@ -1080,5 +953,17 @@ public class ArrayQuestion {
             if (Math.abs(A[i] - i) > 1) return false;
         }
         return true;
+    }
+
+    // 905. Sort Array By Parity
+    public int[] sortArrayByParity(int[] A) {
+        for (int i = 0, j = 0; j < A.length; j++) {
+            if (A[j] % 2 == 0) {
+                int tmp = A[i];
+                A[i++] = A[j];
+                A[j] = tmp;
+            }
+        }
+        return A;
     }
 }
