@@ -430,4 +430,25 @@ public class DPQuestion {
         }
         return take;
     }
+
+    // 357 e.g. 2 -> 91 numbers out of 100 that have unique digits
+    public int countNumbersWithUniqueDigits(int n) {
+        if (n == 0) return 1;
+        int res = 10;
+        int uniqueDigits = 9;
+        int availableNumber = 9;
+        while (n-- > 1 && availableNumber > 0) {
+            uniqueDigits = uniqueDigits * availableNumber;
+            res += uniqueDigits;
+            availableNumber--;
+        }
+        return res;
+    }
+
+    // 779
+    public int kthGrammar(int N, int K) {
+        if (N == 1) return 0;
+        if (K % 2 == 0) return (kthGrammar(N - 1, K / 2) == 0) ? 1 : 0;
+        return (kthGrammar(N - 1, (K + 1) / 2) == 0) ? 0 : 1;
+    }
 }

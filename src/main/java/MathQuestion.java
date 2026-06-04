@@ -1,16 +1,9 @@
 package main.java;
 
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
-import java.util.Stack;
-import java.util.List;
 
-public class EasyQuestion {
+public class MathQuestion {
     // 69
     /** Newton's method */
     public int mySqrt(int x) {
@@ -18,101 +11,6 @@ public class EasyQuestion {
         while (r*r > x)
             r = (r + x/r) / 2;
         return (int) r;
-    }
-
-    // 155 Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
-    /**
-     * push the difference between min & the # to be pushed
-     */
-    class MinStack {
-        long min;
-        final Stack<Long> stack;
-
-        public MinStack() {
-            stack = new Stack<>();
-        }
-
-        public void push(int x) {
-            if (stack.isEmpty()) {
-                stack.push(0L);
-                min = x;
-            } else {
-                stack.push(x - min); // need to change to previous min during pop if x is smaller than min
-                if (x < min)
-                    min = x;
-            }
-        }
-
-        public void pop() {
-            if (stack.isEmpty()) return;
-            final long pop = stack.pop();
-            if (pop < 0)
-                min = min - pop; // If negative, increase the min value
-        }
-
-        public int top() {
-            final long top = stack.peek();
-            if (top > 0) return (int) (top + min);
-            return (int) (min);
-        }
-
-        public int getMin() {
-            return (int) min;
-        }
-    }
-    /** Push the original min value when min is updated */
-    class MinStack2 {
-        int min = Integer.MAX_VALUE;
-        Stack<Integer> stack = new Stack<Integer>();
-        public void push(int x) {
-            // only push the old minimum value when min would be updated to x
-            if(x <= min){
-                stack.push(min);
-                min=x;
-            }
-            stack.push(x);
-        }
-
-        public void pop() {
-            // if pop operation could result in the changing of the current minimum value,
-            // pop twice and change the current minimum value to the last minimum value.
-            if(stack.pop() == min) min = stack.pop();
-        }
-
-        public int top() {
-            return stack.peek();
-        }
-
-        public int getMin() {
-            return min;
-        }
-    }
-
-    // 170
-    public class TwoSum {
-        Set<Integer> num;
-        Set<Integer> sum;
-
-        TwoSum() {
-            num = new HashSet<Integer>();
-            sum = new HashSet<Integer>();
-        }
-
-        public void add(int number) {
-            if (num.contains(number)) {
-                sum.add(number * 2);
-            } else {
-                num.add(number);
-                Iterator<Integer> it = num.iterator();
-                while (it.hasNext()) {
-                    sum.add(it.next() + number);
-                }
-            }
-        }
-
-        public boolean find(int value) {
-            return sum.contains(value);
-        }
     }
 
     // 191 Hamming weight (bitCount)
@@ -169,38 +67,6 @@ public class EasyQuestion {
             }
         }
         return res;
-    }
-
-    // 252 Meeting rooms: check if can attend all meetings
-    private class Interval {
-        int start;
-        int end;
-    }
-    public boolean canAttendMeetings(Interval[] intervals) {
-        int len=intervals.length;
-        if(len==0) return true;
-        int[]begin=new int[len];
-        int[]stop=new int[len];
-        for(int i=0;i<len;i++){
-            begin[i]=intervals[i].start;
-            stop[i]=intervals[i].end;
-        }
-        Arrays.sort(begin);
-        Arrays.sort(stop);
-        for(int i=1;i<len;i++){
-            if(begin[i]<stop[i-1]) return false;
-        }
-        return true;
-    }
-    public boolean canAttendMeetings2(Interval[] intervals) {
-        if (intervals == null)
-            return false;
-        /** Sort the intervals by start time */
-        Arrays.sort(intervals, (a, b) -> a.start - b.start);
-        for (int i = 1; i < intervals.length; i++)
-            if (intervals[i].start < intervals[i - 1].end)
-                return false;
-        return true;
     }
 
     // 326 Power of Three
@@ -272,35 +138,6 @@ public class EasyQuestion {
         return result;
     }
 
-    // 422 Valid Word Square: verify that the transpose of matrix is the same as matrix
-    public boolean validWordSquare(List<String> words) {
-        for (int i = 0, size = words.size(); i < size; i++) {
-            String temp = words.get(i);
-            for (int j = 0, len = temp.length(); j < len; j++) {
-                if (size <= j || words.get(j).length() <= i || words.get(j).charAt(i) != temp.charAt(j)) return false;
-            }
-        }
-        return true;
-    }
-
-    // 443 String Compression: ["a","a","b","b","c","c","c"] -> ["a","2","b","2","c","3"]
-    public int compress(char[] chars) {
-        int indexAns = 0, index = 0;
-        while (index < chars.length) {
-            char currentChar = chars[index];
-            int count = 0;
-            while (index < chars.length && chars[index] == currentChar) {
-                index++;
-                count++;
-            }
-            chars[indexAns++] = currentChar;
-            if(count != 1)
-                for(char c : Integer.toString(count).toCharArray())
-                    chars[indexAns++] = c;
-        }
-        return indexAns;
-    }
-
     // 447 find the number of 2 points that have same distance towards one point
     /**
      * store the distance to point i & number of coordinates for that distance
@@ -340,28 +177,6 @@ public class EasyQuestion {
         }
          */
         return Integer.bitCount(x ^ y);
-    }
-
-    // 463. Island Perimeter
-    /**
-     * watch out how to count neighbours
-     */
-    public int islandPerimeter(int[][] grid) {
-        int numOfIslands = 0, neighbours = 0;
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[0].length; j++) {
-                if (grid[i][j] == 1) {
-                    numOfIslands++;
-                    if (i < grid.length - 1 && grid[i + 1][j] == 1) {
-                        neighbours++; // count down neighbours
-                    }
-                    if (j < grid[i].length - 1 && grid[i][j + 1] == 1) {
-                        neighbours++; // count right neighbours
-                    }
-                }
-            }
-        }
-        return numOfIslands * 4 - neighbours * 2;
     }
 
     // 476 Number Complement
@@ -421,7 +236,4 @@ public class EasyQuestion {
         String str = num + new StringBuilder().append(num).reverse().toString();
         return Long.parseLong(str);
     }
-
-    // 690 Employee Importance
-    /** hashmap then stack */
 }

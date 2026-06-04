@@ -1,24 +1,26 @@
 package main.java;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.security.NoSuchAlgorithmException;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Created by jasperwang on 2018-01-21.
  */
 public class BlowfishTest {
     // create a key generator based upon the Blowfish cipher
-    private final KeyGenerator keygenerator;
+    private KeyGenerator keygenerator;
 
     // create a key
     private SecretKey secretkey;
 
-    public BlowfishTest() throws NoSuchAlgorithmException {
+    @BeforeEach
+    public void setUp() throws NoSuchAlgorithmException {
         keygenerator = KeyGenerator.getInstance("Blowfish");
         secretkey = keygenerator.generateKey();
     }

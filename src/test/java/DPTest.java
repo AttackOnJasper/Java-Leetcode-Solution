@@ -1,15 +1,15 @@
 package main.java;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class DPTest {
     private DPQuestion dpQuestion;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         dpQuestion = new DPQuestion();
     }
@@ -43,5 +43,12 @@ public class DPTest {
     public void testDeleteAndEarn() {
         assertEquals(6, dpQuestion.deleteAndEarn(new int[]{3,4,2}));
         assertEquals(9, dpQuestion.deleteAndEarn(new int[]{2, 2, 3, 3, 3, 4}));
+    }
+
+    @Test
+    public void testKthGrammar() {
+        assertEquals(1, dpQuestion.kthGrammar(3, 3));
+        assertEquals(1, dpQuestion.kthGrammar(4, 5));
+        assertEquals(0, dpQuestion.kthGrammar(4, 6));
     }
 }

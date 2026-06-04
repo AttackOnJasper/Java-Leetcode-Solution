@@ -1,15 +1,15 @@
 package main.java;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class ArrayQuestionTest {
     private ArrayQuestion arrayQuestion;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         arrayQuestion = new ArrayQuestion();
     }

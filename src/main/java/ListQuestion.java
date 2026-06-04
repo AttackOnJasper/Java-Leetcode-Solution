@@ -1,5 +1,6 @@
 package main.java;
 
+import java.util.ArrayDeque;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
@@ -7,6 +8,67 @@ import java.util.PriorityQueue;
  * Created by jasperwang on 2018-02-18.
  */
 public class ListQuestion {
+    public static class ListNode {
+        public int val;
+        public ListNode next;
+
+        public ListNode(int x) { val = x; }
+        public ListNode(int x, ListNode next) {
+            this.val = x;
+            this.next = next;
+        }
+
+        public static ListNode listNodeFactory(ArrayDeque<Integer> vals) {
+            if (vals.size() == 0) return null;
+            return new ListNode(vals.pollFirst(), listNodeFactory(vals));
+        }
+    }
+
+    public static ListNode reverseSecondHalfList(ListNode head) {
+        if (head == null) return null;
+        ListNode fast = head, slow = head, prev = head;
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            prev = slow;
+            slow = slow.next;
+        }
+        prev.next = reverse(slow);
+        return head;
+    }
+    private static ListNode reverse(ListNode head) {
+        ListNode prev = null;
+        while (head != null) {
+            ListNode next = head.next;
+            head.next = prev;
+            prev = head;
+            head = next;
+        }
+        return prev;
+    }
+
+    // 2. Add Two Numbers Linked List
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode res = new ListNode(0);
+        ListNode temp = res;
+        int sum = 0;
+        while (l1 != null || l2 != null) {
+            sum /= 10;
+            if (l1 != null) {
+                sum += l1.val;
+                l1 = l1.next;
+            }
+            if (l2 != null) {
+                sum += l2.val;
+                l2 = l2.next;
+            }
+            temp.next = new ListNode(sum % 10);
+            temp = temp.next;
+        }
+        if (sum / 10 == 1)
+            temp.next = new ListNode(1);
+        return res.next;
+    }
+
     // 23 Merge K lists (Wish interview)
     public ListNode mergeKLists(ListNode[] lists) {
         if (lists == null || lists.length == 0) return null;
@@ -161,5 +223,109 @@ public class ListQuestion {
             slow = slow.next;
         }
         return true;
+    }
+
+    // 369
+    private int carry = 1;
+
+    public ListNode plusOne(ListNode head) {
+        if (plusOneHelper(head).val != 0) return head;
+        final ListNode newHead = new ListNode(1);
+        newHead.next = head;
+        return newHead;
+    }
+
+    private ListNode plusOneHelper(ListNode head) {
+        if (head == null) return null;
+        head.next = plusOneHelper(head.next);
+        if (carry == 1) {
+            if (head.val != 9) {
+                head.val++;
+                carry = 0;
+                return head;
+            }
+            head.val = 0;
+        }
+        return head;
+    }
+
+    public ListNode plusOne2(ListNode head) {
+        // add a new node for the case 999 + 1
+        final ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        // record the least significant digit that is not 9
+        ListNode lastNotNine = dummy, node = head;
+
+        while (node != null) {
+            if (node.val != 9) {
+                lastNotNine = node;
+            }
+            node = node.next;
+        }
+        lastNotNine.val++;
+        node = lastNotNine.next;
+        while (node != null) {
+            node.val = 0;
+            node = node.next;
+        }
+        return dummy.val == 1 ? dummy : dummy.next;
+    }
+
+    // 382
+    /** Reservoir Sampling: choose k elements from an array with unknown length */
+    public class Solution {
+        ListNode head;
+        java.util.Random randomGen = null;
+
+        /** @param head The linked list's head.
+        Note that the head is guaranteed to be not null, so it contains at least one node. */
+        public Solution(ListNode head) {
+            this.head = head;
+            this.randomGen = new java.util.Random();
+        }
+
+        /** Returns a random node's value. */
+        public int getRandom() {
+            ListNode res = null, curr = head;
+            for (int i = 1; curr != null; i++) {
+                if (randomGen.nextInt(i) == 0) { // returns a number between 0 and i - 1
+                    res = curr;
+                }
+                curr = curr.next;
+            }
+            return res.val;
+        }
+    }
+
+    // 445
+    /** numbers are in right order */
+    public ListNode addTwoNumbers2(ListNode l1, ListNode l2) {
+        java.util.Stack<Integer> s1 = new java.util.Stack<Integer>();
+        java.util.Stack<Integer> s2 = new java.util.Stack<Integer>();
+
+        while(l1 != null) {
+            s1.push(l1.val);
+            l1 = l1.next;
+        };
+        while(l2 != null) {
+            s2.push(l2.val);
+            l2 = l2.next;
+        }
+        ListNode res = new ListNode(0);
+        int sum = 0;
+        while (!s1.isEmpty() || !s2.isEmpty()) {
+            sum /= 10;
+            if (!s1.isEmpty()) {
+                sum += s1.pop();
+            }
+            if (!s2.isEmpty()) {
+                sum += s2.pop();
+            }
+            ListNode temp = new ListNode(sum / 10);
+            res.val = sum % 10;
+            temp.next = res;
+            res = temp;
+        }
+        return res.val == 0 ? res.next : res;
     }
 }

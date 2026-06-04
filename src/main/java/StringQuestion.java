@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.Stack;
 import java.util.stream.Collectors;
@@ -195,6 +196,25 @@ public class StringQuestion {
         return true;
     }
 
+    // 246 Same after rotatign 180 degrees
+    public boolean isStrobogrammatic(String num) {
+        HashMap<Character, Character> h = new HashMap<>();
+        h.put('8','8');
+        h.put('1','1');
+        h.put('6','9');
+        h.put('9','6');
+        h.put('0', '0');
+
+        int l = 0, r = num.length() - 1;
+        while (l <= r) {
+            if (!h.containsKey(num.charAt(l))) return false;
+            if (h.get(num.charAt(l)) != num.charAt(r)) return false;
+            l++;
+            r--;
+        }
+        return true;
+    }
+
     // 266 return true if permutation of string can be a palindrome
     public boolean canPermutePalindrome(String s) {
         HashSet<Character> h = new HashSet<Character>();
@@ -236,6 +256,51 @@ public class StringQuestion {
         for (int i=-1; (i = s.indexOf("++", i+1)) >= 0; )
             res.add(s.substring(0, i) + "--" + s.substring(i+2));
         return res;
+    }
+
+    // 294 Flip Game II
+    /** decides if the first player can guarantee a win
+     *  Idea 1: recursion on sub-case
+     *  Idea 2: Dynamic programming
+     * */
+    public boolean canWin(String s) {
+        if(s == null || s.length() < 2) return false;
+
+        Set<String> winSet = new HashSet<String>();
+        return canWin(s, winSet);
+    }
+    private boolean canWin(String s, Set<String> winSet){
+        if(winSet.contains(s)) return true;
+
+        for(int i = 0; i < s.length() - 1; i++) {
+            if(s.charAt(i) == '+' && s.charAt(i + 1) == '+') {
+                String sOpponent = s.substring(0, i) + "--" + s.substring(i + 2);
+                if(!canWin(sOpponent, winSet)) {
+                    winSet.add(s);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean canWin2(String s) {
+        s = s.replace('-', ' ');
+        int G = 0;
+        List<Integer> g = new ArrayList<>();
+        for (String t : s.split("[ ]+")) {
+            int p = t.length();
+            if (p == 0) continue;
+            while (g.size() <= p) {
+                char[] x = t.toCharArray();
+                int i = 0, j = g.size() - 2;
+                while (i <= j)
+                    x[g.get(i++) ^ g.get(j--)] = '-';
+                g.add(new String(x).indexOf('+'));
+            }
+            G ^= g.get(p);
+        }
+        return G != 0;
     }
 
     // 318. Given a string array words, find the maximum value of length(word[i]) * length(word[j])
@@ -545,5 +610,52 @@ public class StringQuestion {
             if (jewels.contains(stones[i]))
                 res++;
         return res;
+    }
+
+    // 422 Valid Word Square: verify that the transpose of matrix is the same as matrix
+    public boolean validWordSquare(List<String> words) {
+        for (int i = 0, size = words.size(); i < size; i++) {
+            String temp = words.get(i);
+            for (int j = 0, len = temp.length(); j < len; j++) {
+                if (size <= j || words.get(j).length() <= i || words.get(j).charAt(i) != temp.charAt(j)) return false;
+            }
+        }
+        return true;
+    }
+
+    // 443 String Compression: ["a","a","b","b","c","c","c"] -> ["a","2","b","2","c","3"]
+    public int compress(char[] chars) {
+        int indexAns = 0, index = 0;
+        while (index < chars.length) {
+            char currentChar = chars[index];
+            int count = 0;
+            while (index < chars.length && chars[index] == currentChar) {
+                index++;
+                count++;
+            }
+            chars[indexAns++] = currentChar;
+            if(count != 1)
+                for(char c : Integer.toString(count).toCharArray())
+                    chars[indexAns++] = c;
+        }
+        return indexAns;
+    }
+
+    // 592
+    public String fractionAddition(String expression) {
+        Scanner sc = new Scanner(expression).useDelimiter("/|(?=[-+])");
+        int A = 0, B = 1;
+        while (sc.hasNext()) {
+            int a = sc.nextInt(), b = sc.nextInt();
+            A = A * b + a * B;
+            B *= b;
+            int g = gcd(A, B);
+            A /= g;
+            B /= g;
+        }
+        return A + "/" + B;
+    }
+    private int gcd(int a, int b) {
+        return a != 0 ? gcd(b % a, a) : Math.abs(b);
     }
 }

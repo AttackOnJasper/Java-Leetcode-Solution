@@ -3,6 +3,14 @@ package main.java;
 import java.util.*;
 
 public class TreeQuestion {
+    public static class TreeNode {
+        public int val;
+        public TreeNode left;
+        public TreeNode right;
+
+        public TreeNode(int x) { val = x; }
+    }
+
     public void bfs(TreeNode root) {
         Queue<TreeNode> q = new ArrayDeque<TreeNode>();
         HashSet<Integer> visited = new HashSet<>();
@@ -431,6 +439,22 @@ public class TreeQuestion {
         return left == null ? right : right == null ? left : root;
     }
 
+    // 250 Count Univalue Subtrees
+    int res = 0;
+    public int countUnivalSubtrees(TreeNode root) {
+        if (root == null) return 0;
+        countUnivalSubtreesHelper(root, root.val);
+        return res;
+    }
+    private boolean countUnivalSubtreesHelper(TreeNode root, int val) {
+        if (root == null) return true;
+        // use | here for explicit comparison
+        if (!countUnivalSubtreesHelper(root.left, root.val) | !countUnivalSubtreesHelper(root.right, root.val)) return false;
+        res++;
+        return root.val == val;
+    }
+
+
     // 257. Binary Tree Paths: return all root-to-leaf paths
     public List<String> binaryTreePaths(TreeNode root) {
         List<String> res = new ArrayList<>();
@@ -713,5 +737,25 @@ public class TreeQuestion {
             node.left = null;
             split(left, v, sP, node);
         }
+    }
+
+    // 582 Kill process
+    public List<Integer> killProcess(List<Integer> pid, List<Integer> ppid, int kill) {
+        Map<Integer, List<Integer>> map = new HashMap<>();  // store parent children relationship
+        for (int i = 0; i < pid.size(); ++i) {
+            map.putIfAbsent(ppid.get(i), new ArrayList<>());
+            map.get(ppid.get(i)).add(pid.get(i));
+        }
+        List<Integer> ans = new ArrayList<>();
+        Queue<Integer> q = new ArrayDeque<>();
+        q.add(kill);
+        while (!q.isEmpty()) {
+            int n = q.poll();
+            ans.add(n);
+            if (map.containsKey(n)) {
+                q.addAll(map.get(n));
+            }
+        }
+        return ans;
     }
 }

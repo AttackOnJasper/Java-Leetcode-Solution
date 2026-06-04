@@ -3,7 +3,121 @@ package main.java;
 import java.util.*;
 
 public class ArrayQuestion {
-    // 1
+    // Quick Sort
+    public int[] quickSort(int[] arr) {
+        return quickSortHelper(arr, 0, arr.length - 1);
+    }
+
+    private int[] quickSortHelper(int[] arr, int low, int high) {
+        int i = low, j = high;
+        int pivot = arr[low + (high-low)/2];
+        while (i <= j) {
+            while (arr[i] < pivot) {
+                i++;
+            }
+            while (arr[j] > pivot) {
+                j--;
+            }
+            if (i <= j) {
+                int temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+                i++;
+                j--;
+            }
+        }
+        if (low < j)
+            return quickSortHelper(arr, low, j);
+        if (i < high)
+            return quickSortHelper(arr, i, high);
+        return arr;
+    }
+
+    // quick select
+    public int selectK(int[] arr, int k) {
+        if (arr.length < 10) {
+            return selectKShort(arr, k);
+        }
+        int pivot = findPivot(arr);
+        List<Integer> left = new ArrayList<>(), right = new ArrayList<>();
+        for (int n : arr) {
+            if (n > pivot) {
+                right.add(n);
+            } else {
+                left.add(n);
+            }
+        }
+        if (left.size() > k) return selectK(left.stream().mapToInt(i -> i).toArray(), k);
+        return selectK(right.stream().mapToInt(i -> i).toArray(), k - left.size());
+    }
+
+    public int selectK2(int[] A, int k, int start, int end) {
+        int l = start, r = end, pivot = A[(l+r)/2];
+        while (l<=r) {
+            while (A[l] < pivot) l++;
+            while (A[r] > pivot) r--;
+            if (l>=r) break;
+            swap(A, l++, r--);
+        }
+        if (l-start+1 > k) return selectK2(A, k, start, l-1);
+        if (l-start+1 == k && l==r) return A[l];
+        return selectK2(A, k-r+start-1, r+1, end);
+    }
+
+    private void swap(int[] A, int i, int j) {
+        int temp = A[i];
+        A[i] = A[j];
+        A[j] = temp;
+    }
+
+    private int findPivot(int[] arr) {
+        int[] groupsOf5 = new int[arr.length / 5 + 1];
+        for (int i = 0, j = 0; i < arr.length; i += 5, j++) {
+            groupsOf5[j] = (i + 5 >= arr.length) ?
+                    selectKShort(Arrays.copyOfRange(arr, i, arr.length - 1), (arr.length - i) / 2) :
+                    selectKShort(Arrays.copyOfRange(arr, i, i + 5), 2);
+        }
+        return selectK(groupsOf5, groupsOf5.length / 2);
+    }
+
+    private int selectKShort(int[] arr, int k) {
+        Arrays.sort(arr);
+        return arr[k];
+    }
+
+    // Merge Sort
+    private int[] merge(int[] first, int[] second) {
+        int i = first.length - 1, j = second.length - 1, newIndex = i + j + 1;
+        int[] res = new int[newIndex + 1];
+        while (i >= 0 && j >= 0) {
+            res[newIndex--] = first[i] > second[j] ? first[i--] : second[j--];
+        }
+        while (j >= 0) {
+            res[newIndex--] = second[j--];
+        }
+        while (i >= 0) {
+            res[newIndex--] = first[i--];
+        }
+        return res;
+    }
+
+    public int[] mergeSort(int[] arr) {
+        if (arr.length < 2) return arr;
+        if (arr.length == 2) {
+            if (arr[0] > arr[1]) {
+                int temp = arr[0];
+                arr[0] = arr[1];
+                arr[1] = temp;
+            }
+            return arr;
+        }
+        int[] frontArr = Arrays.copyOfRange(arr, 0, arr.length / 2);
+        int[] backArr = Arrays.copyOfRange(arr, arr.length / 2, arr.length);
+        return merge(mergeSort(frontArr), mergeSort(backArr));
+    }
+
+
+    // 1. Two Sum
     public int[] twoSum(int[] nums, int target) {
         HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
         int[] result = new int[2];
@@ -19,9 +133,9 @@ public class ArrayQuestion {
     }
 
     // 33. Search in rotated sorted arry e.g. 5 6 7 1 2 3 4
-    /** Idea: find minimum then find target */
+    /** Idea: find minimum then binary search to find target */
 
-    // 34. Search for range
+    // 34. Search for range of an element in a sorted array (Binary search boundary)
     /** do one binary search for lower bound and one for upper bound */
     public int[] searchRange(int[] nums, int target) {
         if (nums.length == 0) return new int[]{-1, -1};
@@ -45,25 +159,11 @@ public class ArrayQuestion {
         return new int[]{left, low};
     }
 
-    // 59 Spiral Matrix II
+    // 59 Spiral Matrix II: generate an n x n matrix filled with elements from 1 to n^2 in spiral order.
     /** Idea: Generate matrix in increasing number order; generate a circle in each while loop */
 
-    // 66 Plus one
-    public int[] plusOne(int[] digits) {
-        for (int i = digits.length - 1 ; i >= 0; i--) {
-            if (digits[i] != 9) {
-                digits[i]++;
-                return digits;
-            }
-            digits[i] = 0;
-        }
-        int[] newNumber = new int[digits.length+1];
-        newNumber[0] = 1;
-        return newNumber;
-    }
-
     // 73. Set Matrix Zeroes: Given a m x n matrix, if an element is 0, set its entire row and column to 0. Do it in place.
-    /** Idea: use first index of a col or row to keep track if the col or row should be converted to 0 */
+    /** Idea: set first index of a col or row to keep track if the col or row should be converted to 0 */
     public void setZeroes(int[][] matrix) {
         int col0 = 1, m = matrix.length, n = matrix[0].length;
         for (int i = 0; i < m; i++) {
@@ -109,24 +209,24 @@ public class ArrayQuestion {
     // 75 sort array of 0, 1, 2
     /** Use low and high to keep track of index of 0 and 2 to be inserted */
     public void sortColors(int[] nums) {
-        if(nums==null || nums.length<2) return;
+        if (nums == null || nums.length < 2) return;
         int low = 0;
-        int high = nums.length-1;
-        for(int i = low; i<=high;) {
-            if(nums[i]==0) {
+        int high = nums.length - 1;
+        for(int i = low; i <= high;) {
+            if (nums[i] == 0) {
                 // swap A[i] and A[low] and i,low both ++
                 int temp = nums[i];
                 nums[i] = nums[low];
-                nums[low]=temp;
+                nums[low] = temp;
                 i++;
                 low++;
-            }else if(nums[i]==2) {
+            } else if (nums[i] == 2) {
                 //swap A[i] and A[high] and high--;
                 int temp = nums[i];
                 nums[i] = nums[high];
-                nums[high]=temp;
+                nums[high] = temp;
                 high--;
-            }else {
+            } else {
                 i++;
             }
         }
@@ -136,29 +236,17 @@ public class ArrayQuestion {
     public List<List<Integer>> generatePascal(int n) {
         List<List<Integer>> res = new ArrayList<>();
         List<Integer> row = new ArrayList<>();
-        for( int i = 0; i < n; i++) {
+        for(int i = 0; i < n; i++) {
             /** reverse the index to ensure previous value is not mutated yet */
             for(int j = row.size() - 1; j > 0; j--) // changing from 2nd element to (n-1)th element
-                row.set(j, row.get(j)+row.get(j-1));
+                row.set(j, row.get(j) + row.get(j-1));
             row.add(1);
             res.add(new ArrayList<>(row));
         }
         return res;
     }
 
-    // 119 Pascal Triangle
-    public List<Integer> getRow(int rowIndex) {
-        List<Integer> res = new ArrayList<>();
-        res.add(1);
-        for (int i = 1; i < rowIndex; i++) {
-            for (int j = i - 1; j > 0; j--)
-                res.set(j, res.get(j - 1) + res.get(j));
-            res.add(1);
-        }
-        return res;
-    }
-
-    // 136
+    // 136: find the single number in a list
     public int singleNumber(int[] nums) {
         int res = 0;
         for (int i : nums)
@@ -188,23 +276,6 @@ public class ArrayQuestion {
             r = Math.max(r, imax);
         }
         return r;
-    }
-
-    // 189
-    public void rotate(int[] nums, int k) {
-        k %= nums.length;
-        reverse(nums, 0, nums.length - 1);
-        reverse(nums, 0, k - 1);
-        reverse(nums, k, nums.length - 1);
-    }
-    private void reverse(int[] nums, int start, int end) {
-        while (start < end) {
-            int temp = nums[start];
-            nums[start] = nums[end];
-            nums[end] = temp;
-            start++;
-            end--;
-        }
     }
 
     // 219 Given an array of integers and an integer k, find out whether there are two distinct indices
@@ -429,6 +500,47 @@ public class ArrayQuestion {
         return -1;
     }
     /** Method 3: Negating the index of array (if array can be modified) */
+
+    // 311 Sparse Matrix Multiplication
+    public int[][] multiply(int[][] A, int[][] B) {
+        int rowA = A.length;
+        if (rowA == 0) return null;
+        int colA = A[0].length;
+        int colB = B[0].length;
+        int[][] res = new int[rowA][colB];
+        for (int i = 0; i < rowA; i++)
+            for (int k = 0; k < colA; k++)
+                if (A[i][k] != 0)
+                    for (int j = 0; j < colB; j++)
+                        if (B[k][j] != 0)
+                            res[i][j] += A[i][k] * B[k][j];
+        return res;
+    }
+
+
+    // 323 Number of Connected Components in an Undirected Graph
+    /** Given n = 5 and edges = [[0, 1], [1, 2], [3, 4]], return 2 */
+    public int countComponents(int n, int[][] edges) {
+        int[] roots = new int[n];
+        for(int i = 0; i < n; i++) roots[i] = i;
+
+        for(int[] e : edges) {
+            int root1 = find(roots, e[0]);
+            int root2 = find(roots, e[1]);
+            if(root1 != root2) {
+                roots[root1] = root2;  // union
+                n--;
+            }
+        }
+        return n;
+    }
+    private int find(int[] roots, int id) {
+        while(roots[id] != id) {
+            roots[id] = roots[roots[id]];  // optional: path compression
+            id = roots[id];
+        }
+        return id;
+    }
 
     // 347 return k most frequent numbers
     /** Bucket Sort */
@@ -965,5 +1077,59 @@ public class ArrayQuestion {
             }
         }
         return A;
+    }
+
+    // 252 Meeting rooms: check if can attend all meetings
+    private class Interval {
+        int start;
+        int end;
+    }
+    public boolean canAttendMeetings(Interval[] intervals) {
+        int len=intervals.length;
+        if(len==0) return true;
+        int[]begin=new int[len];
+        int[]stop=new int[len];
+        for(int i=0;i<len;i++){
+            begin[i]=intervals[i].start;
+            stop[i]=intervals[i].end;
+        }
+        Arrays.sort(begin);
+        Arrays.sort(stop);
+        for(int i=1;i<len;i++){
+            if(begin[i]<stop[i-1]) return false;
+        }
+        return true;
+    }
+    public boolean canAttendMeetings2(Interval[] intervals) {
+        if (intervals == null)
+            return false;
+        /** Sort the intervals by start time */
+        Arrays.sort(intervals, (a, b) -> a.start - b.start);
+        for (int i = 1; i < intervals.length; i++)
+            if (intervals[i].start < intervals[i - 1].end)
+                return false;
+        return true;
+    }
+
+    // 463. Island Perimeter
+    /**
+     * watch out how to count neighbours
+     */
+    public int islandPerimeter(int[][] grid) {
+        int numOfIslands = 0, neighbours = 0;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == 1) {
+                    numOfIslands++;
+                    if (i < grid.length - 1 && grid[i + 1][j] == 1) {
+                        neighbours++; // count down neighbours
+                    }
+                    if (j < grid[i].length - 1 && grid[i][j + 1] == 1) {
+                        neighbours++; // count right neighbours
+                    }
+                }
+            }
+        }
+        return numOfIslands * 4 - neighbours * 2;
     }
 }
