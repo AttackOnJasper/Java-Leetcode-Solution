@@ -1,4 +1,4 @@
-package main.java;
+package com.jasperwang.leetcode;
 
 import java.util.ArrayDeque;
 import java.util.Comparator;

@@ -1,4 +1,4 @@
-package main.java;
+package com.jasperwang.leetcode;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
