@@ -2,7 +2,6 @@ package com.jasperwang.leetcode;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,15 +18,17 @@ import java.util.stream.IntStream;
 public class StringQuestion {
     // 5 Longest Palindrome Substring
     private int lo, maxLen;
+
     public String longestPalindrome(String s) {
         int len = s.length();
         if (len < 2) return s;
-        for (int i = 0; i < len-1; i++) {
-            longestPalindromeHelper(s, i, i);  //assume odd length, try to extend Palindrome as possible
-            longestPalindromeHelper(s, i, i+1); //assume even length.
+        for (int i = 0; i < len - 1; i++) {
+            longestPalindromeHelper(s, i, i); // assume odd length, try to extend Palindrome as possible
+            longestPalindromeHelper(s, i, i + 1); // assume even length.
         }
         return s.substring(lo, lo + maxLen);
     }
+
     private void longestPalindromeHelper(String s, int j, int k) {
         while (j >= 0 && k < s.length() && s.charAt(j) == s.charAt(k)) {
             j--;
@@ -122,7 +123,10 @@ public class StringQuestion {
     }
 
     // 43
-    /** 列竖式计算 ith digit * jth digit -> product lie on (i+j, j+i+1) */
+
+    /**
+     * 列竖式计算 ith digit * jth digit -> product lie on (i+j, j+i+1)
+     */
     public String multiply(String num1, String num2) {
         int m = num1.length(), n = num2.length();
         int[] product = new int[m + n];
@@ -136,14 +140,15 @@ public class StringQuestion {
             }
         }
         StringBuilder sb = new StringBuilder();
-        for (int num : product)
-            if (num != 0 || sb.length() != 0)
-                sb.append(num);
+        for (int num : product) if (num != 0 || sb.length() != 0) sb.append(num);
         return sb.length() == 0 ? "0" : sb.toString();
     }
 
     // 49 Group anagrams: Given an array of strings, group anagrams together
-    /** find a way to identify if anagram exists in the result (hint: sort) */
+
+    /**
+     * find a way to identify if anagram exists in the result (hint: sort)
+     */
     public List<List<String>> groupAnagrams(String[] strs) {
         List<List<String>> res = new ArrayList<>();
         return res;
@@ -189,7 +194,7 @@ public class StringQuestion {
             /** check if the first index of corresponding char matches */
             if (cs[s.charAt(i)] != ct[t.charAt(i)]) return false;
             if (cs[s.charAt(i)] == 0) {
-                cs[s.charAt(i)] = i + 1;  // prevents 0
+                cs[s.charAt(i)] = i + 1; // prevents 0
                 ct[t.charAt(i)] = i + 1;
             }
         }
@@ -199,10 +204,10 @@ public class StringQuestion {
     // 246 Same after rotatign 180 degrees
     public boolean isStrobogrammatic(String num) {
         HashMap<Character, Character> h = new HashMap<>();
-        h.put('8','8');
-        h.put('1','1');
-        h.put('6','9');
-        h.put('9','6');
+        h.put('8', '8');
+        h.put('1', '1');
+        h.put('6', '9');
+        h.put('9', '6');
         h.put('0', '0');
 
         int l = 0, r = num.length() - 1;
@@ -253,29 +258,31 @@ public class StringQuestion {
     // 293 Flip game: replace two "++" with "--"
     public List<String> generatePossibleNextMoves(String s) {
         List<String> res = new LinkedList<>();
-        for (int i=-1; (i = s.indexOf("++", i+1)) >= 0; )
-            res.add(s.substring(0, i) + "--" + s.substring(i+2));
+        for (int i = -1; (i = s.indexOf("++", i + 1)) >= 0; )
+            res.add(s.substring(0, i) + "--" + s.substring(i + 2));
         return res;
     }
 
     // 294 Flip Game II
-    /** decides if the first player can guarantee a win
-     *  Idea 1: recursion on sub-case
-     *  Idea 2: Dynamic programming
-     * */
+
+    /**
+     * decides if the first player can guarantee a win Idea 1: recursion on sub-case Idea 2: Dynamic
+     * programming
+     */
     public boolean canWin(String s) {
-        if(s == null || s.length() < 2) return false;
+        if (s == null || s.length() < 2) return false;
 
         Set<String> winSet = new HashSet<String>();
         return canWin(s, winSet);
     }
-    private boolean canWin(String s, Set<String> winSet){
-        if(winSet.contains(s)) return true;
 
-        for(int i = 0; i < s.length() - 1; i++) {
-            if(s.charAt(i) == '+' && s.charAt(i + 1) == '+') {
+    private boolean canWin(String s, Set<String> winSet) {
+        if (winSet.contains(s)) return true;
+
+        for (int i = 0; i < s.length() - 1; i++) {
+            if (s.charAt(i) == '+' && s.charAt(i + 1) == '+') {
                 String sOpponent = s.substring(0, i) + "--" + s.substring(i + 2);
-                if(!canWin(sOpponent, winSet)) {
+                if (!canWin(sOpponent, winSet)) {
                     winSet.add(s);
                     return true;
                 }
@@ -294,8 +301,7 @@ public class StringQuestion {
             while (g.size() <= p) {
                 char[] x = t.toCharArray();
                 int i = 0, j = g.size() - 2;
-                while (i <= j)
-                    x[g.get(i++) ^ g.get(j--)] = '-';
+                while (i <= j) x[g.get(i++) ^ g.get(j--)] = '-';
                 g.add(new String(x).indexOf('+'));
             }
             G ^= g.get(p);
@@ -313,28 +319,35 @@ public class StringQuestion {
             String tmp = words[i];
             value[i] = 0;
             for (int j = 0; j < tmp.length(); j++)
-                /** put occurrence of each 26 char on 32 bit integer; bit set means occurred */
+            /** put occurrence of each 26 char on 32 bit integer; bit set means occurred */
                 value[i] |= 1 << (tmp.charAt(j) - 'a');
         }
         int maxProduct = 0;
         for (int i = 0; i < len; i++)
             for (int j = i + 1; j < len; j++)
-                /** if 2 strings are differnt, & == 0 */
+            /** if 2 strings are differnt, & == 0 */
                 if ((value[i] & value[j]) == 0 && (words[i].length() * words[j].length() > maxProduct))
                     maxProduct = words[i].length() * words[j].length();
         return maxProduct;
     }
 
     // 340. Get length of longest substring with at most K distinct characters
-    /** sliding window */
+
+    /**
+     * sliding window
+     */
     public int lengthOfLongestSubstringKDistinct(String s, int k) {
         int res = 0, low = 0, numOfDistinctChars = 0;
         int[] arr = new int[256];
         for (int high = 0; high < s.length(); high++) {
             if (arr[s.charAt(high)]++ == 0) numOfDistinctChars++;
             if (numOfDistinctChars > k) {
-                /** while there is still this char in the window after removal, move on and remove the next one until a distinct char is removed */
-                while (--arr[s.charAt(low++)] > 0);
+                /**
+                 * while there is still this char in the window after removal, move on and remove the next
+                 * one until a distinct char is removed
+                 */
+                while (--arr[s.charAt(low++)] > 0)
+                    ;
                 numOfDistinctChars--;
             }
             res = Math.max(res, high - low + 1);
@@ -343,7 +356,10 @@ public class StringQuestion {
     }
 
     // 345 Reverse Vowels
-    /** two pointer */
+
+    /**
+     * two pointer
+     */
 
     // 394. Decode string: 3[a2[c]] -> accaccacc
     public String decodeString(String s) {
@@ -361,8 +377,8 @@ public class StringQuestion {
                 num = 0;
             } else if (c == ']') {
                 int times = intStack.pop();
-                StringBuilder temp = cur;  // string inside [ ]
-                cur = strStack.pop();  // string before [ ]
+                StringBuilder temp = cur; // string inside [ ]
+                cur = strStack.pop(); // string before [ ]
                 while (times-- > 0) {
                     cur.append(temp);
                 }
@@ -376,9 +392,11 @@ public class StringQuestion {
     // 415 Add two Strings
     public String addStrings(String num1, String num2) {
         StringBuilder sb = new StringBuilder();
-        for (int i = num1.length() - 1, j = num2.length() - 1, carry = 0 ; i >= 0 || j >= 0 || carry == 1; i++, j++) {
-            int d1 = i < 0? 0 : num1.charAt(i) - '0';
-            int d2 = j < 0? 0 : num2.charAt(j) - '0';
+        for (int i = num1.length() - 1, j = num2.length() - 1, carry = 0;
+             i >= 0 || j >= 0 || carry == 1;
+             i++, j++) {
+            int d1 = i < 0 ? 0 : num1.charAt(i) - '0';
+            int d2 = j < 0 ? 0 : num2.charAt(j) - '0';
             sb.append((d1 + d2 + carry) % 10);
             carry = (d1 + d2 + carry) / 10;
         }
@@ -386,7 +404,10 @@ public class StringQuestion {
     }
 
     // 434
-    /** " a b c" split -> "" "a" "b" "c" */
+
+    /**
+     * " a b c" split -> "" "a" "b" "c"
+     */
     public int countSegments(String s) {
         return ("x " + s).split(" +").length - 1;
     }
@@ -395,33 +416,38 @@ public class StringQuestion {
     public List<Integer> findAnagrams(String s, String p) {
         List<Integer> list = new ArrayList<>();
         if (s == null || s.length() == 0 || p == null || p.length() == 0) return list;
-        int[] hash = new int[256]; //character hash
-        //record each character in p to hash
+        int[] hash = new int[256]; // character hash
+        // record each character in p to hash
         for (char c : p.toCharArray()) {
             hash[c]++;
         }
-        //two points, initialize count to p's length
+        // two points, initialize count to p's length
         int left = 0, right = 0, count = p.length();
         while (right < s.length()) {
-            //move right everytime, if the character exists in p's hash, decrease the count
-            //current hash value >= 1 means the character is existing in p
+            // move right everytime, if the character exists in p's hash, decrease the count
+            // current hash value >= 1 means the character is existing in p
             if (hash[s.charAt(right++)]-- >= 1) count--;
 
             // found the right anagram
             if (count == 0) list.add(left);
 
-            //if we find the window's size equals to p, then we have to move left (narrow the window) to find the new match window
-            //++ to reset the hash because we kicked out the left
-            //only increase the count if the character is in p
-            //the count >= 0 indicate it was original in the hash, cuz it won't go below 0
+            // if we find the window's size equals to p, then we have to move left (narrow the window) to
+            // find the new match window
+            // ++ to reset the hash because we kicked out the left
+            // only increase the count if the character is in p
+            // the count >= 0 indicate it was original in the hash, cuz it won't go below 0
             if (right - left == p.length() && hash[s.charAt(left++)]++ >= 0) count++;
         }
         return list;
     }
 
-    // 439. Given a string representing arbitrarily nested ternary expressions, calculate the result of the expression
+    // 439. Given a string representing arbitrarily nested ternary expressions, calculate the result
+    // of the expression
     // e.g. "T?2:3" -> 2
-    /** Evaluate from right to left (hint: stack) */
+
+    /**
+     * Evaluate from right to left (hint: stack)
+     */
     public static String parseTernary(String expression) {
         if (expression == null || expression.length() == 0) return "";
         Deque<Character> stack = new LinkedList<>();
@@ -430,9 +456,9 @@ public class StringQuestion {
             char c = expression.charAt(i);
             if (!stack.isEmpty() && stack.peek() == '?') {
 
-                stack.pop(); //pop '?'
+                stack.pop(); // pop '?'
                 char first = stack.pop();
-                stack.pop(); //pop ':'
+                stack.pop(); // pop ':'
                 char second = stack.pop();
 
                 if (c == 'T') stack.push(first);
@@ -468,6 +494,7 @@ public class StringQuestion {
 
     // 647 Palindrome substring: return # of palindromes in string
     int count = 0;
+
     public int countSubstrings(String s) {
         if (s == null || s.length() == 0) return 0;
         for (int i = 0; i < s.length(); i++) { // i is the mid point
@@ -476,9 +503,12 @@ public class StringQuestion {
         }
         return count;
     }
+
     private void extendPalindrome(String s, int left, int right) {
-        while (left >=0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
-            count++; left--; right++;
+        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+            count++;
+            left--;
+            right++;
         }
     }
 
@@ -488,26 +518,32 @@ public class StringQuestion {
         while (++i < --j) {
             if (s.charAt(i) != s.charAt(j)) {
                 // either remove i or remove j
-                return isPalindromic(s, i, j+1) || isPalindromic(s, i-1, j);
+                return isPalindromic(s, i, j + 1) || isPalindromic(s, i - 1, j);
             }
         }
         return true;
     }
+
     private boolean isPalindromic(String s, int l, int r) {
-        while (++l < --r)
-            if (s.charAt(l) != s.charAt(r)) return false;
+        while (++l < --r) if (s.charAt(l) != s.charAt(r)) return false;
         return true;
     }
 
     // 681. Next Closest Time
-    // Given a time "HH:MM", form the next closest time by re-using the current digits. No limit on number of times a digit is re-used
+    // Given a time "HH:MM", form the next closest time by re-using the current digits. No limit on
+    // number of times a digit is re-used
     public String nextClosestTime(String time) {
-        int[] arr = new int[]{time.charAt(0) - '0', time.charAt(1) - '0', time.charAt(3) - '0', time.charAt(4) - '0'};
+        int[] arr =
+                new int[]{
+                        time.charAt(0) - '0', time.charAt(1) - '0', time.charAt(3) - '0', time.charAt(4) - '0'
+                };
         Set<Integer> set = IntStream.of(arr).boxed().collect(Collectors.toSet());
-        int curTime = 60 * Integer.parseInt(time.substring(0, 2)) + Integer.parseInt(time.substring(3, 5));
+        int curTime =
+                60 * Integer.parseInt(time.substring(0, 2)) + Integer.parseInt(time.substring(3, 5));
         while (true) {
             curTime = (curTime + 1) % 1440;
-            int[] digits = new int[]{curTime / 60 / 10, curTime / 60 % 10, curTime % 60 / 10, curTime % 60 % 10};
+            int[] digits =
+                    new int[]{curTime / 60 / 10, curTime / 60 % 10, curTime % 60 / 10, curTime % 60 % 10};
             for (int i = 0; ; i++) {
                 if (!set.contains(digits[i])) break;
                 if (i == digits.length - 1) return String.format("%02d:%02d", curTime / 60, curTime % 60);
@@ -516,7 +552,8 @@ public class StringQuestion {
     }
 
     // 681. Next Closest Time variation
-    // Given a time "HH:MM", form the next closest time by re-using the current digits. each digit can be used once
+    // Given a time "HH:MM", form the next closest time by re-using the current digits. each digit can
+    // be used once
     public String nextClosestTimeII(String S) {
         int minute = Integer.parseInt(S.substring(3, 5)), hour = Integer.parseInt(S.substring(0, 2));
         int[] arr = new int[]{hour / 10, hour % 10, minute / 10, minute % 10};
@@ -528,7 +565,8 @@ public class StringQuestion {
         int curTime = 60 * hour + minute;
         while (true) {
             curTime = (curTime + 1) % totalTime;
-            int[] digits = new int[]{curTime / 60 / 10, curTime / 60 % 10, curTime % 60 / 10, curTime % 60 % 10};
+            int[] digits =
+                    new int[]{curTime / 60 / 10, curTime / 60 % 10, curTime % 60 / 10, curTime % 60 % 10};
             HashMap<Integer, Integer> curTimeMap = new HashMap<>();
             for (int d : digits) {
                 if (!originalTimeMap.containsKey(d)) break;
@@ -547,12 +585,13 @@ public class StringQuestion {
     }
 
     // 696: Give a string s, count the number of non-empty (contiguous) substrings that have the
-    // same number of 0's and 1's, and all the 0's and all the 1's in these substrings are grouped consecutively.
+    // same number of 0's and 1's, and all the 0's and all the 1's in these substrings are grouped
+    // consecutively.
     public int countBinarySubstrings(String s) {
         char[] arr = s.toCharArray();
         int res = 0, prev = 0, curr = 1;
         for (int i = 1; i < arr.length; i++) {
-            if (arr[i] == arr[i-1]) {
+            if (arr[i] == arr[i - 1]) {
                 curr++;
             } else {
                 prev = curr;
@@ -577,7 +616,7 @@ public class StringQuestion {
         // Use PriorityQueue to store pairs of (char, count) and sort by count DESC.
         PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> b[1] - a[1]);
         for (char c : map.keySet()) {
-            pq.add(new int[] {c, map.get(c)});
+            pq.add(new int[]{c, map.get(c)});
         }
         // Build the result.
         StringBuilder sb = new StringBuilder();
@@ -602,13 +641,11 @@ public class StringQuestion {
 
     // 771
     public int numJewelsInStones(String J, String S) {
-        List<Character> chars = J.chars().mapToObj(e->(char)e).collect(Collectors.toList());
+        List<Character> chars = J.chars().mapToObj(e -> (char) e).collect(Collectors.toList());
         HashSet<Character> jewels = new HashSet<Character>(chars);
         char[] stones = S.toCharArray();
         int res = 0;
-        for (int i = 0; i < stones.length; i++)
-            if (jewels.contains(stones[i]))
-                res++;
+        for (int i = 0; i < stones.length; i++) if (jewels.contains(stones[i])) res++;
         return res;
     }
 
@@ -617,7 +654,8 @@ public class StringQuestion {
         for (int i = 0, size = words.size(); i < size; i++) {
             String temp = words.get(i);
             for (int j = 0, len = temp.length(); j < len; j++) {
-                if (size <= j || words.get(j).length() <= i || words.get(j).charAt(i) != temp.charAt(j)) return false;
+                if (size <= j || words.get(j).length() <= i || words.get(j).charAt(i) != temp.charAt(j))
+                    return false;
             }
         }
         return true;
@@ -634,9 +672,7 @@ public class StringQuestion {
                 count++;
             }
             chars[indexAns++] = currentChar;
-            if(count != 1)
-                for(char c : Integer.toString(count).toCharArray())
-                    chars[indexAns++] = c;
+            if (count != 1) for (char c : Integer.toString(count).toCharArray()) chars[indexAns++] = c;
         }
         return indexAns;
     }
@@ -655,6 +691,7 @@ public class StringQuestion {
         }
         return A + "/" + B;
     }
+
     private int gcd(int a, int b) {
         return a != 0 ? gcd(b % a, a) : Math.abs(b);
     }

@@ -1,9 +1,9 @@
 package com.jasperwang.leetcode;
 
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayDeque;
+
 import org.junit.jupiter.api.Test;
 
 public class TreeQuestionTest {

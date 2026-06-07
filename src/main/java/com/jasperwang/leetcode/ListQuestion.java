@@ -12,7 +12,10 @@ public class ListQuestion {
         public int val;
         public ListNode next;
 
-        public ListNode(int x) { val = x; }
+        public ListNode(int x) {
+            val = x;
+        }
+
         public ListNode(int x, ListNode next) {
             this.val = x;
             this.next = next;
@@ -35,6 +38,7 @@ public class ListQuestion {
         prev.next = reverse(slow);
         return head;
     }
+
     private static ListNode reverse(ListNode head) {
         ListNode prev = null;
         while (head != null) {
@@ -64,8 +68,7 @@ public class ListQuestion {
             temp.next = new ListNode(sum % 10);
             temp = temp.next;
         }
-        if (sum / 10 == 1)
-            temp.next = new ListNode(1);
+        if (sum / 10 == 1) temp.next = new ListNode(1);
         return res.next;
     }
 
@@ -75,6 +78,7 @@ public class ListQuestion {
         if (lists.length == 1) return lists[0];
         return mergeKListsHelper(lists, 0, lists.length - 1);
     }
+
     private ListNode mergeKListsHelper(ListNode[] lists, int low, int high) {
         if (low < high) {
             int mid = low + (high - low) / 2;
@@ -84,39 +88,42 @@ public class ListQuestion {
         }
         return lists[low];
     }
-    private ListNode merge(ListNode l1,ListNode l2){
-        if(l1==null) return l2;
-        if(l2==null) return l1;
-        if(l1.val<l2.val){
-            l1.next=merge(l1.next,l2);
+
+    private ListNode merge(ListNode l1, ListNode l2) {
+        if (l1 == null) return l2;
+        if (l2 == null) return l1;
+        if (l1.val < l2.val) {
+            l1.next = merge(l1.next, l2);
             return l1;
-        }else{
-            l2.next=merge(l1,l2.next);
+        } else {
+            l2.next = merge(l1, l2.next);
             return l2;
         }
     }
 
-    public ListNode mergeKLists2(ListNode[] lists){
+    public ListNode mergeKLists2(ListNode[] lists) {
         ListNode curr = null;
         ListNode head = null;
-        if(lists == null || lists.length<1)
-            return null;
-        PriorityQueue<ListNode> q = new PriorityQueue<ListNode>(lists.length,new Comparator<ListNode>(){
-            public int compare(ListNode l1, ListNode l2){
-                return l1.val - l2.val;
-            }
-        });
+        if (lists == null || lists.length < 1) return null;
+        PriorityQueue<ListNode> q =
+                new PriorityQueue<ListNode>(
+                        lists.length,
+                        new Comparator<ListNode>() {
+                            public int compare(ListNode l1, ListNode l2) {
+                                return l1.val - l2.val;
+                            }
+                        });
         // Add all the list nodes to the min heap
-        for(int i=0;i<lists.length;++i){
-            if(lists[i] != null){
+        for (int i = 0; i < lists.length; ++i) {
+            if (lists[i] != null) {
                 q.offer(lists[i]);
             }
         }
 
         // append all nodes to head in the sorted order
-        while(!q.isEmpty()){
+        while (!q.isEmpty()) {
             ListNode tmp = q.poll();
-            if(head == null){
+            if (head == null) {
 
                 head = new ListNode(tmp.val);
                 curr = head;
@@ -126,7 +133,7 @@ public class ListQuestion {
                 curr.next = p;
                 curr = p;
             }
-            if(tmp.next != null){
+            if (tmp.next != null) {
                 q.offer(tmp.next);
             }
         }
@@ -137,7 +144,7 @@ public class ListQuestion {
     public ListNode deleteDuplicates(ListNode head) {
         if (head == null) return null;
         ListNode list = head;
-        while(list.next != null) {
+        while (list.next != null) {
             if (list.val == list.next.val) {
                 list.next = list.next.next;
             } else {
@@ -151,7 +158,10 @@ public class ListQuestion {
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
         if (headA == null || headB == null) return null;
         ListNode a = headA, b = headB;
-        /** note the change to headB when a == null; max iteration is length a + length b when the lengths of lists are different  */
+        /**
+         * note the change to headB when a == null; max iteration is length a + length b when the
+         * lengths of lists are different
+         */
         while (a != b) {
             a = a == null ? headB : a.next;
             b = b == null ? headA : b.next;
@@ -165,6 +175,7 @@ public class ListQuestion {
         head.next = removeElements(head.next, val);
         return head.val == val ? head.next : head;
     }
+
     public ListNode removeElements2(ListNode head, int val) {
         if (head == null) return head;
         ListNode curr = head;
@@ -175,21 +186,23 @@ public class ListQuestion {
                 curr = curr.next;
             }
         }
-        return head.val == val? head.next : head;
+        return head.val == val ? head.next : head;
     }
 
     // 206 Reverse Linked List
     public ListNode reverseList1(ListNode head) {
         return helper(head, null);
     }
+
     private ListNode helper(ListNode head, ListNode newHead) {
         if (head == null) return newHead;
         ListNode next = head.next;
         head.next = newHead;
         return helper(next, head);
     }
+
     public ListNode reverseList2(ListNode head) {
-    /* iterative solution */
+        /* iterative solution */
         ListNode newHead = null;
         while (head != null) {
             ListNode next = head.next; // store the next node for next iteration
@@ -272,19 +285,26 @@ public class ListQuestion {
     }
 
     // 382
-    /** Reservoir Sampling: choose k elements from an array with unknown length */
+
+    /**
+     * Reservoir Sampling: choose k elements from an array with unknown length
+     */
     public class Solution {
         ListNode head;
         java.util.Random randomGen = null;
 
-        /** @param head The linked list's head.
-        Note that the head is guaranteed to be not null, so it contains at least one node. */
+        /**
+         * @param head The linked list's head. Note that the head is guaranteed to be not null, so it
+         *             contains at least one node.
+         */
         public Solution(ListNode head) {
             this.head = head;
             this.randomGen = new java.util.Random();
         }
 
-        /** Returns a random node's value. */
+        /**
+         * Returns a random node's value.
+         */
         public int getRandom() {
             ListNode res = null, curr = head;
             for (int i = 1; curr != null; i++) {
@@ -298,16 +318,20 @@ public class ListQuestion {
     }
 
     // 445
-    /** numbers are in right order */
+
+    /**
+     * numbers are in right order
+     */
     public ListNode addTwoNumbers2(ListNode l1, ListNode l2) {
         java.util.Stack<Integer> s1 = new java.util.Stack<Integer>();
         java.util.Stack<Integer> s2 = new java.util.Stack<Integer>();
 
-        while(l1 != null) {
+        while (l1 != null) {
             s1.push(l1.val);
             l1 = l1.next;
-        };
-        while(l2 != null) {
+        }
+        ;
+        while (l2 != null) {
             s2.push(l2.val);
             l2 = l2.next;
         }

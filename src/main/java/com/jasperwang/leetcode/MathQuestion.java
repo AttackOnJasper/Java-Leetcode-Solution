@@ -5,11 +5,13 @@ import java.util.Map;
 
 public class MathQuestion {
     // 69
-    /** Newton's method */
+
+    /**
+     * Newton's method
+     */
     public int mySqrt(int x) {
         long r = x;
-        while (r*r > x)
-            r = (r + x/r) / 2;
+        while (r * r > x) r = (r + x / r) / 2;
         return (int) r;
     }
 
@@ -23,6 +25,7 @@ public class MathQuestion {
         }
         return count;
     }
+
     // bit shift
     public int hammingWeight2(int n) {
         int count = 0;
@@ -34,7 +37,10 @@ public class MathQuestion {
     }
 
     // 202 is happy number
-    /** test cycle */
+
+    /**
+     * test cycle
+     */
     public boolean isHappy(int n) {
         int i1 = n, i2 = next(n);
         while (i2 != i1) {
@@ -43,6 +49,7 @@ public class MathQuestion {
         }
         return i1 == 1;
     }
+
     private int next(int n) {
         int res = 0;
         while (n != 0) {
@@ -54,7 +61,10 @@ public class MathQuestion {
     }
 
     // 204 Count Primes
-    /** semi-dp idea */
+
+    /**
+     * semi-dp idea
+     */
     public int countPrimes(int n) {
         int res = 0;
         boolean[] notPrime = new boolean[n];
@@ -72,29 +82,36 @@ public class MathQuestion {
     // 326 Power of Three
     public boolean isPowerOfThree(int n) {
         // 1162261467 is 3^19,  3^20 is bigger than int
-        return ( n>0 &&  1162261467%n==0);
+        return (n > 0 && 1162261467 % n == 0);
     }
+
     // 231
     public boolean isPowerOfTwo(int n) {
-        return n>0 && ((n & (n-1)) == 0);
+        return n > 0 && ((n & (n - 1)) == 0);
     }
+
     // 342
     public boolean isPowerOfFour(int num) {
         return num > 0 && (num & (num - 1)) == 0 && (num - 1) % 3 == 0;
     }
 
     // 367 perfect square
-    /** sequence 1 + 3 + 5 + 7 */
+
+    /**
+     * sequence 1 + 3 + 5 + 7
+     */
     public boolean isPerfectSquare(int num) {
         if (num < 1) return false;
-        for (int i = 1; num > 0; i += 2)
-            num -= i;
+        for (int i = 1; num > 0; i += 2) num -= i;
         return num == 0;
     }
-    /** binary search to find the square root */
+
+    /**
+     * binary search to find the square root
+     */
     public boolean isPerfectSquare1(int num) {
         if (num < 1) return false;
-        long left = 1, right = num;// long type to avoid 2147483647 case
+        long left = 1, right = num; // long type to avoid 2147483647 case
 
         while (left <= right) {
             long mid = left + (right - left) / 2;
@@ -109,7 +126,10 @@ public class MathQuestion {
         }
         return false;
     }
-    /** newton's method to find the square root */
+
+    /**
+     * newton's method to find the square root
+     */
     boolean isPerfectSquare2(int num) {
         if (num < 1) return false;
         if (num == 1) return true;
@@ -127,11 +147,14 @@ public class MathQuestion {
     }
 
     // 405 Num to Hex
-    private char[] map = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
+    private char[] map = {
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
+    };
+
     public String toHex(int num) {
-        if(num == 0) return "0";
+        if (num == 0) return "0";
         String result = "";
-        while(num != 0){
+        while (num != 0) {
             result = map[(num & 15)] + result;
             num = (num >>> 4); // >> is arithmetic shift right, >>> is logical shift right
         }
@@ -139,43 +162,37 @@ public class MathQuestion {
     }
 
     // 447 find the number of 2 points that have same distance towards one point
+
     /**
      * store the distance to point i & number of coordinates for that distance
      */
     public int numberOfBoomerangs(int[][] points) {
         int res = 0;
         Map<Integer, Integer> map = new HashMap<>();
-        for(int i=0; i<points.length; i++) {
-            for(int j=0; j<points.length; j++) {
-                if(i == j) continue;
+        for (int i = 0; i < points.length; i++) {
+            for (int j = 0; j < points.length; j++) {
+                if (i == j) continue;
                 int d = getDistance(points[i], points[j]);
                 map.put(d, map.getOrDefault(d, 0) + 1);
             }
-            for(int val : map.values()) {
-                res += val * (val-1);
+            for (int val : map.values()) {
+                res += val * (val - 1);
             }
             map.clear();
         }
         return res;
     }
+
     private int getDistance(int[] a, int[] b) {
         int dx = a[0] - b[0];
         int dy = a[1] - b[1];
 
-        return dx*dx + dy*dy;
+        return dx * dx + dy * dy;
     }
 
     // 461 Hamming distance
     public int hammingDistance(int x, int y) {
-        /**
-        int bitCount(int n) {
-            while(n) {
-                n = n & (n-1);
-                count++;
-            }
-            return count;
-        }
-         */
+        /** int bitCount(int n) { while(n) { n = n & (n-1); count++; } return count; } */
         return Integer.bitCount(x ^ y);
     }
 
@@ -183,9 +200,12 @@ public class MathQuestion {
     public int findComplement(int num) {
         return (largest_power(num) << 1) - 1 - num;
     }
-    /** Equal to highestOneBit */
+
+    /**
+     * Equal to highestOneBit
+     */
     private int largest_power(int N) {
-        //changing all right side bits to 1.
+        // changing all right side bits to 1.
         N = N | (N >> 1);
         N = N | (N >> 2);
         N = N | (N >> 4);
@@ -193,6 +213,7 @@ public class MathQuestion {
         N = N | (N >> 16);
         return (N + 1) >> 1;
     }
+
     public int findComplement2(int num) {
         // highestOneBit(n) returns 2^m, where 2^m < n < 2^(m+1)
         return ~num & ((Integer.highestOneBit(num) << 1) - 1);
@@ -200,14 +221,14 @@ public class MathQuestion {
 
     // 479. Largest Palindrome Product: return the max palindrome from product of 2 n-digit numbers
     public int largestPalindrome(int n) {
-        if(n == 1) return 9;
+        if (n == 1) return 9;
         // if n = 3 then upperBound = 999 and lowerBound = 99
         int upperBound = (int) Math.pow(10, n) - 1, lowerBound = upperBound / 10;
         long maxNumber = (long) upperBound * (long) upperBound;
 
         // represents the first half of the maximum assumed palindrom.
         // e.g. if n = 3 then maxNumber = 999 x 999 = 998001 so firstHalf = 998
-        int firstHalf = (int)(maxNumber / (long) Math.pow(10, n));
+        int firstHalf = (int) (maxNumber / (long) Math.pow(10, n));
 
         boolean palindromFound = false;
         long palindrom = 0;
@@ -219,7 +240,8 @@ public class MathQuestion {
 
             // here i and palindrom/i forms the two factor of assumed palindrom
             for (long i = upperBound; upperBound > lowerBound; i--) {
-                // if n= 3 none of the factor of palindrom  can be more than 999 or less than square root of assumed palindrom
+                // if n= 3 none of the factor of palindrom  can be more than 999 or less than square root of
+                // assumed palindrom
                 if (palindrom / i > maxNumber || i * i < palindrom) break;
 
                 // if two factors found, where both of them are n-digits,
@@ -232,6 +254,7 @@ public class MathQuestion {
         }
         return (int) (palindrom % 1337);
     }
+
     private long createPalindrom(long num) {
         String str = num + new StringBuilder().append(num).reverse().toString();
         return Long.parseLong(str);

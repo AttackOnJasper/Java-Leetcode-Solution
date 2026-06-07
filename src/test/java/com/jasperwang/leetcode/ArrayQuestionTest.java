@@ -3,10 +3,17 @@ package com.jasperwang.leetcode;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class ArrayQuestionTest {
+    private static final int[] TEST_ARR_1 = new int[]{4, 1, 5, 3, 2};
+    private static final int[] TEST_LONG_ARR =
+            new int[]{
+                    123, 456, 3423, 543, 7657, 213, 54, 8, 6, 23, 4, 7, 34, 42, 123, 23, 124, 454, 654, 1231
+            };
+
     private ArrayQuestion arrayQuestion;
 
     @BeforeEach
@@ -25,37 +32,61 @@ public class ArrayQuestionTest {
         assertEquals(3, arr[3]);
     }
 
+    @Test
+    public void testMergeSort() {
+        int[] arr = arrayQuestion.mergeSort(TEST_ARR_1);
+        assertEquals(1, arr[0]);
+        assertEquals(2, arr[1]);
+        assertEquals(3, arr[2]);
+        assertEquals(4, arr[3]);
+    }
+
+    @Test
+    public void testQuickSort() {
+        int[] arr = arrayQuestion.quickSort(TEST_ARR_1);
+        assertEquals(1, arr[0]);
+        assertEquals(2, arr[1]);
+        assertEquals(3, arr[2]);
+        assertEquals(4, arr[3]);
+    }
+
+    @Test
+    public void testSelectK() {
+        assertEquals(8, arrayQuestion.selectK(TEST_LONG_ARR, 3));
+        assertEquals(54, arrayQuestion.selectK(TEST_LONG_ARR, 8));
+    }
+
     // 560
     @Test
     public void testPairSum() {
     /*
-      int[] myIntArray = new int[3];
-      int[] myIntArray = {1,2,3};
-      int[] myIntArray = new int[]{1,2,3};
-      String[] myStringArray = new String[3];
-      String[] myStringArray = {"a","b","c"};
-      String[] myStringArray = new String[]{"a","b","c"};
-     */
+     int[] myIntArray = new int[3];
+     int[] myIntArray = {1,2,3};
+     int[] myIntArray = new int[]{1,2,3};
+     String[] myStringArray = new String[3];
+     String[] myStringArray = {"a","b","c"};
+     String[] myStringArray = new String[]{"a","b","c"};
+    */
         final int[] arr = {1, 2, 3, 4};
         assertEquals(2, arrayQuestion.subarraySum(arr, 3));
     }
 
     @Test
     public void testTopKElement() {
-        int[] arr = new int[]{1,1,1,2,2,3};
+        int[] arr = new int[]{1, 1, 1, 2, 2, 3};
         List<Integer> res = arrayQuestion.topKFrequent(arr, 2);
         assertEquals(2, res.size());
-        assertEquals(1, (int)res.get(0));
-        assertEquals(2, (int)res.get(1));
+        assertEquals(1, (int) res.get(0));
+        assertEquals(2, (int) res.get(1));
     }
 
     // 621
-//    @Test
-//    public void testTaskScheduler() {
-//        char[] ops = new char[]{'A', 'B', 'A', 'A', 'B'};
-//        int res = arrayQuestion.taskScheduler(ops, 2);
-//        assertEquals(8, res);
-//    }
+    //    @Test
+    //    public void testTaskScheduler() {
+    //        char[] ops = new char[]{'A', 'B', 'A', 'A', 'B'};
+    //        int res = arrayQuestion.taskScheduler(ops, 2);
+    //        assertEquals(8, res);
+    //    }
 
     // 683 variation
     @Test
@@ -93,7 +124,7 @@ public class ArrayQuestionTest {
     // 697
     @Test
     public void testFindShortestSubArray() {
-        int[] arr = new int[]{1,2,2,3,1};
+        int[] arr = new int[]{1, 2, 2, 3, 1};
         int res = ArrayQuestion.findShortestSubArray(arr);
         assertEquals(2, res);
         assertEquals("aaa", "aaa".split(" ")[0]);
@@ -106,7 +137,7 @@ public class ArrayQuestionTest {
         int index1 = arrayQuestion.pivotIndex(arr1);
         assertEquals(3, index1);
 
-        int[] arr2 = new int[]{-1,-1,-1,-1,-1,0};
+        int[] arr2 = new int[]{-1, -1, -1, -1, -1, 0};
         int index2 = arrayQuestion.pivotIndex(arr2);
         assertEquals(2, index2);
     }

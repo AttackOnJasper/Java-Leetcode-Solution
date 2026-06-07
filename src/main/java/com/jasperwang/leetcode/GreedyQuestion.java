@@ -10,8 +10,7 @@ public class GreedyQuestion {
     // 55
     public boolean canJump(int[] nums) {
         int i = 0;
-        for (int reach = 0; i < nums.length && i <= reach; ++i)
-            reach = Math.max(i + nums[i], reach);
+        for (int reach = 0; i < nums.length && i <= reach; ++i) reach = Math.max(i + nums[i], reach);
         return i == nums.length;
     }
 
@@ -30,12 +29,14 @@ public class GreedyQuestion {
             end = e;
         }
     }
+
     private class IntervalComparator implements Comparator<Interval> {
         @Override
         public int compare(Interval a, Interval b) {
             return a.end - b.end;
         }
     }
+
     public int eraseOverlapIntervals(Interval[] intervals) {
         if (intervals.length == 0) return 0;
         Arrays.sort(intervals, new IntervalComparator());
@@ -55,9 +56,7 @@ public class GreedyQuestion {
         Arrays.sort(g);
         Arrays.sort(s);
         int i = 0;
-        for (int j = 0; i < g.length && j < s.length; j++)
-            if (g[i] <= s[j])
-                i++;
+        for (int j = 0; i < g.length && j < s.length; j++) if (g[i] <= s[j]) i++;
         return i;
     }
 }

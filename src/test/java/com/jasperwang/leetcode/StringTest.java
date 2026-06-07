@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,10 +15,12 @@ import org.junit.jupiter.api.Test;
  */
 public class StringTest {
     private StringQuestion stringQuestion;
+
     @BeforeEach
     public void setUp() {
         stringQuestion = new StringQuestion();
     }
+
     // 20
     @Test
     public void testIsValid() {
@@ -57,7 +60,10 @@ public class StringTest {
     // 443
     @Test
     public void testCompress() {
-        assertEquals(4, stringQuestion.compress(new char[]{'a','b','b','b','b','b','b','b','b','b','b','b','b'}));
+        assertEquals(
+                4,
+                stringQuestion.compress(
+                        new char[]{'a', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'}));
     }
 
     @Test
