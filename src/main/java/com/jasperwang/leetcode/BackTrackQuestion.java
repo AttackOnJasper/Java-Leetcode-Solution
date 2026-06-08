@@ -5,15 +5,98 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * BackTrack-focused LeetCode solutions and related utilities.
+ *
+ * <p>The methods are grouped by problem domain rather than by difficulty. Most implementations are
+ * self-contained so they can be copied into individual LeetCode submissions.
+ */
 public class BackTrackQuestion {
-    // 17 Letter Combinations of a Phone Number
+    /**
+     * LeetCode 46: permutation: return permutations on a distinct set.
+     *
+     * @param nums input value
+     * @return result
+     */
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        permuteHelper(res, nums, new ArrayList<>());
+        return res;
+    }
+    // Recursion helper
+    private void permuteHelper(List<List<Integer>> res, int[] nums, List<Integer> cur) {
+        if (cur.size() == nums.length) {
+            res.add(new ArrayList<>(cur));
+            return;
+        }
+        for (int num : nums) {
+            if (!cur.contains(num)) {
+                cur.add(num);
+                permuteHelper(res, nums, cur);
+                cur.removeLast();
+            }
+        }
+    }
 
     /**
-     * every time use queue to poll, format, and push
+     * LeetCode 77: combination.
+     *
+     * @param n input value
+     * @param k input value
+     * @return result
+     */
+    public List<List<Integer>> combine(int n, int k) {
+        List<List<Integer>> res = new ArrayList<List<Integer>>();
+        combineHelper(res, new ArrayList<>(), n, k, 1);
+        return res;
+    }
+
+    // Difference with permutation: the for loop starts with index instead of from 0
+    private void combineHelper(List<List<Integer>> res, List<Integer> temp, int n, int k, int index) {
+        if (temp.size() == k) {
+            res.add(new ArrayList<>(temp));
+        } else {
+            for (int i = index; i < n + 1; i++) {
+                if (!temp.contains(i)) {
+                    temp.add(i);
+                    combineHelper(res, temp, n, k, i);
+                    temp.removeLast();
+                }
+            }
+        }
+    }
+
+    /**
+     * LeetCode 78: subsets.
+     *
+     * @param nums input value
+     * @return result
+     */
+    public List<List<Integer>> subsets(int[] nums) { // backtracking
+        final List<List<Integer>> list = new ArrayList<>();
+        Arrays.sort(nums);
+        backtrack(list, new ArrayList<>(), nums, 0);
+        return list;
+    }
+
+    private void backtrack(List<List<Integer>> list, List<Integer> tempList, int[] nums, int start) {
+        list.add(new ArrayList<>(tempList));
+        for (int i = start; i < nums.length; i++) {
+            tempList.add(nums[i]);
+            backtrack(list, tempList, nums, i + 1);
+            tempList.removeLast();
+        }
+    }
+
+    /**
+     * LeetCode 17: letter Combinations of a Phone Number every time use queue to poll, format, and push.
+     *
+     * @param digits input value
+     * @return result
      */
     public List<String> letterCombinations(String digits) {
         LinkedList<String> ans = new LinkedList<String>();
-        if (digits == null || digits.length() == 0) return ans;
+        if (digits == null || digits.isEmpty()) return ans;
         String[] mapping =
                 new String[]{"0", "1", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
         ans.add("");
@@ -27,7 +110,12 @@ public class BackTrackQuestion {
         return ans;
     }
 
-    // 22 Generate Parentheses: get combinations of n pairs of parentheses
+    /**
+     * LeetCode 22: generate Parentheses: get combinations of n pairs of parentheses.
+     *
+     * @param n input value
+     * @return result
+     */
     public List<String> generateParentheses(int n) {
         List<String> res = new ArrayList<>();
         generateParenthesesHelper("", res, 0, 0, n);
@@ -48,10 +136,12 @@ public class BackTrackQuestion {
         }
     }
 
-    // 39 Combination Sum I
-
     /**
-     * Each number can be used infinite number of times
+     * LeetCode 39: combination Sum I Each number can be used infinite number of times.
+     *
+     * @param candidates input value
+     * @param target input value
+     * @return result
      */
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
         List<List<Integer>> res = new LinkedList<List<Integer>>();
@@ -68,13 +158,19 @@ public class BackTrackQuestion {
         if (target < 0) return;
         for (int i = start; i < candidates.length; i++) {
             temp.add(candidates[i]);
-            /** use i as start to re-use same element */
+            // use i as start to re-use the same element
             combinationSumHelper(i, temp, res, candidates, target - candidates[i]);
             temp.remove(temp.size() - 1);
         }
     }
 
-    // 40 Combination Sum: each element can only be used once, no duplicated combinations
+    /**
+     * LeetCode 40: combination Sum: each element can only be used once, no duplicated combinations.
+     *
+     * @param candidates input value
+     * @param target input value
+     * @return result
+     */
     public List<List<Integer>> combinationSum2(int[] candidates, int target) {
         Arrays.sort(candidates);
         List<List<Integer>> res = new ArrayList<>();
@@ -97,65 +193,12 @@ public class BackTrackQuestion {
         }
     }
 
-    // 46 Permutation: return permutations on distinct set
-    public List<List<Integer>> permute(int[] nums) {
-        List<List<Integer>> res = new ArrayList<>();
-        permuteHelper(res, nums, new ArrayList<>());
-        return res;
-    }
-
-    private void permuteHelper(List<List<Integer>> res, int[] nums, List<Integer> cur) {
-        if (cur.size() == nums.length) {
-            res.add(new ArrayList<>(cur));
-            return;
-        }
-        for (int i = 0; i < nums.length; i++) {
-            if (cur.contains(nums[i])) continue;
-            cur.add(nums[i]);
-            permuteHelper(res, nums, cur);
-            cur.remove(cur.size() - 1);
-        }
-    }
-
-    // 77 Combination
-    public List<List<Integer>> combine(int n, int k) {
-        List<List<Integer>> res = new ArrayList<List<Integer>>();
-        combineHelper(res, new ArrayList<>(), n, k, 1);
-        return res;
-    }
-
-    private void combineHelper(List<List<Integer>> res, List<Integer> temp, int n, int k, int index) {
-        if (temp.size() == k) {
-            res.add(new ArrayList<>(temp));
-        } else {
-            for (int i = index; i < n + 1; i++) {
-                if (!temp.contains(i)) {
-                    temp.add(i);
-                    combineHelper(res, temp, n, k, i);
-                    temp.remove(temp.size() - 1);
-                }
-            }
-        }
-    }
-
-    // 78 Subsets
-    public List<List<Integer>> subsets(int[] nums) { // backtracking
-        final List<List<Integer>> list = new ArrayList<>();
-        Arrays.sort(nums);
-        backtrack(list, new ArrayList<>(), nums, 0);
-        return list;
-    }
-
-    private void backtrack(List<List<Integer>> list, List<Integer> tempList, int[] nums, int start) {
-        list.add(new ArrayList<>(tempList));
-        for (int i = start; i < nums.length; i++) {
-            tempList.add(nums[i]);
-            backtrack(list, tempList, nums, i + 1);
-            tempList.remove(tempList.size() - 1);
-        }
-    }
-
-    // 90 Subset II
+    /**
+     * LeetCode 90: subset II.
+     *
+     * @param nums input value
+     * @return result
+     */
     public List<List<Integer>> subsetsWithDup(int[] nums) {
         List<List<Integer>> res = new ArrayList<List<Integer>>();
         Arrays.sort(nums);
@@ -175,7 +218,12 @@ public class BackTrackQuestion {
         }
     }
 
-    // 131 Palindrome partitioning (Uber interview)
+    /**
+     * LeetCode 131: palindrome partitioning (Uber interview).
+     *
+     * @param s input value
+     * @return result
+     */
     public List<List<String>> partition(String s) {
         List<List<String>> res = new ArrayList<>();
         partitionHelper(s, res, new ArrayList<>(), 0);
@@ -205,11 +253,12 @@ public class BackTrackQuestion {
         return true;
     }
 
-    // 216 Combination Sum
-
     /**
-     * Find all possible combinations of k numbers that add up to a number n, given that only numbers
-     * from 1 to 9 can be used and each combination should be a unique set of numbers.
+     * LeetCode 216: combination Sum Find all possible combinations of k numbers that add up to a number n, given that only numbers from 1 to 9 can be used and each combination should be a unique set of numbers.
+     *
+     * @param k input value
+     * @param n input value
+     * @return result
      */
     public static List<List<Integer>> combinationSum3(int k, int n) {
         List<List<Integer>> res = new ArrayList<>();
@@ -234,7 +283,12 @@ public class BackTrackQuestion {
         }
     }
 
-    // 401. Binary Watch
+    /**
+     * LeetCode 401: binary Watch.
+     *
+     * @param num input value
+     * @return result
+     */
     public List<String> readBinaryWatch(int num) {
         List<String> res = new ArrayList<>();
         int[] nums1 = new int[]{8, 4, 2, 1}, nums2 = new int[]{32, 16, 8, 4, 2, 1};
@@ -267,13 +321,19 @@ public class BackTrackQuestion {
             generateDigitHelper(nums, count - 1, i + 1, sum + nums[i], res);
     }
 
-    // 526 Beatiful arrangement: arrange the array of 1 .. N numbers s.t. num[i] % i == 0 || i %
-    // num[i] == 0
+
     /**
+     * 526 Beautiful arrangement: arrange the array of 1 .. N numbers s.t. num[i] % i == 0 || i % num[i] == 0
      * note the addition and deletion of middle element
      */
     int count = 0;
 
+    /**
+     * count arrangement.
+     *
+     * @param N input value
+     * @return result
+     */
     public int countArrangement(int N) {
         if (N == 0) return 0;
         countArrangementHelper(N, 1, new int[N + 1]);
@@ -294,7 +354,12 @@ public class BackTrackQuestion {
         }
     }
 
-    // 784 Letter Case Permutation
+    /**
+     * LeetCode 784: letter Case Permutation.
+     *
+     * @param S input value
+     * @return result
+     */
     public List<String> letterCasePermutation(String S) {
         List<String> res = new LinkedList<>();
         helper(res, S.toCharArray(), 0);

@@ -5,7 +5,10 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 
 /**
- * Created by jasperwang on 2018-02-18.
+ * List-focused LeetCode solutions and related utilities.
+ *
+ * <p>The methods are grouped by problem domain rather than by difficulty. Most implementations are
+ * self-contained so they can be copied into individual LeetCode submissions.
  */
 public class ListQuestion {
     public static class ListNode {
@@ -22,11 +25,17 @@ public class ListQuestion {
         }
 
         public static ListNode listNodeFactory(ArrayDeque<Integer> vals) {
-            if (vals.size() == 0) return null;
+            if (vals.isEmpty()) return null;
             return new ListNode(vals.pollFirst(), listNodeFactory(vals));
         }
     }
 
+    /**
+     * reverse second half list.
+     *
+     * @param head input value
+     * @return result
+     */
     public static ListNode reverseSecondHalfList(ListNode head) {
         if (head == null) return null;
         ListNode fast = head, slow = head, prev = head;
@@ -50,7 +59,13 @@ public class ListQuestion {
         return prev;
     }
 
-    // 2. Add Two Numbers Linked List
+    /**
+     * LeetCode 2: add Two Numbers Linked List.
+     *
+     * @param l1 input value
+     * @param l2 input value
+     * @return result
+     */
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         ListNode res = new ListNode(0);
         ListNode temp = res;
@@ -72,7 +87,12 @@ public class ListQuestion {
         return res.next;
     }
 
-    // 23 Merge K lists (Wish interview)
+    /**
+     * LeetCode 23: merge K lists (Wish interview).
+     *
+     * @param lists input value
+     * @return result
+     */
     public ListNode mergeKLists(ListNode[] lists) {
         if (lists == null || lists.length == 0) return null;
         if (lists.length == 1) return lists[0];
@@ -101,6 +121,12 @@ public class ListQuestion {
         }
     }
 
+    /**
+     * merge klists2.
+     *
+     * @param lists input value
+     * @return result
+     */
     public ListNode mergeKLists2(ListNode[] lists) {
         ListNode curr = null;
         ListNode head = null;
@@ -114,9 +140,9 @@ public class ListQuestion {
                             }
                         });
         // Add all the list nodes to the min heap
-        for (int i = 0; i < lists.length; ++i) {
-            if (lists[i] != null) {
-                q.offer(lists[i]);
+        for (ListNode list : lists) {
+            if (list != null) {
+                q.offer(list);
             }
         }
 
@@ -140,7 +166,12 @@ public class ListQuestion {
         return head;
     }
 
-    // 83
+    /**
+     * LeetCode 83: delete duplicates.
+     *
+     * @param head input value
+     * @return result
+     */
     public ListNode deleteDuplicates(ListNode head) {
         if (head == null) return null;
         ListNode list = head;
@@ -154,14 +185,17 @@ public class ListQuestion {
         return head;
     }
 
-    // 160. Intersection of 2 lists
+    /**
+     * LeetCode 160: intersection of 2 lists note the change to headB when a == null; max iteration is length a + length b when the lengths of lists are different.
+     *
+     * @param headA input value
+     * @param headB input value
+     * @return result
+     */
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
         if (headA == null || headB == null) return null;
         ListNode a = headA, b = headB;
-        /**
-         * note the change to headB when a == null; max iteration is length a + length b when the
-         * lengths of lists are different
-         */
+
         while (a != b) {
             a = a == null ? headB : a.next;
             b = b == null ? headA : b.next;
@@ -169,13 +203,26 @@ public class ListQuestion {
         return a;
     }
 
-    // 203 Remove Linked List Elements
+    /**
+     * LeetCode 203: remove Linked List Elements.
+     *
+     * @param head input value
+     * @param val input value
+     * @return result
+     */
     public ListNode removeElements(ListNode head, int val) {
         if (head == null) return null;
         head.next = removeElements(head.next, val);
         return head.val == val ? head.next : head;
     }
 
+    /**
+     * remove elements2.
+     *
+     * @param head input value
+     * @param val input value
+     * @return result
+     */
     public ListNode removeElements2(ListNode head, int val) {
         if (head == null) return head;
         ListNode curr = head;
@@ -189,7 +236,12 @@ public class ListQuestion {
         return head.val == val ? head.next : head;
     }
 
-    // 206 Reverse Linked List
+    /**
+     * LeetCode 206: reverse Linked List.
+     *
+     * @param head input value
+     * @return result
+     */
     public ListNode reverseList1(ListNode head) {
         return helper(head, null);
     }
@@ -201,6 +253,12 @@ public class ListQuestion {
         return helper(next, head);
     }
 
+    /**
+     * reverse list2.
+     *
+     * @param head input value
+     * @return result
+     */
     public ListNode reverseList2(ListNode head) {
         /* iterative solution */
         ListNode newHead = null;
@@ -215,7 +273,12 @@ public class ListQuestion {
         return newHead;
     }
 
-    // 234  Palindrome Linked List (in O(n) time and O(1) space)
+    /**
+     * LeetCode 234: palindrome Linked List (in O(n) time and O(1) space).
+     *
+     * @param head input value
+     * @return result
+     */
     public boolean isPalindrome(ListNode head) {
         ListNode fast = head, slow = head;
         while (fast != null && fast.next != null) {
@@ -238,9 +301,14 @@ public class ListQuestion {
         return true;
     }
 
-    // 369
     private int carry = 1;
 
+    /**
+     * LeetCode 369: adds one to a linked-list number.
+     *
+     * @param head input value
+     * @return result
+     */
     public ListNode plusOne(ListNode head) {
         if (plusOneHelper(head).val != 0) return head;
         final ListNode newHead = new ListNode(1);
@@ -262,6 +330,12 @@ public class ListQuestion {
         return head;
     }
 
+    /**
+     * plus one2.
+     *
+     * @param head input value
+     * @return result
+     */
     public ListNode plusOne2(ListNode head) {
         // add a new node for the case 999 + 1
         final ListNode dummy = new ListNode(0);
@@ -284,43 +358,14 @@ public class ListQuestion {
         return dummy.val == 1 ? dummy : dummy.next;
     }
 
-    // 382
-
     /**
-     * Reservoir Sampling: choose k elements from an array with unknown length
-     */
-    public class Solution {
-        ListNode head;
-        java.util.Random randomGen = null;
-
-        /**
-         * @param head The linked list's head. Note that the head is guaranteed to be not null, so it
-         *             contains at least one node.
-         */
-        public Solution(ListNode head) {
-            this.head = head;
-            this.randomGen = new java.util.Random();
-        }
-
-        /**
-         * Returns a random node's value.
-         */
-        public int getRandom() {
-            ListNode res = null, curr = head;
-            for (int i = 1; curr != null; i++) {
-                if (randomGen.nextInt(i) == 0) { // returns a number between 0 and i - 1
-                    res = curr;
-                }
-                curr = curr.next;
-            }
-            return res.val;
-        }
-    }
-
-    // 445
-
-    /**
-     * numbers are in right order
+     * LeetCode 445: adds two linked-list numbers whose digits are stored in forward order.
+     *
+     * numbers are in right order.
+     *
+     * @param l1 input value
+     * @param l2 input value
+     * @return result
      */
     public ListNode addTwoNumbers2(ListNode l1, ListNode l2) {
         java.util.Stack<Integer> s1 = new java.util.Stack<Integer>();

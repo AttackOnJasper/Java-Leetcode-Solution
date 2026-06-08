@@ -2,6 +2,12 @@ package com.jasperwang.leetcode;
 
 import java.util.*;
 
+/**
+ * DP-focused LeetCode solutions and related utilities.
+ *
+ * <p>The methods are grouped by problem domain rather than by difficulty. Most implementations are
+ * self-contained so they can be copied into individual LeetCode submissions.
+ */
 public class DPQuestion {
     private class Interval {
         int start;
@@ -18,7 +24,13 @@ public class DPQuestion {
         }
     }
 
-    // weighted interval scheduling: schedule meetings s.t. total weight is maximized
+    /**
+     * weighted interval scheduling: schedule meetings s.t. total weight is maximized.
+     *
+     * @param intervals input value
+     * @param weights input value
+     * @return result
+     */
     public int weightedIntervalScheduling(Interval[] intervals, int[] weights) {
         Arrays.sort(intervals, (a, b) -> a.end - b.end);
         int[] lastFinishedIndexes = new int[intervals.length], dp = new int[intervals.length];
@@ -50,10 +62,12 @@ public class DPQuestion {
         return dp[intervals.length - 1];
     }
 
-    // Subset sum
-
     /**
-     * D[i,k] -> if there exists a subset from 0 to i that sum up to k
+     * subset sum D[i,k] -> if there exists a subset from 0 to i that sum up to k.
+     *
+     * @param nums input value
+     * @param k input value
+     * @return result
      */
     public boolean subsetSum(int[] nums, int k) {
         boolean[][] dp = new boolean[nums.length][k + 1];
@@ -63,7 +77,14 @@ public class DPQuestion {
         return dp[nums.length - 1][k];
     }
 
-    // knapsack: each item has a weight and a value; return max value in a weight limit
+    /**
+     * knapsack: each item has a weight and a value; return max value in a weight limit.
+     *
+     * @param weight input value
+     * @param value input value
+     * @param limit input value
+     * @return result
+     */
     public int knapsack(int[] weight, int[] value, int limit) {
         int[][] dp =
                 new int[weight.length]
@@ -74,7 +95,12 @@ public class DPQuestion {
         return dp[weight.length - 1][limit];
     }
 
-    // 5. Longest Palindromic Substring
+    /**
+     * LeetCode 5: longest Palindromic Substring.
+     *
+     * @param s input value
+     * @return result
+     */
     public String longestPalindrome(String s) {
         if (s == null || s.length() <= 1) {
             return s;
@@ -103,10 +129,11 @@ public class DPQuestion {
         return maxSub;
     }
 
-    // 53 Max subarray
-
     /**
-     * DP dp[i]: max subarray that ends with nums[i]
+     * LeetCode 53: max subarray DP dp[i]: max subarray that ends with nums[i].
+     *
+     * @param nums input value
+     * @return result
      */
     public int maxSubArray(int[] nums) {
         if (nums.length == 0) {
@@ -122,7 +149,12 @@ public class DPQuestion {
         return res;
     }
 
-    // another dp
+    /**
+     * another dp.
+     *
+     * @param nums input value
+     * @return result
+     */
     public int maxSubArray1(int[] nums) {
         int curMax = nums[0], maxSoFar = nums[0];
         for (int i = 1; i < nums.length; i++) {
@@ -132,10 +164,11 @@ public class DPQuestion {
         return maxSoFar;
     }
 
-    // Greedy
-
     /**
-     * find the largest difference between the sums when summing up the array from left to right
+     * greedy Solution. find the largest difference between the sums when summing up the array from left to right.
+     *
+     * @param nums input value
+     * @return result
      */
     public int maxSubArray3(int[] nums) {
         if (nums.length == 0) {
@@ -154,7 +187,12 @@ public class DPQuestion {
         return res;
     }
 
-    // 120. Triangle
+    /**
+     * LeetCode 120: triangle.
+     *
+     * @param triangle input value
+     * @return result
+     */
     public int minimumTotal(List<List<Integer>> triangle) {
         int[] A = new int[triangle.size() + 1];
         for (int i = triangle.size() - 1; i >= 0; i--) {
@@ -165,12 +203,11 @@ public class DPQuestion {
         return A[0];
     }
 
-    // 121 Best Time to buy & sell (very similar to max subarray)
-
     /**
-     * Kadane's Algorithm: the logic is to calculate the difference (maxCur += prices[i] -
-     * prices[i-1]) of the original array, and find a contiguous subarray giving maximum profit. If
-     * the difference falls below 0, reset it to zero.
+     * LeetCode 121: best Time to buy & sell (very similar to max subarray) Kadane's Algorithm: the logic is to calculate the difference (maxCur += prices[i] - prices[i-1]) of the original array, and find a contiguous subarray giving maximum profit. If the difference falls below 0, reset it to zero.
+     *
+     * @param prices input value
+     * @return result
      */
     public int maxProfit(int[] prices) {
         int maxCur = 0, maxSoFar = 0;
@@ -181,7 +218,12 @@ public class DPQuestion {
         return maxSoFar;
     }
 
-    // 123. do at most 2 transactions
+    /**
+     * LeetCode 123: do at most 2 transactions.
+     *
+     * @param prices input value
+     * @return result
+     */
     public int maxProfit3(int[] prices) {
         int hold0 = Integer.MIN_VALUE, sold0 = 0, hold1 = Integer.MIN_VALUE, sold1 = 0;
         for (int p : prices) {
@@ -193,7 +235,13 @@ public class DPQuestion {
         return sold1;
     }
 
-    // 139
+    /**
+     * LeetCode 139: word break.
+     *
+     * @param s input value
+     * @param wordDict input value
+     * @return result
+     */
     public boolean wordBreak(String s, List<String> wordDict) {
         boolean[] d = new boolean[s.length()];
         Arrays.fill(d, false);
@@ -212,7 +260,12 @@ public class DPQuestion {
         return d[d.length - 1];
     }
 
-    // 198. House Robber
+    /**
+     * LeetCode 198: house Robber.
+     *
+     * @param nums input value
+     * @return result
+     */
     public int rob(int[] nums) {
         int robbedPrev = 0, notRobbedPrev = 0;
         for (int n : nums) {
@@ -224,8 +277,12 @@ public class DPQuestion {
         return Math.max(robbedPrev, notRobbedPrev);
     }
 
-    // 221. Maximal Square: Given a 2D binary matrix filled with 0's and 1's, find the largest
-    // square containing only 1's and return its area.
+    /**
+     * LeetCode 221: maximal Square: Given a 2D binary matrix filled with 0's and 1's, find the largest square containing only 1's and return its area.
+     *
+     * @param matrix input value
+     * @return result
+     */
     public int maximalSquare(char[][] matrix) {
         if (matrix.length == 0) return 0;
         int m = matrix.length, n = matrix[0].length, result = 0;
@@ -241,7 +298,12 @@ public class DPQuestion {
         return result * result;
     }
 
-    // 253. Meeting Rooms II. find the minimum meeting rooms required to fulfill all meetings
+    /**
+     * LeetCode 253: meeting Rooms II. find the minimum meeting rooms required to fulfill all meetings.
+     *
+     * @param intervals input value
+     * @return result
+     */
     public int minMeetingRooms(Interval[] intervals) {
         if (intervals.length == 0) return 0;
         Arrays.sort(intervals, (a, b) -> a.start - b.start);
@@ -263,11 +325,11 @@ public class DPQuestion {
         return heap.size();
     }
 
-    // 256. Paint House: each house can be painted from one of the three colours & each adjacent
-    // house cannot share the same colour
-
     /**
-     * reduction of space complexity by keeping only prev & curr values
+     * LeetCode 256: paint House: each house can be painted from one of the three colours & each adjacent house cannot share the same colour reduction of space complexity by keeping only prev & curr values.
+     *
+     * @param costs input value
+     * @return result
      */
     public int minCost(int[][] costs) {
         if (costs == null || costs.length == 0 || costs[0].length == 0) return 0;
@@ -281,11 +343,12 @@ public class DPQuestion {
         return Math.min(r, Math.min(g, b));
     }
 
-    // 276 Paint Fence
-
     /**
-     * Return the total number of ways to paint n posts given k colors s.t. no more than 2 adjacent
-     * posts have the same color
+     * LeetCode 276: paint Fence Return the total number of ways to paint n posts given k colors s.t. no more than 2 adjacent posts have the same color.
+     *
+     * @param n input value
+     * @param k input value
+     * @return result
      */
     public int numWays(int n, int k) {
         if (n == 0) return 0;
@@ -300,7 +363,12 @@ public class DPQuestion {
         return diffColorCounts + sameColorCounts;
     }
 
-    // 300
+    /**
+     * LeetCode 300: length of lis.
+     *
+     * @param nums input value
+     * @return result
+     */
     public int lengthOfLIS(int[] nums) {
         if (nums.length == 0) return 0;
         int[] dp = new int[nums.length];
@@ -312,14 +380,24 @@ public class DPQuestion {
         return res;
     }
 
-    // 338
+    /**
+     * LeetCode 338: count bits.
+     *
+     * @param num input value
+     * @return result
+     */
     public int[] countBits(int num) {
         int[] res = new int[num + 1];
         for (int i = 1; i <= num; i++) res[i] = res[i / 2] + i % 2;
         return res;
     }
 
-    // 516 Longest Palindrome Subsequence
+    /**
+     * LeetCode 516: longest Palindrome Subsequence.
+     *
+     * @param s input value
+     * @return result
+     */
     public int longestPalindromeSubseq(String s) {
         int[][] dp = new int[s.length()][s.length()];
 
@@ -336,10 +414,11 @@ public class DPQuestion {
         return dp[0][s.length() - 1];
     }
 
-    // 416 Partition Equal Subset Sum
-
     /**
-     * knapsack
+     * LeetCode 416: partition Equal Subset Sum knapsack.
+     *
+     * @param nums input value
+     * @return result
      */
     public boolean canPartition(int[] nums) {
         int sum = 0;
@@ -369,10 +448,11 @@ public class DPQuestion {
         return dp[sum];
     }
 
-    // 486. both players draw from either end of array; predict if player 1 wins
-
     /**
-     * dp[i][j] -> how much more score player 1 has than player 2 from i to j
+     * LeetCode 486: both players draw from either end of array; predict if player 1 wins dp[i][j] -> how much more score player 1 has than player 2 from i to j.
+     *
+     * @param nums input value
+     * @return result
      */
     public boolean PredictTheWinner(int[] nums) {
         int[][] dp = new int[nums.length][nums.length];
@@ -386,13 +466,18 @@ public class DPQuestion {
         return dp[0][nums.length - 1] >= 0;
     }
 
-    // 646
-    /** similar to longest increasing sequence */
-
-    // 712 find the lowest ASCII sum of deleted characters to make two strings equal
+    /*
+     * LeetCode 646.
+     *
+     * Tip: similar to longest increasing sequence.
+     */
 
     /**
-     * similar to edit distance
+     * LeetCode 712: find the lowest ASCII sum of deleted characters to make two strings equal. Tip: similar to edit distance.
+     *
+     * @param s1 input value
+     * @param s2 input value
+     * @return result
      */
     public int minimumDeleteSum(String s1, String s2) {
         int m = s1.length(), n = s2.length();
@@ -413,13 +498,12 @@ public class DPQuestion {
         return dp[m][n];
     }
 
-    // 714 Best Time to Buy and Sell Stock with Transaction Fee
-
     /**
-     * notHoldStock represents the max profit of not holding a stock at price p holdStock represents
-     * the max profit of holding a stock at price p Update notHoldStock by selling the stock (bought
-     * at max profit while holding a stock i.e. holdStock) at price p, so profit = holdStock + p
-     * Update holdStock by buying the stock at p
+     * LeetCode 714: best Time to Buy and Sell Stock with Transaction Fee. Tip: notHoldStock represents the max profit of not holding a stock at price p holdStock represents the max profit of holding a stock at price p Update notHoldStock by selling the stock (bought at max profit while holding a stock i.e. holdStock) at price p, so profit = holdStock + p Update holdStock by buying the stock at p.
+     *
+     * @param prices input value
+     * @param fee input value
+     * @return result
      */
     public int maxProfit(int[] prices, int fee) {
         int notHoldStock = 0, holdStock = Integer.MIN_VALUE;
@@ -431,7 +515,12 @@ public class DPQuestion {
         return notHoldStock;
     }
 
-    // 717
+    /**
+     * LeetCode 717: is one bit character.
+     *
+     * @param bits input value
+     * @return result
+     */
     public static boolean isOneBitCharacter(int[] bits) {
         boolean[] isValid = new boolean[bits.length];
         isValid[0] = bits[0] == 0;
@@ -442,7 +531,13 @@ public class DPQuestion {
         return bits.length > 1 ? isValid[bits.length - 2] : isValid[bits.length - 1];
     }
 
-    // 718 find the length of longest subarray in both arrays
+    /**
+     * LeetCode 718: find the length of longest subarray in both arrays.
+     *
+     * @param A input value
+     * @param B input value
+     * @return result
+     */
     public int findLength(int[] A, int[] B) {
         int res = 0;
         int[][] dp = new int[A.length][B.length]; // store the length for max subarray ending with i & j
@@ -455,8 +550,12 @@ public class DPQuestion {
         return res;
     }
 
-    // 740
-    // The length of nums is at most 20000. Each element nums[i] is an integer in the range [1, 10000]
+    /**
+     * LeetCode 740: the length of nums is at most 20000. Each element nums[i] is an integer in the range [1, 10000].
+     *
+     * @param nums input value
+     * @return result
+     */
     public int deleteAndEarn(int[] nums) {
         final int[] values = new int[10001]; // values array stores sums of buckets
         for (int num : nums) {
@@ -471,7 +570,12 @@ public class DPQuestion {
         return take;
     }
 
-    // 357 e.g. 2 -> 91 numbers out of 100 that have unique digits
+    /**
+     * LeetCode 357: e.g. 2 -> 91 numbers out of 100 that have unique digits.
+     *
+     * @param n input value
+     * @return result
+     */
     public int countNumbersWithUniqueDigits(int n) {
         if (n == 0) return 1;
         int res = 10;
@@ -485,7 +589,13 @@ public class DPQuestion {
         return res;
     }
 
-    // 779
+    /**
+     * LeetCode 779: kth grammar.
+     *
+     * @param N input value
+     * @param K input value
+     * @return result
+     */
     public int kthGrammar(int N, int K) {
         if (N == 1) return 0;
         if (K % 2 == 0) return (kthGrammar(N - 1, K / 2) == 0) ? 1 : 0;

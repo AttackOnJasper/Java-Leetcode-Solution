@@ -4,17 +4,25 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 /**
- * Created by jasperwang on 2018-02-18.
+ * Greedy-focused LeetCode solutions and related utilities.
+ *
+ * <p>The methods are grouped by problem domain rather than by difficulty. Most implementations are
+ * self-contained so they can be copied into individual LeetCode submissions.
  */
 public class GreedyQuestion {
-    // 55
+    /**
+     * LeetCode 55: can jump.
+     *
+     * @param nums input value
+     * @return result
+     */
     public boolean canJump(int[] nums) {
         int i = 0;
         for (int reach = 0; i < nums.length && i <= reach; ++i) reach = Math.max(i + nums[i], reach);
         return i == nums.length;
     }
 
-    // 435
+    /** LeetCode 435: interval model for erasing overlap intervals. */
     private class Interval {
         int start;
         int end;
@@ -37,6 +45,12 @@ public class GreedyQuestion {
         }
     }
 
+    /**
+     * erase overlap intervals.
+     *
+     * @param intervals input value
+     * @return result
+     */
     public int eraseOverlapIntervals(Interval[] intervals) {
         if (intervals.length == 0) return 0;
         Arrays.sort(intervals, new IntervalComparator());
@@ -50,7 +64,13 @@ public class GreedyQuestion {
         return intervals.length - numOfIntervalsNotOverlapping;
     }
 
-    // 455 Cookie
+    /**
+     * LeetCode 455: cookie.
+     *
+     * @param g input value
+     * @param s input value
+     * @return result
+     */
     public int findContentChildren(int[] g, int[] s) {
         if (s.length == 0 || g.length == 0) return 0;
         Arrays.sort(g);

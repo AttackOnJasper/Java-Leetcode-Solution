@@ -3,11 +3,20 @@ package com.jasperwang.leetcode;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Math-focused LeetCode solutions and related utilities.
+ *
+ * <p>The methods are grouped by problem domain rather than by difficulty. Most implementations are
+ * self-contained so they can be copied into individual LeetCode submissions.
+ */
 public class MathQuestion {
-    // 69
-
     /**
-     * Newton's method
+     * LeetCode 69.
+     *
+     * newton's method.
+     *
+     * @param x input value
+     * @return result
      */
     public int mySqrt(int x) {
         long r = x;
@@ -15,8 +24,12 @@ public class MathQuestion {
         return (int) r;
     }
 
-    // 191 Hamming weight (bitCount)
-    // bit manipulation
+    /**
+     * LeetCode 191: hamming weight (bitCount) bit manipulation.
+     *
+     * @param n input value
+     * @return result
+     */
     public int hammingWeight(int n) {
         int count = 0;
         while (n != 0) {
@@ -26,7 +39,12 @@ public class MathQuestion {
         return count;
     }
 
-    // bit shift
+    /**
+     * bit shift.
+     *
+     * @param n input value
+     * @return result
+     */
     public int hammingWeight2(int n) {
         int count = 0;
         while (n != 0) {
@@ -36,10 +54,13 @@ public class MathQuestion {
         return count;
     }
 
-    // 202 is happy number
-
     /**
-     * test cycle
+     * LeetCode 202: is happy number.
+     *
+     * test cycle.
+     *
+     * @param n input value
+     * @return result
      */
     public boolean isHappy(int n) {
         int i1 = n, i2 = next(n);
@@ -60,10 +81,13 @@ public class MathQuestion {
         return res;
     }
 
-    // 204 Count Primes
-
     /**
-     * semi-dp idea
+     * LeetCode 204: count Primes.
+     *
+     * semi-dp idea.
+     *
+     * @param n input value
+     * @return result
      */
     public int countPrimes(int n) {
         int res = 0;
@@ -79,26 +103,42 @@ public class MathQuestion {
         return res;
     }
 
-    // 326 Power of Three
+    /**
+     * LeetCode 326: power of Three.
+     *
+     * @param n input value
+     * @return result
+     */
     public boolean isPowerOfThree(int n) {
         // 1162261467 is 3^19,  3^20 is bigger than int
         return (n > 0 && 1162261467 % n == 0);
     }
 
-    // 231
+    /**
+     * LeetCode 231: is power of two.
+     *
+     * @param n input value
+     * @return result
+     */
     public boolean isPowerOfTwo(int n) {
         return n > 0 && ((n & (n - 1)) == 0);
     }
 
-    // 342
+    /**
+     * LeetCode 342: is power of four.
+     *
+     * @param num input value
+     * @return result
+     */
     public boolean isPowerOfFour(int num) {
         return num > 0 && (num & (num - 1)) == 0 && (num - 1) % 3 == 0;
     }
 
-    // 367 perfect square
-
     /**
-     * sequence 1 + 3 + 5 + 7
+     * LeetCode 367: perfect square sequence 1 + 3 + 5 + 7.
+     *
+     * @param num input value
+     * @return result
      */
     public boolean isPerfectSquare(int num) {
         if (num < 1) return false;
@@ -107,7 +147,10 @@ public class MathQuestion {
     }
 
     /**
-     * binary search to find the square root
+     * binary search to find the square root.
+     *
+     * @param num input value
+     * @return result
      */
     public boolean isPerfectSquare1(int num) {
         if (num < 1) return false;
@@ -140,17 +183,28 @@ public class MathQuestion {
         return t * t == num;
     }
 
-    // 371 Get Sum
-    // Implement sum without +
+    /**
+     * LeetCode 371: get Sum Implement sum without +.
+     *
+     * @param a input value
+     * @param b input value
+     * @return result
+     */
     public int getSum(int a, int b) {
         return b == 0 ? a : getSum(a ^ b, (a & b) << 1);
     }
 
-    // 405 Num to Hex
+    /** LeetCode 405: converts a number to hexadecimal. */
     private char[] map = {
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
     };
 
+    /**
+     * LeetCode 405: converts a number to hexadecimal.
+     *
+     * @param num input value
+     * @return result
+     */
     public String toHex(int num) {
         if (num == 0) return "0";
         String result = "";
@@ -161,10 +215,11 @@ public class MathQuestion {
         return result;
     }
 
-    // 447 find the number of 2 points that have same distance towards one point
-
     /**
-     * store the distance to point i & number of coordinates for that distance
+     * LeetCode 447: find the number of 2 points that have same distance towards one point store the distance to point i & number of coordinates for that distance.
+     *
+     * @param points input value
+     * @return result
      */
     public int numberOfBoomerangs(int[][] points) {
         int res = 0;
@@ -190,13 +245,24 @@ public class MathQuestion {
         return dx * dx + dy * dy;
     }
 
-    // 461 Hamming distance
+    /**
+     * LeetCode 461: hamming distance.
+     *
+     * @param x input value
+     * @param y input value
+     * @return result
+     */
     public int hammingDistance(int x, int y) {
         /** int bitCount(int n) { while(n) { n = n & (n-1); count++; } return count; } */
         return Integer.bitCount(x ^ y);
     }
 
-    // 476 Number Complement
+    /**
+     * LeetCode 476: number Complement.
+     *
+     * @param num input value
+     * @return result
+     */
     public int findComplement(int num) {
         return (largest_power(num) << 1) - 1 - num;
     }
@@ -214,12 +280,23 @@ public class MathQuestion {
         return (N + 1) >> 1;
     }
 
+    /**
+     * find complement2.
+     *
+     * @param num input value
+     * @return result
+     */
     public int findComplement2(int num) {
         // highestOneBit(n) returns 2^m, where 2^m < n < 2^(m+1)
         return ~num & ((Integer.highestOneBit(num) << 1) - 1);
     }
 
-    // 479. Largest Palindrome Product: return the max palindrome from product of 2 n-digit numbers
+    /**
+     * LeetCode 479: largest Palindrome Product: return the max palindrome from product of 2 n-digit numbers.
+     *
+     * @param n input value
+     * @return result
+     */
     public int largestPalindrome(int n) {
         if (n == 1) return 9;
         // if n = 3 then upperBound = 999 and lowerBound = 99

@@ -2,8 +2,20 @@ package com.jasperwang.leetcode;
 
 import java.util.*;
 
+/**
+ * Array-focused LeetCode solutions and related utilities.
+ *
+ * <p>The methods are grouped by problem domain rather than by difficulty. Most implementations are
+ * self-contained so they can be copied into individual LeetCode submissions.
+ */
 public class ArrayQuestion {
-    // 4 Median of Two Sorted List
+    /**
+     * LeetCode 4: median of Two Sorted List.
+     *
+     * @param A input value
+     * @param B input value
+     * @return result
+     */
     public double findMedianSortedArrays(int[] A, int[] B) {
         int m = A.length, n = B.length, l = (m + n + 1) / 2, r = (m + n + 2) / 2;
         return (getkth(A, 0, B, 0, l) + getkth(A, 0, B, 0, r)) / 2.0;
@@ -23,7 +35,12 @@ public class ArrayQuestion {
         return getkth(A, aStart, B, bStart + k / 2, k - k / 2); // Check: bRight + aLeft
     }
 
-    // Quick Sort
+    /**
+     * quick Sort.
+     *
+     * @param arr input value
+     * @return result
+     */
     public int[] quickSort(int[] arr) {
         return quickSortHelper(arr, 0, arr.length - 1);
     }
@@ -51,7 +68,13 @@ public class ArrayQuestion {
         return arr;
     }
 
-    // quick select
+    /**
+     * quick select.
+     *
+     * @param arr input value
+     * @param k input value
+     * @return result
+     */
     public int selectK(int[] arr, int k) {
         if (arr.length < 10) {
             return selectKShort(arr, k);
@@ -69,6 +92,15 @@ public class ArrayQuestion {
         return selectK(right.stream().mapToInt(i -> i).toArray(), k - left.size());
     }
 
+    /**
+     * select k2.
+     *
+     * @param A input value
+     * @param k input value
+     * @param start input value
+     * @param end input value
+     * @return result
+     */
     public int selectK2(int[] A, int k, int start, int end) {
         int l = start, r = end, pivot = A[(l + r) / 2];
         while (l <= r) {
@@ -120,6 +152,12 @@ public class ArrayQuestion {
         return res;
     }
 
+    /**
+     * merge sort.
+     *
+     * @param arr input value
+     * @return result
+     */
     public int[] mergeSort(int[] arr) {
         if (arr.length < 2) return arr;
         if (arr.length == 2) {
@@ -135,7 +173,13 @@ public class ArrayQuestion {
         return merge(mergeSort(frontArr), mergeSort(backArr));
     }
 
-    // 1. Two Sum
+    /**
+     * LeetCode 1: two Sum.
+     *
+     * @param nums input value
+     * @param target input value
+     * @return result
+     */
     public int[] twoSum(int[] nums, int target) {
         HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
         int[] result = new int[2];
@@ -150,13 +194,22 @@ public class ArrayQuestion {
         return result;
     }
 
-    // 33. Search in rotated sorted arry e.g. 5 6 7 1 2 3 4
-    /** Idea: find minimum then binary search to find target */
-
-    // 34. Search for range of an element in a sorted array (Binary search boundary)
+    /**
+     * LeetCode 33: search in a rotated sorted array.
+     *
+     * <p>Example: {@code [5, 6, 7, 1, 2, 3, 4]}.
+     *
+     * <p>Tip: find the minimum value, then binary search for the target.
+     */
 
     /**
-     * do one binary search for lower bound and one for upper bound
+     * LeetCode 34: search for range of an element in a sorted array (Binary search boundary).
+     *
+     * do one binary search for lower bound and one for upper bound.
+     *
+     * @param nums input value
+     * @param target input value
+     * @return result
      */
     public int[] searchRange(int[] nums, int target) {
         if (nums.length == 0) return new int[]{-1, -1};
@@ -181,15 +234,19 @@ public class ArrayQuestion {
         return new int[]{left, low};
     }
 
-    // 59 Spiral Matrix II: generate an n x n matrix filled with elements from 1 to n^2 in spiral
-    // order.
-    /** Idea: Generate matrix in increasing number order; generate a circle in each while loop */
-
-    // 73. Set Matrix Zeroes: Given a m x n matrix, if an element is 0, set its entire row and column
-    // to 0. Do it in place.
+    /**
+     * LeetCode 59: generates an {@code n x n} matrix filled with values from {@code 1} to {@code n^2}
+     * in spiral order.
+     *
+     * <p>Tip: generate the matrix in increasing number order, one ring at a time.
+     */
 
     /**
-     * Idea: set first index of a col or row to keep track if the col or row should be converted to 0
+     * LeetCode 73: set Matrix Zeroes: Given a m x n matrix, if an element is 0, set its entire row and column to 0. Do it in place.
+     *
+     * tip: set first index of a col or row to keep track if the col or row should be converted to 0.
+     *
+     * @param matrix input value
      */
     public void setZeroes(int[][] matrix) {
         int col0 = 1, m = matrix.length, n = matrix[0].length;
@@ -203,13 +260,20 @@ public class ArrayQuestion {
         }
     }
 
-    // 74. Search a 2D Matrix
-
     /**
+     * LeetCode 74: search a 2D Matrix.
+     *
      * treat it as a sorted list
      */
 
-    // 88 Merge Sorted Arrays
+    /**
+     * LeetCode 88: merge Sorted Arrays.
+     *
+     * @param nums1 input value
+     * @param m input value
+     * @param nums2 input value
+     * @param n input value
+     */
     public void merge1(int[] nums1, int m, int[] nums2, int n) {
         int i = 0, j = 0, newIndex = 0;
         int[] temp = nums1.clone();
@@ -233,10 +297,12 @@ public class ArrayQuestion {
             nums1[m + n - 1] = (m == 0 || nums2[n - 1] > nums1[m - 1]) ? nums2[--n] : nums1[--m];
     }
 
-    // 75 sort array of 0, 1, 2
-
     /**
-     * Use low and high to keep track of index of 0 and 2 to be inserted
+     * LeetCode 75: sort array of 0, 1, 2.
+     *
+     * use low and high to keep track of index of 0 and 2 to be inserted.
+     *
+     * @param nums input value
      */
     public void sortColors(int[] nums) {
         if (nums == null || nums.length < 2) return;
@@ -262,7 +328,12 @@ public class ArrayQuestion {
         }
     }
 
-    // 118 Generate pascal triangle for first n rows
+    /**
+     * LeetCode 118: generate pascal triangle for first n rows.
+     *
+     * @param n input value
+     * @return result
+     */
     public List<List<Integer>> generatePascal(int n) {
         List<List<Integer>> res = new ArrayList<>();
         List<Integer> row = new ArrayList<>();
@@ -276,14 +347,24 @@ public class ArrayQuestion {
         return res;
     }
 
-    // 136: find the single number in a list
+    /**
+     * LeetCode 136: : find the single number in a list.
+     *
+     * @param nums input value
+     * @return result
+     */
     public int singleNumber(int[] nums) {
         int res = 0;
         for (int i : nums) res ^= i;
         return res;
     }
 
-    // 152. Maximum Product Subarray
+    /**
+     * LeetCode 152: maximum Product Subarray.
+     *
+     * @param A input value
+     * @return result
+     */
     public int maxProduct(int[] A) {
         int r = A[0];
 
@@ -307,10 +388,13 @@ public class ArrayQuestion {
         return r;
     }
 
-    // 219 Given an array of integers and an integer k, find out whether there are two distinct
-    // indices
-    // i and j in the array such that nums[i] = nums[j] and the absolute difference between i and j
-    // is at most k.
+    /**
+     * LeetCode 219: given an array of integers and an integer k, find out whether there are two distinct indices i and j in the array such that nums[i] = nums[j] and the absolute difference between i and j is at most k.
+     *
+     * @param nums input value
+     * @param k input value
+     * @return result
+     */
     public boolean containsNearbyDuplicate(int[] nums, int k) {
         Set<Integer> set = new HashSet<Integer>();
         for (int i = 0; i < nums.length; i++) {
@@ -326,10 +410,13 @@ public class ArrayQuestion {
         return false;
     }
 
-    // 229. Majority Element II: find all elements that occur more than n / 3 times
-
     /**
-     * similar to majority element I
+     * LeetCode 229: majority Element II: find all elements that occur more than n / 3 times.
+     *
+     * similar to majority element I.
+     *
+     * @param nums input value
+     * @return result
      */
     public List<Integer> majorityElement(int[] nums) {
         if (nums == null || nums.length == 0) return new ArrayList<Integer>();
@@ -365,11 +452,13 @@ public class ArrayQuestion {
         return result;
     }
 
-    // 238. Product of Array Except Self (answer[i] is equal to the product of all the elements of
-    // nums except nums[i])
-
     /**
-     * Keep track of left sub-product & right sub-product
+     * LeetCode 238: product of Array Except Self (answer[i] is equal to the product of all the elements of nums except nums[i]).
+     *
+     * keep track of left sub-product & right sub-product.
+     *
+     * @param nums input value
+     * @return result
      */
     public int[] productExceptSelf(int[] nums) {
         int[] res = new int[nums.length];
@@ -382,8 +471,14 @@ public class ArrayQuestion {
         return res;
     }
 
-    // 243 shortest word distance: given an array and two strings, find the minimum distance of the
-    // two strings in that array
+    /**
+     * LeetCode 243: shortest word distance: given an array and two strings, find the minimum distance of the two strings in that array.
+     *
+     * @param words input value
+     * @param word1 input value
+     * @param word2 input value
+     * @return result
+     */
     public int shortestDistance(String[] words, String word1, String word2) {
         int i1 = -1, i2 = -1, res = Integer.MAX_VALUE;
         for (int i = 0, length = words.length; i < length; i++) {
@@ -396,8 +491,10 @@ public class ArrayQuestion {
         return res;
     }
 
-    // 244. shortest word distance 2: use a class to optimize the method if it's called multiple times
-    // with the same word list
+    /**
+     * LeetCode 244: shortest word distance structure optimized for repeated queries over the same
+     * word list.
+     */
     class WordDistance {
         Map<String, List<Integer>> map;
 
@@ -427,7 +524,14 @@ public class ArrayQuestion {
         }
     }
 
-    // 245. shortest word distance 3: word1 can be the same as word2
+    /**
+     * LeetCode 245: shortest word distance 3: word1 can be the same as word2.
+     *
+     * @param words input value
+     * @param word1 input value
+     * @param word2 input value
+     * @return result
+     */
     public int shortestWordDistance(String[] words, String word1, String word2) {
         int p1 = -1, p2 = -1, res = Integer.MAX_VALUE;
         for (int i = 0; i < words.length; i++) {
@@ -440,7 +544,12 @@ public class ArrayQuestion {
         return res;
     }
 
-    // 260 2 single numbers: find the distinct 2 single numbers in a list
+    /**
+     * LeetCode 260: 2 single numbers: find the distinct 2 single numbers in a list.
+     *
+     * @param nums input value
+     * @return result
+     */
     public int[] singleNumbers(int[] nums) {
         // Pass 1 :
         // Get the XOR of the two numbers we need to find
@@ -464,7 +573,12 @@ public class ArrayQuestion {
         return res;
     }
 
-    // 268 the Missing Number from 0 to n in a n-size array
+    /**
+     * LeetCode 268: the Missing Number from 0 to n in a n-size array.
+     *
+     * @param nums input value
+     * @return result
+     */
     public int missingNumber(int[] nums) {
         int res = 0;
         for (int i = 0; i < nums.length; i++) {
@@ -475,14 +589,23 @@ public class ArrayQuestion {
         return res;
     }
 
+    /**
+     * missing number2.
+     *
+     * @param nums input value
+     * @return result
+     */
     public int missingNumber2(int[] nums) {
         int sum = nums.length;
         for (int i = 0; i < nums.length; i++) sum += i - nums[i];
         return sum;
     }
 
-    // 280 Given an unsorted array nums, reorder it in-place such that nums[0] <= nums[1] >= nums[2]
-    // <= nums[3]....
+    /**
+     * LeetCode 280: given an unsorted array nums, reorder it in-place such that nums[0] <= nums[1] >= nums[2] <= nums[3]....
+     *
+     * @param nums input value
+     */
     public void wiggleSort(int[] nums) {
         /**
          * swap between 2 consecutive numbers if odd index & prev > curr, swap if even index & prev <
@@ -498,10 +621,13 @@ public class ArrayQuestion {
         }
     }
 
-    // 287. Find the Duplicate Number (Yext Interview)
-
     /**
-     * Method 1: divide-and-conquer: compare median to nums[mid]
+     * LeetCode 287: find the Duplicate Number (Yext Interview).
+     *
+     * method 1: divide-and-conquer: compare median to nums[mid].
+     *
+     * @param nums input value
+     * @return result
      */
     public int findDuplicate(int[] nums) {
         int start = 1, end = nums.length - 1;
@@ -516,7 +642,10 @@ public class ArrayQuestion {
     }
 
     /**
-     * Method 2: Linked list cycle 2
+     * method 2: Linked list cycle 2.
+     *
+     * @param nums input value
+     * @return result
      */
     public int findDuplicate2(int[] nums) {
         if (nums.length > 1) {
@@ -539,7 +668,13 @@ public class ArrayQuestion {
      * Method 3: Negating the index of array (if array can be modified)
      */
 
-    // 311 Sparse Matrix Multiplication
+    /**
+     * LeetCode 311: sparse Matrix Multiplication.
+     *
+     * @param A input value
+     * @param B input value
+     * @return result
+     */
     public int[][] multiply(int[][] A, int[][] B) {
         int rowA = A.length;
         if (rowA == 0) return null;
@@ -553,10 +688,14 @@ public class ArrayQuestion {
         return res;
     }
 
-    // 323 Number of Connected Components in an Undirected Graph
-
     /**
-     * Given n = 5 and edges = [[0, 1], [1, 2], [3, 4]], return 2
+     * LeetCode 323: number of Connected Components in an Undirected Graph.
+     *
+     * given n = 5 and edges = [[0, 1], [1, 2], [3, 4]], return 2.
+     *
+     * @param n input value
+     * @param edges input value
+     * @return result
      */
     public int countComponents(int n, int[][] edges) {
         int[] roots = new int[n];
@@ -581,10 +720,14 @@ public class ArrayQuestion {
         return id;
     }
 
-    // 347 return k most frequent numbers
-
     /**
-     * Bucket Sort
+     * LeetCode 347: return k most frequent numbers.
+     *
+     * bucket Sort.
+     *
+     * @param nums input value
+     * @param k input value
+     * @return result
      */
     public static List<Integer> topKFrequent(int[] nums, int k) {
         List<Integer>[] buckets =
@@ -604,9 +747,13 @@ public class ArrayQuestion {
         return res;
     }
 
-    // 370. Each operation is represented as a triplet: [startIndex, endIndex, inc] which increments
-    // each element of subarray A[startIndex ... endIndex] (startIndex and endIndex inclusive) with
-    // inc.
+    /**
+     * LeetCode 370: each operation is represented as a triplet: [startIndex, endIndex, inc] which increments each element of subarray A[startIndex ... endIndex] (startIndex and endIndex inclusive) with inc.
+     *
+     * @param length input value
+     * @param updates input value
+     * @return result
+     */
     public int[] getModifiedArray(int length, int[][] updates) {
         // add val at the start index and -val at the end index
         int res[] = new int[length];
@@ -619,7 +766,12 @@ public class ArrayQuestion {
         return res;
     }
 
-    // 406 Queue Reconstruction by height
+    /**
+     * LeetCode 406: queue Reconstruction by height.
+     *
+     * @param people input value
+     * @return result
+     */
     public int[][] reconstructQueue(int[][] people) {
         /**
          * pick up the tallest guy first when insert the next guy with same height, just need to insert
@@ -631,8 +783,12 @@ public class ArrayQuestion {
         return res.toArray(new int[people.length][]);
     }
 
-    // 413: Arithmetic slices: return # of subarray that forms arithmetic sequence (form sequence if
-    // at least 3 elements have the same diff)
+    /**
+     * LeetCode 413: : Arithmetic slices: return # of subarray that forms arithmetic sequence (form sequence if at least 3 elements have the same diff).
+     *
+     * @param A input value
+     * @return result
+     */
     public int numberOfArithmeticSlices(int[] A) {
         if (A.length < 3) return 0;
         int res = 0, difference = Integer.MAX_VALUE, count = 0;
@@ -650,7 +806,12 @@ public class ArrayQuestion {
         return res;
     }
 
-    // 419: Battleships in a board (either vertical or horizontal X)
+    /**
+     * LeetCode 419: : Battleships in a board (either vertical or horizontal X).
+     *
+     * @param board input value
+     * @return result
+     */
     public int countBattleships(char[][] board) {
         int res = 0;
         for (int i = 0; i < board.length; i++) {
@@ -664,11 +825,13 @@ public class ArrayQuestion {
         return res;
     }
 
-    // 442. Find All Duplicates in an Array
-
     /**
-     * Given an array of integers, 1 ≤ a[i] ≤ n (n = size of array), some elements appear twice and
-     * others appear once. Find all the elements that appear twice in this array.
+     * LeetCode 442: find All Duplicates in an Array.
+     *
+     * given an array of integers, 1 ≤ a[i] ≤ n (n = size of array), some elements appear twice and others appear once. Find all the elements that appear twice in this array.
+     *
+     * @param nums input value
+     * @return result
      */
     public List<Integer> findDuplicates(int[] nums) {
         List<Integer> res = new ArrayList<>();
@@ -680,7 +843,12 @@ public class ArrayQuestion {
         return res;
     }
 
-    // 447
+    /**
+     * LeetCode 447: total hamming distance.
+     *
+     * @param nums input value
+     * @return result
+     */
     public int totalHammingDistance(int[] nums) {
         int total = 0, n = nums.length;
         for (int j = 0; j < 32; j++) {
@@ -691,7 +859,12 @@ public class ArrayQuestion {
         return total;
     }
 
-    // 448. Find All Numbers Disappeared in an Array
+    /**
+     * LeetCode 448: find All Numbers Disappeared in an Array.
+     *
+     * @param nums input value
+     * @return result
+     */
     public List<Integer> findDisappearedNumbers(int[] nums) {
         List<Integer> res = new ArrayList<Integer>();
         for (int i = 0; i < nums.length; i++) {
@@ -702,8 +875,15 @@ public class ArrayQuestion {
         return res;
     }
 
-    // 454 4Sum II. Given four lists A, B, C, D of integer values, compute how many
-    // tuples (i, j, k, l) there are such that A[i] + B[j] + C[k] + D[l] is zero
+    /**
+     * LeetCode 454: 4Sum II. Given four lists A, B, C, D of integer values, compute how many tuples (i, j, k, l) there are such that A[i] + B[j] + C[k] + D[l] is zero.
+     *
+     * @param A input value
+     * @param B input value
+     * @param C input value
+     * @param D input value
+     * @return result
+     */
     public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
         Map<Integer, Integer> map = new HashMap<>();
         for (int i = 0; i < C.length; i++) {
@@ -718,12 +898,14 @@ public class ArrayQuestion {
         return res;
     }
 
-    // 496 Next Greater Element: 2 arrays nums1 and nums2 where nums1’s elements are subset of nums2.
-    // Find all the next greater numbers for nums1's elements in the corresponding places of nums2
-
     /**
-     * Use a stack to store a decreasing subsequence, and pop all items that is smaller than the next
-     * item to put in the next greater element map
+     * LeetCode 496: next Greater Element: 2 arrays nums1 and nums2 where nums1’s elements are subset of nums2. Find all the next greater numbers for nums1's elements in the corresponding places of nums2.
+     *
+     * use a stack to store a decreasing subsequence, and pop all items that is smaller than the next item to put in the next greater element map.
+     *
+     * @param findNums input value
+     * @param nums input value
+     * @return result
      */
     public int[] nextGreaterElement(int[] findNums, int[] nums) {
         Map<Integer, Integer> map = new HashMap<>(); // store the integer and its next greater integer
@@ -736,7 +918,12 @@ public class ArrayQuestion {
         return findNums;
     }
 
-    // 503: given a circular array, get index of next greater element
+    /**
+     * LeetCode 503: : given a circular array, get index of next greater element.
+     *
+     * @param nums input value
+     * @return result
+     */
     public int[] nextGreaterElements(int[] nums) {
         Stack<Integer> s = new Stack<>();
         int n = nums.length;
@@ -751,12 +938,13 @@ public class ArrayQuestion {
         return res;
     }
 
-    // 531 Find lonely pixels : A black lonely pixel is character 'B' that located at a specific
-    // position where the same row
-    // and same column don't have any other black pixels
-
     /**
-     * record the number of Bs in each column & each row
+     * LeetCode 531: find lonely pixels : A black lonely pixel is character 'B' that located at a specific position where the same row and same column don't have any other black pixels.
+     *
+     * record the number of Bs in each column & each row.
+     *
+     * @param picture input value
+     * @return result
      */
     public int findLonelyPixel(char[][] picture) {
         int n = picture.length, m = picture[0].length;
@@ -776,11 +964,14 @@ public class ArrayQuestion {
         return count;
     }
 
-    // 560 Subarray Sum Equals k: Given an array and an integer k, find # of continuous subarrays
-    // whose sum equals to k.
-
     /**
-     * store all the presums and occurrences
+     * LeetCode 560: subarray Sum Equals k: Given an array and an integer k, find # of continuous subarrays whose sum equals to k.
+     *
+     * store all the presums and occurrences.
+     *
+     * @param nums input value
+     * @param k input value
+     * @return result
      */
     public int subarraySum(int[] nums, int k) {
         int result = 0, sum = 0;
@@ -795,10 +986,13 @@ public class ArrayQuestion {
         return result;
     }
 
-    // 565 Array Nesting
-
     /**
-     * S[K] = { A[K], A[A[K]], A[A[A[K]]], ... }; find the largest size of S[K]
+     * LeetCode 565: array Nesting.
+     *
+     * s[K] = { A[K], A[A[K]], A[A[A[K]]], ... }; find the largest size of S[K].
+     *
+     * @param nums input value
+     * @return result
      */
     public int arrayNesting(int[] nums) {
         int res = 1;
@@ -816,7 +1010,14 @@ public class ArrayQuestion {
         return res;
     }
 
-    // 566 Matrix Reshape
+    /**
+     * LeetCode 566: matrix Reshape.
+     *
+     * @param nums input value
+     * @param r input value
+     * @param c input value
+     * @return result
+     */
     public int[][] matrixReshape(int[][] nums, int r, int c) {
         int x = nums.length;
         int y = nums[0].length;
@@ -828,10 +1029,13 @@ public class ArrayQuestion {
         return res;
     }
 
-    // 575. Distribution Candies: return the max kind of candies one can get
-
     /**
-     * Use set to return number of distinct numbers
+     * LeetCode 575: distribution Candies: return the max kind of candies one can get.
+     *
+     * use set to return number of distinct numbers.
+     *
+     * @param candies input value
+     * @return result
      */
     public int distributeCandies(int[] candies) {
         final Set<Integer> set = new HashSet<>();
@@ -842,7 +1046,12 @@ public class ArrayQuestion {
         return set.size(); // smaller than half
     }
 
-    // 581 Shortest Unsorted Continuous Subarray
+    /**
+     * LeetCode 581: shortest Unsorted Continuous Subarray.
+     *
+     * @param A input value
+     * @return result
+     */
     public int findUnsortedSubarray(int[] A) {
         int len = A.length, start = -1, end = -2, min = A[len - 1], max = A[0];
         for (int i = 1; i < len; i++) {
@@ -858,11 +1067,14 @@ public class ArrayQuestion {
         return end - start + 1;
     }
 
-    // 605
-    // place flowers s.t. no flowers are adjacent to each other
-
     /**
-     * greedy
+     * LeetCode 605: place flowers s.t. no flowers are adjacent to each other.
+     *
+     * greedy.
+     *
+     * @param flowerbed input value
+     * @param n input value
+     * @return result
      */
     public boolean canPlaceFlowers(int[] flowerbed, int n) {
         int count = 0;
@@ -881,10 +1093,13 @@ public class ArrayQuestion {
         return count == n;
     }
 
-    // 611. valid triangle numbers:
-
     /**
-     * note the reduction of calculation of sums of 2 numbers
+     * LeetCode 611: valid triangle numbers:.
+     *
+     * note the reduction of calculation of sums of 2 numbers.
+     *
+     * @param nums input value
+     * @return result
      */
     public int triangleNumber(int[] nums) {
         Arrays.sort(nums);
@@ -901,10 +1116,14 @@ public class ArrayQuestion {
         return count;
     }
 
-    // 621. Task Scheduler
-
     /**
-     * only consider most frequent tasks
+     * LeetCode 621: task Scheduler.
+     *
+     * only consider most frequent tasks.
+     *
+     * @param tasks input value
+     * @param n input value
+     * @return result
      */
     public int taskScheduler(char[] tasks, int n) {
         int[] c = new int[26];
@@ -916,7 +1135,12 @@ public class ArrayQuestion {
         return Math.max(tasks.length, (c[25] - 1) * (n + 1) + 25 - i);
     }
 
-    // 628. Maximum Product of Three Numbers
+    /**
+     * LeetCode 628: maximum Product of Three Numbers.
+     *
+     * @param nums input value
+     * @return result
+     */
     public int maximumProduct(int[] nums) {
         Arrays.sort(nums);
         final int a = nums[nums.length - 1] * nums[nums.length - 2] * nums[nums.length - 3];
@@ -925,11 +1149,13 @@ public class ArrayQuestion {
         return a > b ? a : b;
     }
 
-    // 645. Set Mismatch
-
     /**
-     * n size array with elements ranging from 1 to n, one element is duplicated & another element is
-     * missing; find these elements
+     * LeetCode 645: set Mismatch.
+     *
+     * n size array with elements ranging from 1 to n, one element is duplicated & another element is missing; find these elements.
+     *
+     * @param nums input value
+     * @return result
      */
     public int[] findErrorNums(int[] nums) {
         int[] res = new int[2];
@@ -946,6 +1172,12 @@ public class ArrayQuestion {
         return res;
     }
 
+    /**
+     * find error nums2.
+     *
+     * @param nums input value
+     * @return result
+     */
     public int[] findErrorNums2(int[] nums) {
         Set<Integer> set = new HashSet<>();
         int duplicate = 0, n = nums.length;
@@ -958,10 +1190,13 @@ public class ArrayQuestion {
         return new int[]{duplicate, (int) sum + duplicate};
     }
 
-    // 665. Check if it is possible to change one element to make the array non-descending
-
     /**
-     * Greedy: try to decrease i-1 to i first; if can't, increase i to i - 1
+     * LeetCode 665: check if it is possible to change one element to make the array non-descending.
+     *
+     * greedy: try to decrease i-1 to i first; if can't, increase i to i - 1.
+     *
+     * @param nums input value
+     * @return result
      */
     public boolean checkPossibility(int[] nums) {
         int count = 0;
@@ -978,10 +1213,13 @@ public class ArrayQuestion {
         return count <= 1;
     }
 
-    // 683
-    // flowers[i] = x means the flower at pos x would be blooming on day i. Output the day where
-    // there are at least 2 flowers blooming, and the number of flowers between them is k, and those
-    // flowers are not blooming
+    /**
+     * LeetCode 683: flowers[i] = x means the flower at pos x would be blooming on day i. Output the day where there are at least 2 flowers blooming, and the number of flowers between them is k, and those flowers are not blooming.
+     *
+     * @param flowers input value
+     * @param k input value
+     * @return result
+     */
     public int kEmptySlots(int[] flowers, int k) {
         int[] days = new int[flowers.length]; // days[i] record blooming day of flower in pos i+1
         for (int i = 0; i < flowers.length; i++) {
@@ -1002,9 +1240,13 @@ public class ArrayQuestion {
         return res == Integer.MAX_VALUE ? -1 : res;
     }
 
-    // 683 Variation
-    // flowers[i] = x means the flower at pos x would be blooming on day i. Output the day where
-    // there are k consecutive flowers blooming
+    /**
+     * LeetCode 683: variation flowers[i] = x means the flower at pos x would be blooming on day i. Output the day where there are k consecutive flowers blooming.
+     *
+     * @param P input value
+     * @param K input value
+     * @return result
+     */
     public int kEmptySlotsII(int[] P, int K) {
         if (K == P.length) return K;
         int[] days = new int[P.length]; // days[i] record blooming day of flower in pos i+1
@@ -1033,7 +1275,12 @@ public class ArrayQuestion {
         return res == Integer.MIN_VALUE ? -1 : res;
     }
 
-    // 695
+    /**
+     * LeetCode 695: max area of island.
+     *
+     * @param grid input value
+     * @return result
+     */
     public int maxAreaOfIsland(int[][] grid) {
         if (grid == null || grid.length == 0 || grid[0].length == 0) return 0;
         int res = 0, row = grid.length, col = grid[0].length;
@@ -1057,9 +1304,12 @@ public class ArrayQuestion {
         return 0;
     }
 
-    // 697 find the smallest possible length of a (contiguous) subarray of nums, that has the same
-    // degree as nums
-    // degree: the maximum frequency of any one of its elements
+    /**
+     * LeetCode 697: find the smallest possible length of a (contiguous) subarray of nums, that has the same degree as nums degree: the maximum frequency of any one of its elements.
+     *
+     * @param nums input value
+     * @return result
+     */
     public static int findShortestSubArray(int[] nums) {
         Map<Integer, int[]> map = new HashMap<>();
         for (int i = 0; i < nums.length; i++) {
@@ -1088,10 +1338,13 @@ public class ArrayQuestion {
         return res;
     }
 
-    // 720: ["w". "wo", "wor", "worl", "world", "wort", "worth"] -> "world"
-
     /**
-     * sort
+     * LeetCode 720: : ["w". "wo", "wor", "worl", "world", "wort", "worth"] -> "world".
+     *
+     * sort.
+     *
+     * @param words input value
+     * @return result
      */
     public String longestWord(String[] words) {
         if (words == null || words.length == 0) return "";
@@ -1107,10 +1360,13 @@ public class ArrayQuestion {
         return res;
     }
 
-    // 724 Find Pivot Index
-
     /**
-     * find index where LHS sum == RHS sum
+     * LeetCode 724: find Pivot Index.
+     *
+     * find index where LHS sum == RHS sum.
+     *
+     * @param nums input value
+     * @return result
      */
     public int pivotIndex(int[] nums) {
         int sum = 0, half = 0;
@@ -1123,7 +1379,12 @@ public class ArrayQuestion {
         return -1;
     }
 
-    // 739
+    /**
+     * LeetCode 739: daily temperatures.
+     *
+     * @param temperatures input value
+     * @return result
+     */
     public int[] dailyTemperatures(int[] temperatures) {
         if (temperatures.length == 0) return new int[0];
         int[] res = new int[temperatures.length];
@@ -1138,7 +1399,12 @@ public class ArrayQuestion {
         return res;
     }
 
-    // 769. Max Chunks To Make Sorted I
+    /**
+     * LeetCode 769: max Chunks To Make Sorted I.
+     *
+     * @param arr input value
+     * @return result
+     */
     public int maxChunksToSorted(int[] arr) {
         int curLen = 0, res = 0;
         for (int i = 0; i < arr.length; i++) {
@@ -1148,7 +1414,12 @@ public class ArrayQuestion {
         return res;
     }
 
-    // 775. Global and Local Inversions
+    /**
+     * LeetCode 775: global and Local Inversions.
+     *
+     * @param A input value
+     * @return result
+     */
     public boolean isIdealPermutation(int[] A) {
         for (int i = 0; i < A.length; i++) {
             if (Math.abs(A[i] - i) > 1) return false;
@@ -1156,7 +1427,12 @@ public class ArrayQuestion {
         return true;
     }
 
-    // 905. Sort Array By Parity
+    /**
+     * LeetCode 905: sort Array By Parity.
+     *
+     * @param A input value
+     * @return result
+     */
     public int[] sortArrayByParity(int[] A) {
         for (int i = 0, j = 0; j < A.length; j++) {
             if (A[j] % 2 == 0) {
@@ -1168,12 +1444,18 @@ public class ArrayQuestion {
         return A;
     }
 
-    // 252 Meeting rooms: check if can attend all meetings
+    /** LeetCode 252: interval model for checking whether all meetings can be attended. */
     private class Interval {
         int start;
         int end;
     }
 
+    /**
+     * can attend meetings.
+     *
+     * @param intervals input value
+     * @return result
+     */
     public boolean canAttendMeetings(Interval[] intervals) {
         int len = intervals.length;
         if (len == 0) return true;
@@ -1191,6 +1473,12 @@ public class ArrayQuestion {
         return true;
     }
 
+    /**
+     * can attend meetings2.
+     *
+     * @param intervals input value
+     * @return result
+     */
     public boolean canAttendMeetings2(Interval[] intervals) {
         if (intervals == null) return false;
         /** Sort the intervals by start time */
@@ -1200,10 +1488,13 @@ public class ArrayQuestion {
         return true;
     }
 
-    // 463. Island Perimeter
-
     /**
-     * watch out how to count neighbours
+     * LeetCode 463: island Perimeter.
+     *
+     * watch out how to count neighbours.
+     *
+     * @param grid input value
+     * @return result
      */
     public int islandPerimeter(int[][] grid) {
         int numOfIslands = 0, neighbours = 0;
@@ -1223,7 +1514,7 @@ public class ArrayQuestion {
         return numOfIslands * 4 - neighbours * 2;
     }
 
-    // 308. Range Sum Query 2D - Mutable
+    /** LeetCode 308: mutable 2D range sum query structure. */
     class NumMatrix {
         private int[][] colSums;
         private int[][] matrix;

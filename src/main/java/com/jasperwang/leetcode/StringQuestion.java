@@ -15,10 +15,21 @@ import java.util.Stack;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/**
+ * String-focused LeetCode solutions and small text utilities.
+ *
+ * <p>The methods are grouped by problem domain rather than by difficulty. Most implementations are
+ * self-contained so they can be copied into individual LeetCode submissions.
+ */
 public class StringQuestion {
-    // 5 Longest Palindrome Substring
     private int lo, maxLen;
 
+    /**
+     * LeetCode 5: finds the longest palindromic substring by expanding around each possible center.
+     *
+     * @param s input string
+     * @return longest contiguous palindrome in {@code s}
+     */
     public String longestPalindrome(String s) {
         int len = s.length();
         if (len < 2) return s;
@@ -40,7 +51,13 @@ public class StringQuestion {
         }
     }
 
-    // Cipher
+    /**
+     * Encodes alphabetic characters with a Caesar shift while leaving non-letters unchanged.
+     *
+     * @param text source text
+     * @param shift number of positions to shift letters forward
+     * @return encoded text
+     */
     public static String cipherEncode(final String text, final int shift) {
         final StringBuilder sb = new StringBuilder();
         final char[] arr = text.toCharArray();
@@ -56,6 +73,13 @@ public class StringQuestion {
         return sb.toString();
     }
 
+    /**
+     * Decodes text encoded with the matching Caesar shift.
+     *
+     * @param text encoded text
+     * @param shift number of positions originally shifted forward
+     * @return decoded text
+     */
     public static String cipherDecode(final String text, final int shift) {
         final StringBuilder sb = new StringBuilder();
         final char[] arr = text.toCharArray();
@@ -71,7 +95,12 @@ public class StringQuestion {
         return sb.toString();
     }
 
-    // 14
+    /**
+     * LeetCode 14: returns the longest prefix shared by every string in the array.
+     *
+     * @param strs strings to compare
+     * @return common prefix, or an empty string when none exists
+     */
     public String longestCommonPrefix(String[] strs) {
         if (strs.length == 0) return "";
         String res = strs[0];
@@ -86,7 +115,12 @@ public class StringQuestion {
         return res;
     }
 
-    // 20 Valid Parenthesis
+    /**
+     * LeetCode 20: validates whether brackets are balanced and properly nested.
+     *
+     * @param s string containing bracket characters
+     * @return {@code true} when every opener is closed in stack order
+     */
     public boolean isValid(String s) {
         char[] arr = s.toCharArray();
         Stack<Character> stack = new Stack<Character>();
@@ -111,7 +145,13 @@ public class StringQuestion {
         return stack.isEmpty();
     }
 
-    // 28 IndexOf
+    /**
+     * LeetCode 28: finds the first occurrence of {@code needle} in {@code haystack}.
+     *
+     * @param haystack string to search within
+     * @param needle substring to find
+     * @return starting index of the first match, or {@code -1}
+     */
     public int strStr(String haystack, String needle) {
         for (int i = 0; ; i++) {
             for (int j = 0; ; j++) {
@@ -122,10 +162,16 @@ public class StringQuestion {
         }
     }
 
-    // 43
-
     /**
-     * 列竖式计算 ith digit * jth digit -> product lie on (i+j, j+i+1)
+     * LeetCode 43: multiplies two non-negative integer strings without converting them to numeric
+     * types.
+     *
+     * <p>Tip: use vertical multiplication. The product of the {@code i}th digit and {@code j}th
+     * digit contributes to positions {@code i + j} and {@code i + j + 1}.
+     *
+     * @param num1 first non-negative integer
+     * @param num2 second non-negative integer
+     * @return product as a decimal string
      */
     public String multiply(String num1, String num2) {
         int m = num1.length(), n = num2.length();
@@ -133,7 +179,7 @@ public class StringQuestion {
         for (int i = m - 1; i >= 0; i--) {
             for (int j = n - 1; j >= 0; j--) {
                 int partialProduct = (num1.charAt(i) - '0') * (num2.charAt(j) - '0');
-                /** need to use partialSum as partial result might be larger than 10 */
+                // Keep the partial sum because the intermediate value can be larger than 10.
                 int partialSum = partialProduct + product[i + j + 1];
                 product[i + j] += partialSum / 10;
                 product[i + j + 1] = partialSum % 10;
@@ -144,17 +190,28 @@ public class StringQuestion {
         return sb.length() == 0 ? "0" : sb.toString();
     }
 
-    // 49 Group anagrams: Given an array of strings, group anagrams together
-
     /**
-     * find a way to identify if anagram exists in the result (hint: sort)
+     * LeetCode 49: groups anagrams together.
+     *
+     * <p>Tip: sort each string to create a stable key for detecting existing anagram groups.
+     *
+     * <p>This method is currently a placeholder and returns an empty result.
+     *
+     * @param strs strings to group
+     * @return grouped anagrams
      */
     public List<List<String>> groupAnagrams(String[] strs) {
         List<List<String>> res = new ArrayList<>();
         return res;
     }
 
-    // 67
+    /**
+     * LeetCode 67: adds two binary strings.
+     *
+     * @param a first binary number
+     * @param b second binary number
+     * @return binary representation of the sum
+     */
     public String addBinary(String a, String b) {
         String res = "";
         int i = a.length() - 1, j = b.length() - 1, c = 0;
@@ -166,14 +223,26 @@ public class StringQuestion {
         return res;
     }
 
-    // 125
+    /**
+     * LeetCode 125: tests whether a string is a palindrome after removing non-alphanumeric characters and
+     * normalizing case.
+     *
+     * @param s input string
+     * @return {@code true} when the normalized string reads the same backward
+     */
     public static boolean isPalindrome(String s) {
         String temp = s.replaceAll("[^A-Za-z0-9]", "").toLowerCase();
         String reversed = new StringBuffer(temp).reverse().toString();
         return reversed.equals(temp);
     }
 
-    // 161
+    /**
+     * LeetCode 161: checks whether two strings are exactly one insert, delete, or replace apart.
+     *
+     * @param s first string
+     * @param t second string
+     * @return {@code true} if the edit distance is exactly one
+     */
     public boolean isOneEditDistance(String s, String t) {
         for (int i = 0; i < Math.min(s.length(), t.length()); i++) {
             if (s.charAt(i) != t.charAt(i)) {
@@ -185,13 +254,19 @@ public class StringQuestion {
         return Math.abs(s.length() - t.length()) == 1;
     }
 
-    // 205 Isomorphic Strings (Yext)
+    /**
+     * LeetCode 205: determines whether two strings have a one-to-one character pattern.
+     *
+     * @param s source pattern string
+     * @param t target pattern string
+     * @return {@code true} when matching positions preserve the same first-occurrence mapping
+     */
     public boolean isIsomorphic(String s, String t) {
         int sLen = s.length(), tLen = t.length();
         if (sLen != tLen) return false;
         int[] cs = new int[128], ct = new int[128];
         for (int i = 0; i < sLen; i++) {
-            /** check if the first index of corresponding char matches */
+            // Matching characters must share the same first-seen index.
             if (cs[s.charAt(i)] != ct[t.charAt(i)]) return false;
             if (cs[s.charAt(i)] == 0) {
                 cs[s.charAt(i)] = i + 1; // prevents 0
@@ -201,7 +276,13 @@ public class StringQuestion {
         return true;
     }
 
-    // 246 Same after rotatign 180 degrees
+    /**
+     * LeetCode 246: checks whether a number string remains valid and equal after a 180-degree
+     * rotation.
+     *
+     * @param num number string
+     * @return {@code true} for strobogrammatic strings
+     */
     public boolean isStrobogrammatic(String num) {
         HashMap<Character, Character> h = new HashMap<>();
         h.put('8', '8');
@@ -220,7 +301,12 @@ public class StringQuestion {
         return true;
     }
 
-    // 266 return true if permutation of string can be a palindrome
+    /**
+     * LeetCode 266: determines whether any permutation of the string can form a palindrome.
+     *
+     * @param s input string
+     * @return {@code true} when at most one character has an odd count
+     */
     public boolean canPermutePalindrome(String s) {
         HashSet<Character> h = new HashSet<Character>();
         char[] arr = s.toCharArray();
@@ -234,7 +320,13 @@ public class StringQuestion {
         return h.size() < 2;
     }
 
-    // 290 Word Pattern
+    /**
+     * LeetCode 290: validates whether words follow a character pattern with a one-to-one mapping.
+     *
+     * @param pattern pattern characters
+     * @param str space-separated words
+     * @return {@code true} when the pattern maps consistently to words
+     */
     public boolean wordPattern(String pattern, String str) {
         HashMap<Character, String> map = new HashMap<Character, String>();
         String[] splited = str.split(" ");
@@ -255,7 +347,15 @@ public class StringQuestion {
         return true;
     }
 
-    // 293 Flip game: replace two "++" with "--"
+    /**
+     * LeetCode 293: generates all possible next moves for Flip Game by replacing one {@code "++"} with {@code
+     * "--"}.
+     *
+     * <p>Example: one move replaces a single {@code "++"} run with {@code "--"}.
+     *
+     * @param s current game state
+     * @return possible states after one move
+     */
     public List<String> generatePossibleNextMoves(String s) {
         List<String> res = new LinkedList<>();
         for (int i = -1; (i = s.indexOf("++", i + 1)) >= 0; )
@@ -263,11 +363,15 @@ public class StringQuestion {
         return res;
     }
 
-    // 294 Flip Game II
-
     /**
-     * decides if the first player can guarantee a win Idea 1: recursion on sub-case Idea 2: Dynamic
-     * programming
+     * LeetCode 294: decides whether the first player can guarantee a Flip Game II win using
+     * recursion with memoization.
+     *
+     * <p>Tip: solve recursively on each opponent state, or use dynamic programming over repeated
+     * states.
+     *
+     * @param s current game state
+     * @return {@code true} when the first player can force a win
      */
     public boolean canWin(String s) {
         if (s == null || s.length() < 2) return false;
@@ -291,6 +395,12 @@ public class StringQuestion {
         return false;
     }
 
+    /**
+     * LeetCode 294 alternative: determines the Flip Game II result using Grundy numbers.
+     *
+     * @param s current game state
+     * @return {@code true} when the first player can force a win
+     */
     public boolean canWin2(String s) {
         s = s.replace('-', ' ');
         int G = 0;
@@ -309,8 +419,15 @@ public class StringQuestion {
         return G != 0;
     }
 
-    // 318. Given a string array words, find the maximum value of length(word[i]) * length(word[j])
-    // where the two words do not share common letters
+    /**
+     * LeetCode 318: finds the maximum product of lengths for two words that share no letters.
+     *
+     * <p>Computes the maximum value of {@code length(words[i]) * length(words[j])} where the two
+     * words do not share common letters.
+     *
+     * @param words candidate words
+     * @return maximum length product
+     */
     public static int maxProduct(String[] words) {
         if (words == null || words.length == 0) return 0;
         int len = words.length;
@@ -319,22 +436,25 @@ public class StringQuestion {
             String tmp = words[i];
             value[i] = 0;
             for (int j = 0; j < tmp.length(); j++)
-            /** put occurrence of each 26 char on 32 bit integer; bit set means occurred */
+                // Store each word as a bit mask of its letters.
                 value[i] |= 1 << (tmp.charAt(j) - 'a');
         }
         int maxProduct = 0;
         for (int i = 0; i < len; i++)
             for (int j = i + 1; j < len; j++)
-            /** if 2 strings are differnt, & == 0 */
+                // Two words have no shared letters when their masks do not overlap.
                 if ((value[i] & value[j]) == 0 && (words[i].length() * words[j].length() > maxProduct))
                     maxProduct = words[i].length() * words[j].length();
         return maxProduct;
     }
 
-    // 340. Get length of longest substring with at most K distinct characters
-
     /**
-     * sliding window
+     * LeetCode 340: gets the length of the longest substring with at most {@code k} distinct
+     * characters using a sliding window.
+     *
+     * @param s input string
+     * @param k maximum number of distinct characters allowed
+     * @return longest valid window length
      */
     public int lengthOfLongestSubstringKDistinct(String s, int k) {
         int res = 0, low = 0, numOfDistinctChars = 0;
@@ -342,10 +462,7 @@ public class StringQuestion {
         for (int high = 0; high < s.length(); high++) {
             if (arr[s.charAt(high)]++ == 0) numOfDistinctChars++;
             if (numOfDistinctChars > k) {
-                /**
-                 * while there is still this char in the window after removal, move on and remove the next
-                 * one until a distinct char is removed
-                 */
+                // Remove characters until one distinct character leaves the window.
                 while (--arr[s.charAt(low++)] > 0)
                     ;
                 numOfDistinctChars--;
@@ -355,13 +472,14 @@ public class StringQuestion {
         return res;
     }
 
-    // 345 Reverse Vowels
-
     /**
-     * two pointer
+     * LeetCode 394: decodes bracketed repeat expressions such as {@code "3[a2[c]]"}.
+     *
+     * <p>Example: {@code "3[a2[c]]"} decodes to {@code "accaccacc"}.
+     *
+     * @param s encoded expression
+     * @return decoded string
      */
-
-    // 394. Decode string: 3[a2[c]] -> accaccacc
     public String decodeString(String s) {
         Deque<Integer> intStack = new ArrayDeque<>();
         Deque<StringBuilder> strStack = new ArrayDeque<>();
@@ -389,7 +507,13 @@ public class StringQuestion {
         return cur.toString();
     }
 
-    // 415 Add two Strings
+    /**
+     * LeetCode 415: adds two non-negative integer strings.
+     *
+     * @param num1 first non-negative integer
+     * @param num2 second non-negative integer
+     * @return decimal sum as a string
+     */
     public String addStrings(String num1, String num2) {
         StringBuilder sb = new StringBuilder();
         for (int i = num1.length() - 1, j = num2.length() - 1, carry = 0;
@@ -403,16 +527,25 @@ public class StringQuestion {
         return sb.reverse().toString();
     }
 
-    // 434
-
     /**
-     * " a b c" split -> "" "a" "b" "c"
+     * LeetCode 434: counts the number of segments in a string after splitting on spaces.
+     *
+     * <p>Example: splitting {@code " a b c"} by spaces yields three non-empty segments.
+     *
+     * @param s input string
+     * @return number of whitespace-separated segments
      */
     public int countSegments(String s) {
         return ("x " + s).split(" +").length - 1;
     }
 
-    // 438
+    /**
+     * LeetCode 438: finds every start index where {@code p}'s anagram appears in {@code s}.
+     *
+     * @param s source string
+     * @param p pattern string
+     * @return start indices of anagram windows
+     */
     public List<Integer> findAnagrams(String s, String p) {
         List<Integer> list = new ArrayList<>();
         if (s == null || s.length() == 0 || p == null || p.length() == 0) return list;
@@ -441,12 +574,14 @@ public class StringQuestion {
         return list;
     }
 
-    // 439. Given a string representing arbitrarily nested ternary expressions, calculate the result
-    // of the expression
-    // e.g. "T?2:3" -> 2
-
     /**
-     * Evaluate from right to left (hint: stack)
+     * LeetCode 439: evaluates an arbitrarily nested ternary expression from right to left.
+     *
+     * <p>Tip: scan from right to left with a stack. Example: {@code "T?2:3"} evaluates to {@code
+     * "2"}.
+     *
+     * @param expression ternary expression
+     * @return evaluated expression result
      */
     public static String parseTernary(String expression) {
         if (expression == null || expression.length() == 0) return "";
@@ -471,7 +606,12 @@ public class StringQuestion {
         return String.valueOf(stack.peek());
     }
 
-    // 459 Repeated Substring pattern
+    /**
+     * LeetCode 459: checks whether a string is composed of repeated copies of a smaller substring.
+     *
+     * @param s input string
+     * @return {@code true} when a repeating substring pattern exists
+     */
     public boolean repeatedSubstringPattern(String s) {
         final int length = s.length();
         for (int i = length / 2; i >= 1; i--) {
@@ -492,9 +632,14 @@ public class StringQuestion {
         return false;
     }
 
-    // 647 Palindrome substring: return # of palindromes in string
     int count = 0;
 
+    /**
+     * LeetCode 647: counts palindromic substrings by expanding around each center.
+     *
+     * @param s input string
+     * @return number of palindromic substrings
+     */
     public int countSubstrings(String s) {
         if (s == null || s.length() == 0) return 0;
         for (int i = 0; i < s.length(); i++) { // i is the mid point
@@ -512,7 +657,13 @@ public class StringQuestion {
         }
     }
 
-    // 680 Palindrome 2: can have one character difference
+    /**
+     * LeetCode 680: checks whether a string can become a palindrome after deleting at most one
+     * character.
+     *
+     * @param s input string
+     * @return {@code true} when the string is already valid or can be fixed with one deletion
+     */
     public boolean validPalindrome(String s) {
         int i = -1, j = s.length();
         while (++i < --j) {
@@ -529,9 +680,14 @@ public class StringQuestion {
         return true;
     }
 
-    // 681. Next Closest Time
-    // Given a time "HH:MM", form the next closest time by re-using the current digits. No limit on
-    // number of times a digit is re-used
+    /**
+     * LeetCode 681: finds the next closest time that can be formed by reusing the original digits.
+     *
+     * <p>Digits from the original {@code HH:mm} input may be reused any number of times.
+     *
+     * @param time time in {@code HH:mm} format
+     * @return next valid time, wrapping past midnight if needed
+     */
     public String nextClosestTime(String time) {
         int[] arr =
                 new int[]{
@@ -551,9 +707,15 @@ public class StringQuestion {
         }
     }
 
-    // 681. Next Closest Time variation
-    // Given a time "HH:MM", form the next closest time by re-using the current digits. each digit can
-    // be used once
+    /**
+     * LeetCode 681 variation: finds the next closest time using each original digit at most as often
+     * as it appears.
+     *
+     * <p>Unlike the standard problem, each original digit can only be used once per generated time.
+     *
+     * @param S time in {@code HH:mm} format
+     * @return next valid time, wrapping past midnight if needed
+     */
     public String nextClosestTimeII(String S) {
         int minute = Integer.parseInt(S.substring(3, 5)), hour = Integer.parseInt(S.substring(0, 2));
         int[] arr = new int[]{hour / 10, hour % 10, minute / 10, minute % 10};
@@ -584,9 +746,15 @@ public class StringQuestion {
         }
     }
 
-    // 696: Give a string s, count the number of non-empty (contiguous) substrings that have the
-    // same number of 0's and 1's, and all the 0's and all the 1's in these substrings are grouped
-    // consecutively.
+    /**
+     * LeetCode 696: counts binary substrings with equal grouped runs of zeroes and ones.
+     *
+     * <p>Valid substrings must have the same number of zeroes and ones, with all zeroes grouped
+     * together and all ones grouped together.
+     *
+     * @param s binary string
+     * @return number of valid grouped binary substrings
+     */
     public int countBinarySubstrings(String s) {
         char[] arr = s.toCharArray();
         int res = 0, prev = 0, curr = 1;
@@ -602,7 +770,12 @@ public class StringQuestion {
         return res;
     }
 
-    // 767. Reorganize string
+    /**
+     * LeetCode 767: reorganizes characters so no adjacent characters are equal.
+     *
+     * @param S input string
+     * @return reorganized string, or an empty string when impossible
+     */
     public String reorganizeString(String S) {
         // Create map of each char to its count
         Map<Character, Integer> map = new HashMap<>();
@@ -639,7 +812,13 @@ public class StringQuestion {
         return sb.toString();
     }
 
-    // 771
+    /**
+     * LeetCode 771: counts how many stones are jewels.
+     *
+     * @param J characters representing jewel types
+     * @param S characters representing stones
+     * @return number of stones that are jewels
+     */
     public int numJewelsInStones(String J, String S) {
         List<Character> chars = J.chars().mapToObj(e -> (char) e).collect(Collectors.toList());
         HashSet<Character> jewels = new HashSet<Character>(chars);
@@ -649,7 +828,12 @@ public class StringQuestion {
         return res;
     }
 
-    // 422 Valid Word Square: verify that the transpose of matrix is the same as matrix
+    /**
+     * LeetCode 422: validates whether the word list reads the same horizontally and vertically.
+     *
+     * @param words candidate word square rows
+     * @return {@code true} when each row/column character matches
+     */
     public boolean validWordSquare(List<String> words) {
         for (int i = 0, size = words.size(); i < size; i++) {
             String temp = words.get(i);
@@ -661,7 +845,15 @@ public class StringQuestion {
         return true;
     }
 
-    // 443 String Compression: ["a","a","b","b","c","c","c"] -> ["a","2","b","2","c","3"]
+    /**
+     * LeetCode 443: compresses consecutive character groups in-place.
+     *
+     * <p>Example: {@code ["a","a","b","b","c","c","c"]} compresses to the prefix {@code
+     * ["a","2","b","2","c","3"]}.
+     *
+     * @param chars mutable character array
+     * @return length of the compressed prefix
+     */
     public int compress(char[] chars) {
         int indexAns = 0, index = 0;
         while (index < chars.length) {
@@ -677,7 +869,12 @@ public class StringQuestion {
         return indexAns;
     }
 
-    // 592
+    /**
+     * LeetCode 592: adds and subtracts fractions represented in a single expression.
+     *
+     * @param expression expression such as {@code "-1/2+1/2+1/3"}
+     * @return reduced fraction in {@code numerator/denominator} form
+     */
     public String fractionAddition(String expression) {
         Scanner sc = new Scanner(expression).useDelimiter("/|(?=[-+])");
         int A = 0, B = 1;

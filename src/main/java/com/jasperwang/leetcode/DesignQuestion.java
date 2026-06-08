@@ -9,8 +9,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
+/**
+ * Design-focused LeetCode solutions and related utilities.
+ *
+ * <p>The methods are grouped by problem domain rather than by difficulty. Most implementations are
+ * self-contained so they can be copied into individual LeetCode submissions.
+ */
 public class DesignQuestion {
-    // 146
+    /** LeetCode 146: least recently used cache backed by an access-ordered map. */
     public class LRUCache {
         private final int capacity;
         private LinkedHashMap<Integer, Integer> map;
@@ -34,11 +40,11 @@ public class DesignQuestion {
         }
     }
 
-    // 155 Design a stack that supports push, pop, top, and retrieving the minimum element in constant
-    // time.
-
     /**
-     * push the difference between min & the # to be pushed
+     * LeetCode 155: stack that supports push, pop, top, and retrieving the minimum in constant
+     * time.
+     *
+     * <p>Tip: push the difference between the current minimum and the value being pushed.
      */
     class MinStack {
         long min;
@@ -106,7 +112,7 @@ public class DesignQuestion {
         }
     }
 
-    // 170
+    /** LeetCode 170: Two Sum data structure. */
     public class TwoSum {
         Set<Integer> num;
         Set<Integer> sum;
@@ -133,7 +139,7 @@ public class DesignQuestion {
         }
     }
 
-    // 362
+    /** LeetCode 362: hit counter over a rolling five-minute window. */
     public class HitCounter {
         private int[] times;
         private int[] hits;
@@ -177,7 +183,7 @@ public class DesignQuestion {
         }
     }
 
-    // 731
+    /** LeetCode 731: calendar that allows double bookings but rejects triple bookings. */
     class MyCalendarTwo {
         private List<int[]> books = new ArrayList<>();
 
