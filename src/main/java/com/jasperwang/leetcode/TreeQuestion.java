@@ -1,6 +1,15 @@
 package com.jasperwang.leetcode;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Stack;
 
 /**
  * Tree-focused LeetCode solutions and related utilities.
@@ -9,7 +18,9 @@ import java.util.*;
  * self-contained so they can be copied into individual LeetCode submissions.
  */
 public class TreeQuestion {
+
     public static class TreeNode {
+
         public int val;
         public TreeNode left;
         public TreeNode right;
@@ -33,8 +44,12 @@ public class TreeQuestion {
             System.out.print(root.val);
             if (!visited.contains(root.val)) {
                 visited.add(root.val);
-                if (root.left != null) q.add(root.left);
-                if (root.right != null) q.add(root.right);
+                if (root.left != null) {
+                    q.add(root.left);
+                }
+                if (root.right != null) {
+                    q.add(root.right);
+                }
             }
         }
     }
@@ -105,7 +120,7 @@ public class TreeQuestion {
 
     /**
      * LeetCode 145: postorder Traversal.
-     *
+     * <p>
      * push right & set right to null, push left & set left to null.
      *
      * @param root input value
@@ -142,7 +157,9 @@ public class TreeQuestion {
      */
     public List<Integer> postorderTraversal2(TreeNode root) {
         LinkedList<Integer> res = new LinkedList<>();
-        if (root == null) return res;
+        if (root == null) {
+            return res;
+        }
         ArrayDeque<TreeNode> stack = new ArrayDeque<>();
         while (root != null || !stack.isEmpty()) {
             if (root != null) {
@@ -209,22 +226,30 @@ public class TreeQuestion {
      * @return result
      */
     public int minPathSum(TreeNode root) {
-        if (root == null) return 0;
-        if (root.left == null) return minPathSum(root.right) + root.val;
-        if (root.right == null) return minPathSum(root.left) + root.val;
+        if (root == null) {
+            return 0;
+        }
+        if (root.left == null) {
+            return minPathSum(root.right) + root.val;
+        }
+        if (root.right == null) {
+            return minPathSum(root.left) + root.val;
+        }
         return Math.min(minPathSum(root.left), minPathSum(root.right)) + root.val;
     }
 
     /**
      * LeetCode 98: is BST.
-     *
+     * <p>
      * in order and then compare prev and curr.
      *
      * @param root input value
      * @return result
      */
     public boolean isValidBST(TreeNode root) {
-        if (root == null) return true;
+        if (root == null) {
+            return true;
+        }
         Stack<TreeNode> stack = new Stack<>();
         TreeNode pre = null;
         while (root != null || !stack.isEmpty()) {
@@ -233,7 +258,9 @@ public class TreeQuestion {
                 root = root.left;
             } else {
                 root = stack.pop();
-                if (pre != null && root.val <= pre.val) return false;
+                if (pre != null && root.val <= pre.val) {
+                    return false;
+                }
                 pre = root;
                 root = root.right;
             }
@@ -249,7 +276,9 @@ public class TreeQuestion {
      * @return result
      */
     public boolean isSameTree(TreeNode p, TreeNode q) {
-        if (p == null || q == null) return p == q;
+        if (p == null || q == null) {
+            return p == q;
+        }
         return p.val == q.val && isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
     }
 
@@ -265,14 +294,18 @@ public class TreeQuestion {
 
     private boolean isSymmetricHelper(TreeNode left, TreeNode right) {
         /** note the reduction of null cases */
-        if (left == null || right == null) return left == right;
-        if (left.val != right.val) return false;
+        if (left == null || right == null) {
+            return left == right;
+        }
+        if (left.val != right.val) {
+            return false;
+        }
         return isSymmetricHelper(left.left, right.right) && isSymmetricHelper(right.left, left.right);
     }
 
     /**
      * LeetCode 103: binary Tree Zigzag Level Order Traversal.
-     *
+     * <p>
      * bfs and add data with different orders by using a flag.
      *
      * @param root input value
@@ -281,7 +314,9 @@ public class TreeQuestion {
     public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
         List<List<Integer>> res = new LinkedList<List<Integer>>();
         LinkedList<TreeNode> q = new LinkedList<TreeNode>();
-        if (root == null) return res;
+        if (root == null) {
+            return res;
+        }
         q.add(root);
         boolean flag = true;
         while (!q.isEmpty()) {
@@ -294,8 +329,12 @@ public class TreeQuestion {
                 } else {
                     temp.add(0, root.val);
                 }
-                if (root.left != null) q.offer(root.left);
-                if (root.right != null) q.offer(root.right);
+                if (root.left != null) {
+                    q.offer(root.left);
+                }
+                if (root.right != null) {
+                    q.offer(root.right);
+                }
             }
             flag = !flag;
             res.add(new LinkedList<>(temp));
@@ -320,7 +359,7 @@ public class TreeQuestion {
      * LeetCode 105: constructs a binary tree from preorder and inorder traversals.
      *
      * @param preorder input value
-     * @param inorder input value
+     * @param inorder  input value
      * @return result
      */
     public TreeNode buildTreeFromInorderAndPreorder(int[] preorder, int[] inorder) {
@@ -329,8 +368,10 @@ public class TreeQuestion {
     }
 
     private TreeNode buildTreeFromInorderAndPreorderHelper(
-            int[] preorder, int[] inorder, TreeNode start) {
-        if (pPreorder >= preorder.length) return null;
+        int[] preorder, int[] inorder, TreeNode start) {
+        if (pPreorder >= preorder.length) {
+            return null;
+        }
         // root node
         final TreeNode root = new TreeNode(preorder[pPreorder++]);
         // left
@@ -347,16 +388,16 @@ public class TreeQuestion {
 
     /**
      * LeetCode 106: construct Binary Tree from Inorder and Postorder Traversal.
-     *
-     * Idea: take the last element in postorder array as the root, find the position of the root in
-     * the inorder array; then locate the range for left sub-tree and right sub-tree and do recursion.
+     * <p>
+     * Idea: take the last element in postorder array as the root, find the position of the root in the inorder array;
+     * then locate the range for left sub-tree and right sub-tree and do recursion.
      */
     private int pPostorder; // index of postorder array
 
     /**
      * build tree.
      *
-     * @param inorder input value
+     * @param inorder   input value
      * @param postorder input value
      * @return result
      */
@@ -367,7 +408,9 @@ public class TreeQuestion {
     }
 
     private TreeNode buildTree(int[] inorder, int[] postorder, TreeNode end) {
-        if (pPostorder < 0) return null;
+        if (pPostorder < 0) {
+            return null;
+        }
         // create root node
         final TreeNode root = new TreeNode(postorder[pPostorder--]);
 
@@ -397,7 +440,9 @@ public class TreeQuestion {
     }
 
     private void levelOrderBottomHelper(List<List<Integer>> res, int level, TreeNode root) {
-        if (root == null) return;
+        if (root == null) {
+            return;
+        }
         if (res.size() <= level) {
             res.add(0, new LinkedList<>());
         }
@@ -414,7 +459,9 @@ public class TreeQuestion {
      */
     public List<List<Integer>> levelOrderBottom2(TreeNode root) {
         LinkedList<List<Integer>> res = new LinkedList<>();
-        if (root == null) return res;
+        if (root == null) {
+            return res;
+        }
         LinkedList<TreeNode> q = new LinkedList<>();
         q.add(root);
         while (!q.isEmpty()) {
@@ -423,8 +470,12 @@ public class TreeQuestion {
             for (int i = 0; i < size; i++) {
                 root = q.pop();
                 temp.add(root.val);
-                if (root.left != null) q.offer(root.left);
-                if (root.right != null) q.offer(root.right);
+                if (root.left != null) {
+                    q.offer(root.left);
+                }
+                if (root.right != null) {
+                    q.offer(root.right);
+                }
             }
             res.addFirst(new LinkedList<>(temp));
         }
@@ -438,7 +489,9 @@ public class TreeQuestion {
      * @return result
      */
     public TreeNode sortedArrayToBST(int[] num) {
-        if (num.length == 0) return null;
+        if (num.length == 0) {
+            return null;
+        }
         return sortedArrayToBSTHelper(num, 0, num.length - 1);
     }
 
@@ -458,7 +511,7 @@ public class TreeQuestion {
 
     /**
      * LeetCode 110.
-     *
+     * <p>
      * watch out the reduction of recursion here.
      *
      * @param root input value
@@ -469,33 +522,47 @@ public class TreeQuestion {
     }
 
     private int isBalancedHelper(TreeNode root) {
-        if (root == null) return 0;
+        if (root == null) {
+            return 0;
+        }
         int left = isBalancedHelper(root.left);
-        if (left == -1) return -1;
+        if (left == -1) {
+            return -1;
+        }
         int right = isBalancedHelper(root.right);
-        if (right == -1) return -1;
-        if (Math.abs(left - right) > 1) return -1;
+        if (right == -1) {
+            return -1;
+        }
+        if (Math.abs(left - right) > 1) {
+            return -1;
+        }
         return 1 + Math.max(left, right);
     }
 
     /**
      * LeetCode 111.
-     *
+     * <p>
      * pay attention to the case where either left or right is null.
      *
      * @param root input value
      * @return result
      */
     public int minDepth(TreeNode root) {
-        if (root == null) return 0;
-        if (root.left == null) return minDepth(root.right) + 1;
-        if (root.right == null) return minDepth(root.left) + 1;
+        if (root == null) {
+            return 0;
+        }
+        if (root.left == null) {
+            return minDepth(root.right) + 1;
+        }
+        if (root.right == null) {
+            return minDepth(root.left) + 1;
+        }
         return Math.min(minDepth(root.left), minDepth(root.right)) + 1;
     }
 
     /**
      * LeetCode 114: flatten a binary tree in pre-order in place (arrange all nodes to the right of previous one).
-     *
+     * <p>
      * post order traversal: build the tree from bottom up (last element to root).
      *
      * @param root input value
@@ -505,7 +572,9 @@ public class TreeQuestion {
     }
 
     private TreeNode flattenHelper(TreeNode root, TreeNode pre) {
-        if (root == null) return pre;
+        if (root == null) {
+            return pre;
+        }
         pre = flattenHelper(root.right, pre);
         pre = flattenHelper(root.left, pre);
         root.right = pre;
@@ -520,7 +589,9 @@ public class TreeQuestion {
      * @return result
      */
     public TreeNode upsideDownBinaryTree(TreeNode root) {
-        if (root == null || root.left == null) return root;
+        if (root == null || root.left == null) {
+            return root;
+        }
         TreeNode newRoot = upsideDownBinaryTree(root.left);
         root.left.left = root.right;
         root.left.right = root;
@@ -555,14 +626,16 @@ public class TreeQuestion {
 
     /**
      * LeetCode 226: invert BST.
-     *
+     * <p>
      * note the use of temp TreeNode to hold the original right.
      *
      * @param root input value
      * @return result
      */
     public TreeNode invertTree(TreeNode root) {
-        if (root == null) return null;
+        if (root == null) {
+            return null;
+        }
         TreeNode tempRight = root.right;
         root.right = invertTree(root.left);
         root.left = invertTree(tempRight);
@@ -576,7 +649,9 @@ public class TreeQuestion {
      * @return result
      */
     public TreeNode invertTree2(TreeNode root) {
-        if (root == null) return null;
+        if (root == null) {
+            return null;
+        }
         final Deque<TreeNode> stack = new LinkedList<>();
         stack.push(root);
         while (!stack.isEmpty()) {
@@ -584,25 +659,31 @@ public class TreeQuestion {
             final TreeNode left = node.left;
             node.left = node.right;
             node.right = left;
-            if (node.left != null) stack.push(node.left);
-            if (node.right != null) stack.push(node.right);
+            if (node.left != null) {
+                stack.push(node.left);
+            }
+            if (node.right != null) {
+                stack.push(node.right);
+            }
         }
         return root;
     }
 
     /**
      * LeetCode 235: lowest Common Ancestor.
-     *
-     * just walk down from the whole tree's root as long as both p and q are in the same subtree (meaning their values are both smaller or both larger than root's).
+     * <p>
+     * just walk down from the whole tree's root as long as both p and q are in the same subtree (meaning their values
+     * are both smaller or both larger than root's).
      *
      * @param root input value
-     * @param p input value
-     * @param q input value
+     * @param p    input value
+     * @param q    input value
      * @return result
      */
     public TreeNode lowestCommonAncestorForBST(TreeNode root, TreeNode p, TreeNode q) {
-        while ((root.val - p.val) * (root.val - q.val) > 0)
+        while ((root.val - p.val) * (root.val - q.val) > 0) {
             root = p.val < root.val ? root.left : root.right;
+        }
         return root;
     }
 
@@ -610,12 +691,14 @@ public class TreeQuestion {
      * LeetCode 236: lowest Common Ancestor in a binary tree.
      *
      * @param root input value
-     * @param p input value
-     * @param q input value
+     * @param p    input value
+     * @param q    input value
      * @return result
      */
     public TreeNode lowestCommonAncestorForBinaryTree(TreeNode root, TreeNode p, TreeNode q) {
-        if (root == null || root == p || root == q) return root;
+        if (root == null || root == p || root == q) {
+            return root;
+        }
         final TreeNode left = lowestCommonAncestorForBinaryTree(root.left, p, q);
         final TreeNode right = lowestCommonAncestorForBinaryTree(root.right, p, q);
         return left == null ? right : right == null ? left : root;
@@ -630,16 +713,22 @@ public class TreeQuestion {
      * @return result
      */
     public int countUnivalSubtrees(TreeNode root) {
-        if (root == null) return 0;
+        if (root == null) {
+            return 0;
+        }
         countUnivalSubtreesHelper(root, root.val);
         return res;
     }
 
     private boolean countUnivalSubtreesHelper(TreeNode root, int val) {
-        if (root == null) return true;
+        if (root == null) {
+            return true;
+        }
         // use | here for explicit comparison
         if (!countUnivalSubtreesHelper(root.left, root.val)
-                | !countUnivalSubtreesHelper(root.right, root.val)) return false;
+            | !countUnivalSubtreesHelper(root.right, root.val)) {
+            return false;
+        }
         res++;
         return root.val == val;
     }
@@ -657,22 +746,30 @@ public class TreeQuestion {
     }
 
     private void binaryTreePathsHelper(TreeNode root, String curString, List<String> res) {
-        if (root.left == null && root.right == null) res.add(curString + root.val);
-        if (root.left != null) binaryTreePathsHelper(root.left, curString + root.val + "->", res);
-        if (root.right != null) binaryTreePathsHelper(root.right, curString + root.val + "->", res);
+        if (root.left == null && root.right == null) {
+            res.add(curString + root.val);
+        }
+        if (root.left != null) {
+            binaryTreePathsHelper(root.left, curString + root.val + "->", res);
+        }
+        if (root.right != null) {
+            binaryTreePathsHelper(root.right, curString + root.val + "->", res);
+        }
     }
 
     /**
      * LeetCode 270: closest Binary Search Tree Value.
      *
-     * @param root input value
+     * @param root   input value
      * @param target input value
      * @return result
      */
     public int closestValue(TreeNode root, double target) {
         int a = root.val;
         TreeNode child = (a < target) ? root.right : root.left;
-        if (child == null) return a;
+        if (child == null) {
+            return a;
+        }
         int b = closestValue(child, target);
         return Math.abs(a - target) < Math.abs(b - target) ? a : b;
     }
@@ -686,21 +783,28 @@ public class TreeQuestion {
      * @return result
      */
     public static int longestConsecutive(TreeNode root) {
-        if (root == null) return 0;
+        if (root == null) {
+            return 0;
+        }
         longestConsecutiveHelper(root, 0, root.val);
         return max;
     }
 
     private static void longestConsecutiveHelper(TreeNode root, int cur, int target) {
-        if (root == null) return;
+        if (root == null) {
+            return;
+        }
         cur = (root.val == target) ? cur + 1 : 1;
         max = Math.max(cur, max);
         longestConsecutiveHelper(root.left, cur, root.val + 1);
         longestConsecutiveHelper(root.right, cur, root.val + 1);
     }
 
-    /** LeetCode 366: groups leaves by removal round. */
+    /**
+     * LeetCode 366: groups leaves by removal round.
+     */
     public class findLeavesSolution {
+
         final List<List<Integer>> res = new ArrayList<>();
 
         public List<List<Integer>> findLeaves(TreeNode root) {
@@ -709,7 +813,9 @@ public class TreeQuestion {
         }
 
         private int findLeavesHelper(TreeNode root) {
-            if (root == null) return -1;
+            if (root == null) {
+                return -1;
+            }
             final int level = 1 + Math.max(findLeavesHelper(root.left), findLeavesHelper(root.right));
             if (res.size() <= level) {
                 res.add(new ArrayList<>());
@@ -726,7 +832,9 @@ public class TreeQuestion {
      * @return result
      */
     public int sumOfLeftLeaves(TreeNode root) {
-        if (root == null) return 0;
+        if (root == null) {
+            return 0;
+        }
         int ans = 0;
         Stack<TreeNode> stack = new Stack<>();
         stack.push(root);
@@ -734,11 +842,16 @@ public class TreeQuestion {
         while (!stack.empty()) {
             TreeNode node = stack.pop();
             if (node.left != null) {
-                if (node.left.left == null && node.left.right == null) ans += node.left.val;
-                else stack.push(node.left);
+                if (node.left.left == null && node.left.right == null) {
+                    ans += node.left.val;
+                } else {
+                    stack.push(node.left);
+                }
             }
             if (node.right != null) {
-                if (node.right.left != null || node.right.right != null) stack.push(node.right);
+                if (node.right.left != null || node.right.right != null) {
+                    stack.push(node.right);
+                }
             }
         }
         return ans;
@@ -751,7 +864,7 @@ public class TreeQuestion {
      * sums from the current sum.
      *
      * @param root input value
-     * @param sum input value
+     * @param sum  input value
      * @return result
      */
     public int pathSum(TreeNode root, int sum) {
@@ -761,18 +874,20 @@ public class TreeQuestion {
     }
 
     private int pathSumHelper(
-            TreeNode root, int currSum, int target, HashMap<Integer, Integer> preSum) {
-        if (root == null) return 0;
+        TreeNode root, int currSum, int target, HashMap<Integer, Integer> preSum) {
+        if (root == null) {
+            return 0;
+        }
         currSum += root.val;
         int res =
-                preSum.getOrDefault(
-                        currSum - target,
-                        0); // find if the difference between currSum & one of presum is target
+            preSum.getOrDefault(
+                currSum - target,
+                0); // find if the difference between currSum & one of presum is target
         preSum.put(currSum, preSum.getOrDefault(currSum, 0) + 1);
 
         res +=
-                pathSumHelper(root.left, currSum, target, preSum)
-                        + pathSumHelper(root.right, currSum, target, preSum);
+            pathSumHelper(root.left, currSum, target, preSum)
+                + pathSumHelper(root.right, currSum, target, preSum);
         preSum.put(currSum, preSum.get(currSum) - 1);
         return res;
     }
@@ -781,19 +896,23 @@ public class TreeQuestion {
      * recursion.
      *
      * @param root input value
-     * @param sum input value
+     * @param sum  input value
      * @return result
      */
     public int pathSum2(TreeNode root, int sum) {
-        if (root == null) return 0;
+        if (root == null) {
+            return 0;
+        }
         return pathSumFrom(root, sum) + pathSum2(root.left, sum) + pathSum2(root.right, sum);
     }
 
     private int pathSumFrom(TreeNode node, int sum) {
-        if (node == null) return 0;
+        if (node == null) {
+            return 0;
+        }
         return (node.val == sum ? 1 : 0)
-                + pathSumFrom(node.left, sum - node.val)
-                + pathSumFrom(node.right, sum - node.val);
+            + pathSumFrom(node.left, sum - node.val)
+            + pathSumFrom(node.right, sum - node.val);
     }
 
     private Integer prevVal = null;
@@ -807,18 +926,25 @@ public class TreeQuestion {
      * @return result
      */
     public int[] findMode(TreeNode root) {
-        if (root == null) return new int[0];
+        if (root == null) {
+            return new int[0];
+        }
         List<Integer> list = new ArrayList<>();
         traverse(root, list);
         return list.stream().mapToInt(i -> i).toArray();
     }
 
     private void traverse(TreeNode root, List<Integer> list) {
-        if (root == null) return;
+        if (root == null) {
+            return;
+        }
         traverse(root.left, list);
         if (prevVal != null) {
-            if (root.val == prevVal) count++;
-            else count = 1;
+            if (root.val == prevVal) {
+                count++;
+            } else {
+                count = 1;
+            }
         }
         if (count > modeCount) {
             modeCount = count;
@@ -833,7 +959,7 @@ public class TreeQuestion {
 
     /**
      * LeetCode 513: find Bottom Left Tree Value.
-     *
+     * <p>
      * note the order of left & right.
      *
      * @param root input value
@@ -844,8 +970,12 @@ public class TreeQuestion {
         queue.add(root);
         while (!queue.isEmpty()) {
             root = queue.poll();
-            if (root.right != null) queue.add(root.right);
-            if (root.left != null) queue.add(root.left);
+            if (root.right != null) {
+                queue.add(root.right);
+            }
+            if (root.left != null) {
+                queue.add(root.left);
+            }
         }
         return root.val;
     }
@@ -858,8 +988,12 @@ public class TreeQuestion {
      * @return result
      */
     public TreeNode mergeTrees(TreeNode t1, TreeNode t2) {
-        if (t1 == null) return t2;
-        if (t2 == null) return t1;
+        if (t1 == null) {
+            return t2;
+        }
+        if (t2 == null) {
+            return t1;
+        }
         TreeNode res = new TreeNode(t1.val + t2.val);
         res.left = mergeTrees(t1.left, t2.left);
         res.right = mergeTrees(t1.right, t2.right);
@@ -882,8 +1016,12 @@ public class TreeQuestion {
             for (int i = 0; i < n; i++) {
                 TreeNode cur = q.poll();
                 sum += cur.val;
-                if (cur.left != null) q.offer(cur.left);
-                if (cur.right != null) q.offer(cur.right);
+                if (cur.left != null) {
+                    q.offer(cur.left);
+                }
+                if (cur.right != null) {
+                    q.offer(cur.right);
+                }
             }
             res.add(sum / n);
         }
@@ -892,11 +1030,11 @@ public class TreeQuestion {
 
     /**
      * LeetCode 653: two Sum IV - Input is a BST.
-     *
+     * <p>
      * method 1 For each node, we check if k - node.val exists in this BST.
      *
      * @param root input value
-     * @param k input value
+     * @param k    input value
      * @return result
      */
     public boolean findTarget(TreeNode root, int k) {
@@ -904,22 +1042,26 @@ public class TreeQuestion {
     }
 
     private boolean dfs(TreeNode root, TreeNode cur, int k) {
-        if (cur == null) return false;
+        if (cur == null) {
+            return false;
+        }
         return search(root, cur, k - cur.val) || dfs(root, cur.left, k) || dfs(root, cur.right, k);
     }
 
     private boolean search(TreeNode root, TreeNode cur, int value) {
-        if (root == null) return false;
+        if (root == null) {
+            return false;
+        }
         return (root.val == value) && (root != cur)
-                || (root.val < value) && search(root.right, cur, value)
-                || (root.val > value) && search(root.left, cur, value);
+            || (root.val < value) && search(root.right, cur, value)
+            || (root.val > value) && search(root.left, cur, value);
     }
 
     /**
      * method 2 Use hashtable to store the values.
      *
      * @param root input value
-     * @param k input value
+     * @param k    input value
      * @return result
      */
     public boolean findTarget2(TreeNode root, int k) {
@@ -928,8 +1070,12 @@ public class TreeQuestion {
     }
 
     private boolean dfs(TreeNode root, HashSet<Integer> set, int k) {
-        if (root == null) return false;
-        if (set.contains(k - root.val)) return true;
+        if (root == null) {
+            return false;
+        }
+        if (set.contains(k - root.val)) {
+            return true;
+        }
         set.add(root.val);
         return dfs(root.left, set, k) || dfs(root.right, set, k);
     }
@@ -941,13 +1087,19 @@ public class TreeQuestion {
      * @return result
      */
     public int findSecondMinimumValue(TreeNode root) {
-        if (root == null || root.left == null) return -1;
+        if (root == null || root.left == null) {
+            return -1;
+        }
         final int left =
-                (root.left.val == root.val) ? findSecondMinimumValue(root.left) : root.left.val;
+            (root.left.val == root.val) ? findSecondMinimumValue(root.left) : root.left.val;
         final int right =
-                (root.right.val == root.val) ? findSecondMinimumValue(root.right) : root.right.val;
-        if (left == -1) return right;
-        if (right == -1) return left;
+            (root.right.val == root.val) ? findSecondMinimumValue(root.right) : root.right.val;
+        if (left == -1) {
+            return right;
+        }
+        if (right == -1) {
+            return left;
+        }
         return Math.min(left, right);
     }
 
@@ -958,13 +1110,17 @@ public class TreeQuestion {
      * @return result
      */
     public int longestUnivaluePath(TreeNode root) {
-        if (root == null) return 0;
+        if (root == null) {
+            return 0;
+        }
         longestUnivaluePathHelper(root, root.val);
         return max;
     }
 
     private int longestUnivaluePathHelper(TreeNode root, int parentVal) {
-        if (root == null) return 0;
+        if (root == null) {
+            return 0;
+        }
         /** left, right: max path length in which all nodes' val == parentVal */
         int left = longestUnivaluePathHelper(root.left, root.val);
         int right = longestUnivaluePathHelper(root.right, root.val);
@@ -982,16 +1138,21 @@ public class TreeQuestion {
      * @return result
      */
     public TreeNode binaryTreeToDoubleLinkedList(TreeNode root) {
-        if (root == null) return null;
+        if (root == null) {
+            return null;
+        }
         helper(root);
         return head;
     }
 
     private void helper(TreeNode root) {
-        if (root == null) return;
+        if (root == null) {
+            return;
+        }
         helper(root.left);
-        if (prev == null) head = root;
-        else {
+        if (prev == null) {
+            head = root;
+        } else {
             root.left = prev;
             prev.right = root;
         }
@@ -1003,7 +1164,7 @@ public class TreeQuestion {
      * LeetCode 776: split bst.
      *
      * @param root input value
-     * @param V input value
+     * @param V    input value
      * @return result
      */
     public TreeNode[] splitBST(TreeNode root, int V) {
@@ -1013,7 +1174,9 @@ public class TreeQuestion {
     }
 
     private void split(TreeNode node, int v, TreeNode sP, TreeNode bP) {
-        if (node == null) return;
+        if (node == null) {
+            return;
+        }
         if (node.val <= v) {
             sP.right = node;
             TreeNode right = node.right;
@@ -1030,7 +1193,7 @@ public class TreeQuestion {
     /**
      * LeetCode 582: kill process.
      *
-     * @param pid input value
+     * @param pid  input value
      * @param ppid input value
      * @param kill input value
      * @return result

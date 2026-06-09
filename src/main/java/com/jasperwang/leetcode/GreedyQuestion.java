@@ -10,6 +10,7 @@ import java.util.Comparator;
  * self-contained so they can be copied into individual LeetCode submissions.
  */
 public class GreedyQuestion {
+
     /**
      * LeetCode 55: can jump.
      *
@@ -18,12 +19,17 @@ public class GreedyQuestion {
      */
     public boolean canJump(int[] nums) {
         int i = 0;
-        for (int reach = 0; i < nums.length && i <= reach; ++i) reach = Math.max(i + nums[i], reach);
+        for (int reach = 0; i < nums.length && i <= reach; ++i) {
+            reach = Math.max(i + nums[i], reach);
+        }
         return i == nums.length;
     }
 
-    /** LeetCode 435: interval model for erasing overlap intervals. */
+    /**
+     * LeetCode 435: interval model for erasing overlap intervals.
+     */
     private class Interval {
+
         int start;
         int end;
 
@@ -39,6 +45,7 @@ public class GreedyQuestion {
     }
 
     private class IntervalComparator implements Comparator<Interval> {
+
         @Override
         public int compare(Interval a, Interval b) {
             return a.end - b.end;
@@ -52,7 +59,9 @@ public class GreedyQuestion {
      * @return result
      */
     public int eraseOverlapIntervals(Interval[] intervals) {
-        if (intervals.length == 0) return 0;
+        if (intervals.length == 0) {
+            return 0;
+        }
         Arrays.sort(intervals, new IntervalComparator());
         int numOfIntervalsNotOverlapping = 1;
         for (int i = 1, end = intervals[0].end; i < intervals.length; i++) {
@@ -72,11 +81,17 @@ public class GreedyQuestion {
      * @return result
      */
     public int findContentChildren(int[] g, int[] s) {
-        if (s.length == 0 || g.length == 0) return 0;
+        if (s.length == 0 || g.length == 0) {
+            return 0;
+        }
         Arrays.sort(g);
         Arrays.sort(s);
         int i = 0;
-        for (int j = 0; i < g.length && j < s.length; j++) if (g[i] <= s[j]) i++;
+        for (int j = 0; i < g.length && j < s.length; j++) {
+            if (g[i] <= s[j]) {
+                i++;
+            }
+        }
         return i;
     }
 }

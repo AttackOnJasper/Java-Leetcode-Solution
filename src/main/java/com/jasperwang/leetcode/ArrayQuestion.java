@@ -1,6 +1,14 @@
 package com.jasperwang.leetcode;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
 
 /**
  * Array-focused LeetCode solutions and related utilities.
@@ -9,6 +17,7 @@ import java.util.*;
  * self-contained so they can be copied into individual LeetCode submissions.
  */
 public class ArrayQuestion {
+
     /**
      * LeetCode 4: median of Two Sorted List.
      *
@@ -22,16 +31,27 @@ public class ArrayQuestion {
     }
 
     private double getkth(int[] A, int aStart, int[] B, int bStart, int k) {
-        if (aStart > A.length - 1) return B[bStart + k - 1];
-        if (bStart > B.length - 1) return A[aStart + k - 1];
-        if (k == 1) return Math.min(A[aStart], B[bStart]);
+        if (aStart > A.length - 1) {
+            return B[bStart + k - 1];
+        }
+        if (bStart > B.length - 1) {
+            return A[aStart + k - 1];
+        }
+        if (k == 1) {
+            return Math.min(A[aStart], B[bStart]);
+        }
 
         int aMid = Integer.MAX_VALUE, bMid = Integer.MAX_VALUE;
-        if (aStart + k / 2 - 1 < A.length) aMid = A[aStart + k / 2 - 1];
-        if (bStart + k / 2 - 1 < B.length) bMid = B[bStart + k / 2 - 1];
+        if (aStart + k / 2 - 1 < A.length) {
+            aMid = A[aStart + k / 2 - 1];
+        }
+        if (bStart + k / 2 - 1 < B.length) {
+            bMid = B[bStart + k / 2 - 1];
+        }
 
-        if (aMid < bMid)
+        if (aMid < bMid) {
             return getkth(A, aStart + k / 2, B, bStart, k - k / 2); // Check: aRight + bLeft
+        }
         return getkth(A, aStart, B, bStart + k / 2, k - k / 2); // Check: bRight + aLeft
     }
 
@@ -63,8 +83,12 @@ public class ArrayQuestion {
                 j--;
             }
         }
-        if (low < j) return quickSortHelper(arr, low, j);
-        if (i < high) return quickSortHelper(arr, i, high);
+        if (low < j) {
+            return quickSortHelper(arr, low, j);
+        }
+        if (i < high) {
+            return quickSortHelper(arr, i, high);
+        }
         return arr;
     }
 
@@ -72,7 +96,7 @@ public class ArrayQuestion {
      * quick select.
      *
      * @param arr input value
-     * @param k input value
+     * @param k   input value
      * @return result
      */
     public int selectK(int[] arr, int k) {
@@ -88,29 +112,41 @@ public class ArrayQuestion {
                 left.add(n);
             }
         }
-        if (left.size() > k) return selectK(left.stream().mapToInt(i -> i).toArray(), k);
+        if (left.size() > k) {
+            return selectK(left.stream().mapToInt(i -> i).toArray(), k);
+        }
         return selectK(right.stream().mapToInt(i -> i).toArray(), k - left.size());
     }
 
     /**
      * select k2.
      *
-     * @param A input value
-     * @param k input value
+     * @param A     input value
+     * @param k     input value
      * @param start input value
-     * @param end input value
+     * @param end   input value
      * @return result
      */
     public int selectK2(int[] A, int k, int start, int end) {
         int l = start, r = end, pivot = A[(l + r) / 2];
         while (l <= r) {
-            while (A[l] < pivot) l++;
-            while (A[r] > pivot) r--;
-            if (l >= r) break;
+            while (A[l] < pivot) {
+                l++;
+            }
+            while (A[r] > pivot) {
+                r--;
+            }
+            if (l >= r) {
+                break;
+            }
             swap(A, l++, r--);
         }
-        if (l - start + 1 > k) return selectK2(A, k, start, l - 1);
-        if (l - start + 1 == k && l == r) return A[l];
+        if (l - start + 1 > k) {
+            return selectK2(A, k, start, l - 1);
+        }
+        if (l - start + 1 == k && l == r) {
+            return A[l];
+        }
         return selectK2(A, k - r + start - 1, r + 1, end);
     }
 
@@ -124,9 +160,9 @@ public class ArrayQuestion {
         int[] groupsOf5 = new int[arr.length / 5 + 1];
         for (int i = 0, j = 0; i < arr.length; i += 5, j++) {
             groupsOf5[j] =
-                    (i + 5 >= arr.length)
-                            ? selectKShort(Arrays.copyOfRange(arr, i, arr.length - 1), (arr.length - i) / 2)
-                            : selectKShort(Arrays.copyOfRange(arr, i, i + 5), 2);
+                (i + 5 >= arr.length)
+                    ? selectKShort(Arrays.copyOfRange(arr, i, arr.length - 1), (arr.length - i) / 2)
+                    : selectKShort(Arrays.copyOfRange(arr, i, i + 5), 2);
         }
         return selectK(groupsOf5, groupsOf5.length / 2);
     }
@@ -159,7 +195,9 @@ public class ArrayQuestion {
      * @return result
      */
     public int[] mergeSort(int[] arr) {
-        if (arr.length < 2) return arr;
+        if (arr.length < 2) {
+            return arr;
+        }
         if (arr.length == 2) {
             if (arr[0] > arr[1]) {
                 int temp = arr[0];
@@ -176,7 +214,7 @@ public class ArrayQuestion {
     /**
      * LeetCode 1: two Sum.
      *
-     * @param nums input value
+     * @param nums   input value
      * @param target input value
      * @return result
      */
@@ -204,23 +242,30 @@ public class ArrayQuestion {
 
     /**
      * LeetCode 34: search for range of an element in a sorted array (Binary search boundary).
-     *
+     * <p>
      * do one binary search for lower bound and one for upper bound.
      *
-     * @param nums input value
+     * @param nums   input value
      * @param target input value
      * @return result
      */
     public int[] searchRange(int[] nums, int target) {
-        if (nums.length == 0) return new int[]{-1, -1};
+        if (nums.length == 0) {
+            return new int[]{-1, -1};
+        }
         int low = 0, high = nums.length - 1;
         // left
         while (low < high) {
             int mid = (low + high) / 2;
-            if (nums[mid] >= target) high = mid;
-            else low = mid + 1;
+            if (nums[mid] >= target) {
+                high = mid;
+            } else {
+                low = mid + 1;
+            }
         }
-        if (nums[low] != target) return new int[]{-1, -1};
+        if (nums[low] != target) {
+            return new int[]{-1, -1};
+        }
         int left = low;
         // right
         low = 0;
@@ -228,8 +273,11 @@ public class ArrayQuestion {
         while (low < high) {
             int mid = (low + high) / 2 + 1;
             /** note the modification of mid to avoid 'low' stuck on the same value every time */
-            if (nums[mid] > target) high = mid - 1;
-            else low = mid;
+            if (nums[mid] > target) {
+                high = mid - 1;
+            } else {
+                low = mid;
+            }
         }
         return new int[]{left, low};
     }
@@ -242,8 +290,9 @@ public class ArrayQuestion {
      */
 
     /**
-     * LeetCode 73: set Matrix Zeroes: Given a m x n matrix, if an element is 0, set its entire row and column to 0. Do it in place.
-     *
+     * LeetCode 73: set Matrix Zeroes: Given a m x n matrix, if an element is 0, set its entire row and column to 0. Do
+     * it in place.
+     * <p>
      * tip: set first index of a col or row to keep track if the col or row should be converted to 0.
      *
      * @param matrix input value
@@ -251,12 +300,24 @@ public class ArrayQuestion {
     public void setZeroes(int[][] matrix) {
         int col0 = 1, m = matrix.length, n = matrix[0].length;
         for (int i = 0; i < m; i++) {
-            if (matrix[i][0] == 0) col0 = 0;
-            for (int j = 0; j < n; j++) if (matrix[i][j] == 0) matrix[i][0] = matrix[0][j] = 0;
+            if (matrix[i][0] == 0) {
+                col0 = 0;
+            }
+            for (int j = 0; j < n; j++) {
+                if (matrix[i][j] == 0) {
+                    matrix[i][0] = matrix[0][j] = 0;
+                }
+            }
         }
         for (int i = m - 1; i >= 0; i--) {
-            for (int j = n - 1; j >= 1; j--) if (matrix[i][0] == 0 || matrix[0][j] == 0) matrix[i][j] = 0;
-            if (col0 == 0) matrix[i][0] = 0;
+            for (int j = n - 1; j >= 1; j--) {
+                if (matrix[i][0] == 0 || matrix[0][j] == 0) {
+                    matrix[i][j] = 0;
+                }
+            }
+            if (col0 == 0) {
+                matrix[i][0] = 0;
+            }
         }
     }
 
@@ -270,9 +331,9 @@ public class ArrayQuestion {
      * LeetCode 88: merge Sorted Arrays.
      *
      * @param nums1 input value
-     * @param m input value
+     * @param m     input value
      * @param nums2 input value
-     * @param n input value
+     * @param n     input value
      */
     public void merge1(int[] nums1, int m, int[] nums2, int n) {
         int i = 0, j = 0, newIndex = 0;
@@ -293,19 +354,22 @@ public class ArrayQuestion {
     }
 
     protected void merge2(int[] nums1, int m, int[] nums2, int n) {
-        while (n > 0)
+        while (n > 0) {
             nums1[m + n - 1] = (m == 0 || nums2[n - 1] > nums1[m - 1]) ? nums2[--n] : nums1[--m];
+        }
     }
 
     /**
      * LeetCode 75: sort array of 0, 1, 2.
-     *
+     * <p>
      * use low and high to keep track of index of 0 and 2 to be inserted.
      *
      * @param nums input value
      */
     public void sortColors(int[] nums) {
-        if (nums == null || nums.length < 2) return;
+        if (nums == null || nums.length < 2) {
+            return;
+        }
         int low = 0;
         int high = nums.length - 1;
         for (int i = low; i <= high; ) {
@@ -340,7 +404,9 @@ public class ArrayQuestion {
         for (int i = 0; i < n; i++) {
             /** reverse the index to ensure previous value is not mutated yet */
             for (int j = row.size() - 1; j > 0; j--) // changing from 2nd element to (n-1)th element
+            {
                 row.set(j, row.get(j) + row.get(j - 1));
+            }
             row.add(1);
             res.add(new ArrayList<>(row));
         }
@@ -355,7 +421,9 @@ public class ArrayQuestion {
      */
     public int singleNumber(int[] nums) {
         int res = 0;
-        for (int i : nums) res ^= i;
+        for (int i : nums) {
+            res ^= i;
+        }
         return res;
     }
 
@@ -389,10 +457,11 @@ public class ArrayQuestion {
     }
 
     /**
-     * LeetCode 219: given an array of integers and an integer k, find out whether there are two distinct indices i and j in the array such that nums[i] = nums[j] and the absolute difference between i and j is at most k.
+     * LeetCode 219: given an array of integers and an integer k, find out whether there are two distinct indices i and
+     * j in the array such that nums[i] = nums[j] and the absolute difference between i and j is at most k.
      *
      * @param nums input value
-     * @param k input value
+     * @param k    input value
      * @return result
      */
     public boolean containsNearbyDuplicate(int[] nums, int k) {
@@ -412,14 +481,16 @@ public class ArrayQuestion {
 
     /**
      * LeetCode 229: majority Element II: find all elements that occur more than n / 3 times.
-     *
+     * <p>
      * similar to majority element I.
      *
      * @param nums input value
      * @return result
      */
     public List<Integer> majorityElement(int[] nums) {
-        if (nums == null || nums.length == 0) return new ArrayList<Integer>();
+        if (nums == null || nums.length == 0) {
+            return new ArrayList<Integer>();
+        }
         List<Integer> result = new ArrayList<Integer>();
         int number1 = nums[0], number2 = nums[0], count1 = 0, count2 = 0, len = nums.length;
         /**
@@ -427,9 +498,11 @@ public class ArrayQuestion {
          * n / 3 times
          */
         for (int i = 0; i < len; i++) {
-            if (nums[i] == number1) count1++;
-            else if (nums[i] == number2) count2++;
-            else if (count1 == 0) {
+            if (nums[i] == number1) {
+                count1++;
+            } else if (nums[i] == number2) {
+                count2++;
+            } else if (count1 == 0) {
                 number1 = nums[i];
                 count1 = 1;
             } else if (count2 == 0) {
@@ -444,17 +517,25 @@ public class ArrayQuestion {
         count1 = 0;
         count2 = 0;
         for (int i = 0; i < len; i++) {
-            if (nums[i] == number1) count1++;
-            else if (nums[i] == number2) count2++;
+            if (nums[i] == number1) {
+                count1++;
+            } else if (nums[i] == number2) {
+                count2++;
+            }
         }
-        if (count1 > len / 3) result.add(number1);
-        if (count2 > len / 3) result.add(number2);
+        if (count1 > len / 3) {
+            result.add(number1);
+        }
+        if (count2 > len / 3) {
+            result.add(number2);
+        }
         return result;
     }
 
     /**
-     * LeetCode 238: product of Array Except Self (answer[i] is equal to the product of all the elements of nums except nums[i]).
-     *
+     * LeetCode 238: product of Array Except Self (answer[i] is equal to the product of all the elements of nums except
+     * nums[i]).
+     * <p>
      * keep track of left sub-product & right sub-product.
      *
      * @param nums input value
@@ -463,7 +544,9 @@ public class ArrayQuestion {
     public int[] productExceptSelf(int[] nums) {
         int[] res = new int[nums.length];
         res[0] = 1;
-        for (int i = 1; i < nums.length; i++) res[i] = res[i - 1] * nums[i - 1];
+        for (int i = 1; i < nums.length; i++) {
+            res[i] = res[i - 1] * nums[i - 1];
+        }
         for (int i = nums.length - 1, right = 1; i >= 0; i--) {
             res[i] *= right;
             right *= nums[i];
@@ -472,7 +555,8 @@ public class ArrayQuestion {
     }
 
     /**
-     * LeetCode 243: shortest word distance: given an array and two strings, find the minimum distance of the two strings in that array.
+     * LeetCode 243: shortest word distance: given an array and two strings, find the minimum distance of the two
+     * strings in that array.
      *
      * @param words input value
      * @param word1 input value
@@ -485,17 +569,21 @@ public class ArrayQuestion {
             String s = words[i];
             if (s.equals(word1)) {
                 i1 = i;
-            } else if (s.equals(word2)) i2 = i;
-            if (i1 != -1 && i2 != -1) res = Math.min(res, Math.abs(i1 - i2));
+            } else if (s.equals(word2)) {
+                i2 = i;
+            }
+            if (i1 != -1 && i2 != -1) {
+                res = Math.min(res, Math.abs(i1 - i2));
+            }
         }
         return res;
     }
 
     /**
-     * LeetCode 244: shortest word distance structure optimized for repeated queries over the same
-     * word list.
+     * LeetCode 244: shortest word distance structure optimized for repeated queries over the same word list.
      */
     class WordDistance {
+
         Map<String, List<Integer>> map;
 
         public WordDistance(String[] words) {
@@ -536,10 +624,16 @@ public class ArrayQuestion {
         int p1 = -1, p2 = -1, res = Integer.MAX_VALUE;
         for (int i = 0; i < words.length; i++) {
             if (words[i].equals(word1)) {
-                if (word1.equals(word2)) p2 = p1;
+                if (word1.equals(word2)) {
+                    p2 = p1;
+                }
                 p1 = i;
-            } else if (words[i].equals(word2)) p2 = i;
-            if (p1 != -1 && p2 != -1) res = Math.min(res, Math.abs(p1 - p2));
+            } else if (words[i].equals(word2)) {
+                p2 = i;
+            }
+            if (p1 != -1 && p2 != -1) {
+                res = Math.min(res, Math.abs(p1 - p2));
+            }
         }
         return res;
     }
@@ -566,9 +660,12 @@ public class ArrayQuestion {
 
         int[] res = {0, 0}; // this array stores the two numbers we will return
         for (int num : nums) {
-            if ((num & diff) == 0) res[0] ^= num;
-            else // the bit is set
+            if ((num & diff) == 0) {
+                res[0] ^= num;
+            } else // the bit is set
+            {
                 res[1] ^= num;
+            }
         }
         return res;
     }
@@ -597,12 +694,15 @@ public class ArrayQuestion {
      */
     public int missingNumber2(int[] nums) {
         int sum = nums.length;
-        for (int i = 0; i < nums.length; i++) sum += i - nums[i];
+        for (int i = 0; i < nums.length; i++) {
+            sum += i - nums[i];
+        }
         return sum;
     }
 
     /**
-     * LeetCode 280: given an unsorted array nums, reorder it in-place such that nums[0] <= nums[1] >= nums[2] <= nums[3]....
+     * LeetCode 280: given an unsorted array nums, reorder it in-place such that nums[0] <= nums[1] >= nums[2] <=
+     * nums[3]....
      *
      * @param nums input value
      */
@@ -623,7 +723,7 @@ public class ArrayQuestion {
 
     /**
      * LeetCode 287: find the Duplicate Number (Yext Interview).
-     *
+     * <p>
      * method 1: divide-and-conquer: compare median to nums[mid].
      *
      * @param nums input value
@@ -634,9 +734,16 @@ public class ArrayQuestion {
         while (start < end) {
             int mid = start + (end - start) / 2;
             int count = 0;
-            for (int n : nums) if (n <= mid) count++;
-            if (count <= mid) start = mid + 1;
-            else end = mid;
+            for (int n : nums) {
+                if (n <= mid) {
+                    count++;
+                }
+            }
+            if (count <= mid) {
+                start = mid + 1;
+            } else {
+                end = mid;
+            }
         }
         return start;
     }
@@ -677,29 +784,40 @@ public class ArrayQuestion {
      */
     public int[][] multiply(int[][] A, int[][] B) {
         int rowA = A.length;
-        if (rowA == 0) return null;
+        if (rowA == 0) {
+            return null;
+        }
         int colA = A[0].length;
         int colB = B[0].length;
         int[][] res = new int[rowA][colB];
-        for (int i = 0; i < rowA; i++)
-            for (int k = 0; k < colA; k++)
-                if (A[i][k] != 0)
-                    for (int j = 0; j < colB; j++) if (B[k][j] != 0) res[i][j] += A[i][k] * B[k][j];
+        for (int i = 0; i < rowA; i++) {
+            for (int k = 0; k < colA; k++) {
+                if (A[i][k] != 0) {
+                    for (int j = 0; j < colB; j++) {
+                        if (B[k][j] != 0) {
+                            res[i][j] += A[i][k] * B[k][j];
+                        }
+                    }
+                }
+            }
+        }
         return res;
     }
 
     /**
      * LeetCode 323: number of Connected Components in an Undirected Graph.
-     *
+     * <p>
      * given n = 5 and edges = [[0, 1], [1, 2], [3, 4]], return 2.
      *
-     * @param n input value
+     * @param n     input value
      * @param edges input value
      * @return result
      */
     public int countComponents(int n, int[][] edges) {
         int[] roots = new int[n];
-        for (int i = 0; i < n; i++) roots[i] = i;
+        for (int i = 0; i < n; i++) {
+            roots[i] = i;
+        }
 
         for (int[] e : edges) {
             int root1 = find(roots, e[0]);
@@ -722,35 +840,43 @@ public class ArrayQuestion {
 
     /**
      * LeetCode 347: return k most frequent numbers.
-     *
+     * <p>
      * bucket Sort.
      *
      * @param nums input value
-     * @param k input value
+     * @param k    input value
      * @return result
      */
     public static List<Integer> topKFrequent(int[] nums, int k) {
         List<Integer>[] buckets =
-                new List
-                        [nums.length
-                        + 1]; // buckets[i] store the numbers that occur i times in the original list
+            new List
+                [nums.length
+                + 1]; // buckets[i] store the numbers that occur i times in the original list
         HashMap<Integer, Integer> m = new HashMap<Integer, Integer>(); // map num to frequency
-        for (int n : nums) m.put(n, m.getOrDefault(n, 0) + 1);
+        for (int n : nums) {
+            m.put(n, m.getOrDefault(n, 0) + 1);
+        }
         for (int key : m.keySet()) {
             int freq = m.get(key);
-            if (buckets[freq] == null) buckets[freq] = new ArrayList<Integer>();
+            if (buckets[freq] == null) {
+                buckets[freq] = new ArrayList<Integer>();
+            }
             buckets[freq].add(key);
         }
         List<Integer> res = new ArrayList<>();
-        for (int pos = buckets.length - 1; pos >= 0 && res.size() < k; pos--)
-            if (buckets[pos] != null) res.addAll(buckets[pos]);
+        for (int pos = buckets.length - 1; pos >= 0 && res.size() < k; pos--) {
+            if (buckets[pos] != null) {
+                res.addAll(buckets[pos]);
+            }
+        }
         return res;
     }
 
     /**
-     * LeetCode 370: each operation is represented as a triplet: [startIndex, endIndex, inc] which increments each element of subarray A[startIndex ... endIndex] (startIndex and endIndex inclusive) with inc.
+     * LeetCode 370: each operation is represented as a triplet: [startIndex, endIndex, inc] which increments each
+     * element of subarray A[startIndex ... endIndex] (startIndex and endIndex inclusive) with inc.
      *
-     * @param length input value
+     * @param length  input value
      * @param updates input value
      * @return result
      */
@@ -760,9 +886,13 @@ public class ArrayQuestion {
         for (int[] update : updates) {
             res[update[0]] += update[2];
             int end = update[1];
-            if (end < length - 1) res[end + 1] -= update[2];
+            if (end < length - 1) {
+                res[end + 1] -= update[2];
+            }
         }
-        for (int i = 1; i < length; i++) res[i] += res[i - 1];
+        for (int i = 1; i < length; i++) {
+            res[i] += res[i - 1];
+        }
         return res;
     }
 
@@ -779,18 +909,23 @@ public class ArrayQuestion {
          */
         Arrays.sort(people, (o1, o2) -> o1[0] != o2[0] ? -o1[0] + o2[0] : o1[1] - o2[1]);
         List<int[]> res = new LinkedList<>();
-        for (int[] cur : people) res.add(cur[1], cur);
+        for (int[] cur : people) {
+            res.add(cur[1], cur);
+        }
         return res.toArray(new int[people.length][]);
     }
 
     /**
-     * LeetCode 413: : Arithmetic slices: return # of subarray that forms arithmetic sequence (form sequence if at least 3 elements have the same diff).
+     * LeetCode 413: : Arithmetic slices: return # of subarray that forms arithmetic sequence (form sequence if at least
+     * 3 elements have the same diff).
      *
      * @param A input value
      * @return result
      */
     public int numberOfArithmeticSlices(int[] A) {
-        if (A.length < 3) return 0;
+        if (A.length < 3) {
+            return 0;
+        }
         int res = 0, difference = Integer.MAX_VALUE, count = 0;
         for (int i = 1; i < A.length; i++) {
             int curDiff = A[i] - A[i - 1];
@@ -818,8 +953,9 @@ public class ArrayQuestion {
             for (int j = 0; j < board[i].length; j++) {
                 char temp = board[i][j];
                 /** only add the first X appeared */
-                if (temp == 'X')
+                if (temp == 'X') {
                     res += ((i > 0 && board[i - 1][j] == 'X') || (j > 0 && board[i][j - 1] == 'X')) ? 0 : 1;
+                }
             }
         }
         return res;
@@ -827,8 +963,9 @@ public class ArrayQuestion {
 
     /**
      * LeetCode 442: find All Duplicates in an Array.
-     *
-     * given an array of integers, 1 ≤ a[i] ≤ n (n = size of array), some elements appear twice and others appear once. Find all the elements that appear twice in this array.
+     * <p>
+     * given an array of integers, 1 ≤ a[i] ≤ n (n = size of array), some elements appear twice and others appear once.
+     * Find all the elements that appear twice in this array.
      *
      * @param nums input value
      * @return result
@@ -837,7 +974,9 @@ public class ArrayQuestion {
         List<Integer> res = new ArrayList<>();
         for (int i = 0; i < nums.length; ++i) {
             int index = Math.abs(nums[i]) - 1;
-            if (nums[index] < 0) res.add(Math.abs(index + 1));
+            if (nums[index] < 0) {
+                res.add(Math.abs(index + 1));
+            }
             nums[index] = -nums[index];
         }
         return res;
@@ -853,7 +992,9 @@ public class ArrayQuestion {
         int total = 0, n = nums.length;
         for (int j = 0; j < 32; j++) {
             int bitCount = 0;
-            for (int i = 0; i < n; i++) bitCount += (nums[i] >> j) & 1;
+            for (int i = 0; i < n; i++) {
+                bitCount += (nums[i] >> j) & 1;
+            }
             total += bitCount * (n - bitCount);
         }
         return total;
@@ -869,14 +1010,21 @@ public class ArrayQuestion {
         List<Integer> res = new ArrayList<Integer>();
         for (int i = 0; i < nums.length; i++) {
             int val = Math.abs(nums[i]) - 1;
-            if (nums[val] > 0) nums[val] = -nums[val];
+            if (nums[val] > 0) {
+                nums[val] = -nums[val];
+            }
         }
-        for (int i = 0; i < nums.length; i++) if (nums[i] > 0) res.add(i + 1);
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] > 0) {
+                res.add(i + 1);
+            }
+        }
         return res;
     }
 
     /**
-     * LeetCode 454: 4Sum II. Given four lists A, B, C, D of integer values, compute how many tuples (i, j, k, l) there are such that A[i] + B[j] + C[k] + D[l] is zero.
+     * LeetCode 454: 4Sum II. Given four lists A, B, C, D of integer values, compute how many tuples (i, j, k, l) there
+     * are such that A[i] + B[j] + C[k] + D[l] is zero.
      *
      * @param A input value
      * @param B input value
@@ -893,28 +1041,37 @@ public class ArrayQuestion {
             }
         }
         int res = 0;
-        for (int i = 0; i < A.length; i++)
-            for (int j = 0; j < B.length; j++) res += map.getOrDefault(-1 * (A[i] + B[j]), 0);
+        for (int i = 0; i < A.length; i++) {
+            for (int j = 0; j < B.length; j++) {
+                res += map.getOrDefault(-1 * (A[i] + B[j]), 0);
+            }
+        }
         return res;
     }
 
     /**
-     * LeetCode 496: next Greater Element: 2 arrays nums1 and nums2 where nums1’s elements are subset of nums2. Find all the next greater numbers for nums1's elements in the corresponding places of nums2.
-     *
-     * use a stack to store a decreasing subsequence, and pop all items that is smaller than the next item to put in the next greater element map.
+     * LeetCode 496: next Greater Element: 2 arrays nums1 and nums2 where nums1’s elements are subset of nums2. Find all
+     * the next greater numbers for nums1's elements in the corresponding places of nums2.
+     * <p>
+     * use a stack to store a decreasing subsequence, and pop all items that is smaller than the next item to put in the
+     * next greater element map.
      *
      * @param findNums input value
-     * @param nums input value
+     * @param nums     input value
      * @return result
      */
     public int[] nextGreaterElement(int[] findNums, int[] nums) {
         Map<Integer, Integer> map = new HashMap<>(); // store the integer and its next greater integer
         Stack<Integer> s = new Stack<>();
         for (int n : nums) {
-            while (!s.isEmpty() && s.peek() < n) map.put(s.pop(), n);
+            while (!s.isEmpty() && s.peek() < n) {
+                map.put(s.pop(), n);
+            }
             s.push(n);
         }
-        for (int i = 0; i < findNums.length; i++) findNums[i] = map.getOrDefault(findNums[i], -1);
+        for (int i = 0; i < findNums.length; i++) {
+            findNums[i] = map.getOrDefault(findNums[i], -1);
+        }
         return findNums;
     }
 
@@ -932,15 +1089,20 @@ public class ArrayQuestion {
         /** append an array at the back */
         for (int i = 0; i < 2 * n; i++) {
             int num = nums[i % n];
-            while (!s.isEmpty() && nums[s.peek()] < num) res[s.pop()] = num;
-            if (i < n) s.push(i);
+            while (!s.isEmpty() && nums[s.peek()] < num) {
+                res[s.pop()] = num;
+            }
+            if (i < n) {
+                s.push(i);
+            }
         }
         return res;
     }
 
     /**
-     * LeetCode 531: find lonely pixels : A black lonely pixel is character 'B' that located at a specific position where the same row and same column don't have any other black pixels.
-     *
+     * LeetCode 531: find lonely pixels : A black lonely pixel is character 'B' that located at a specific position
+     * where the same row and same column don't have any other black pixels.
+     * <p>
      * record the number of Bs in each column & each row.
      *
      * @param picture input value
@@ -950,27 +1112,34 @@ public class ArrayQuestion {
         int n = picture.length, m = picture[0].length;
 
         int[] rowCount = new int[n], colCount = new int[m];
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < m; j++)
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
                 if (picture[i][j] == 'B') {
                     rowCount[i]++;
                     colCount[j]++;
                 }
+            }
+        }
 
         int count = 0;
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < m; j++)
-                if (picture[i][j] == 'B' && rowCount[i] == 1 && colCount[j] == 1) count++;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (picture[i][j] == 'B' && rowCount[i] == 1 && colCount[j] == 1) {
+                    count++;
+                }
+            }
+        }
         return count;
     }
 
     /**
-     * LeetCode 560: subarray Sum Equals k: Given an array and an integer k, find # of continuous subarrays whose sum equals to k.
-     *
+     * LeetCode 560: subarray Sum Equals k: Given an array and an integer k, find # of continuous subarrays whose sum
+     * equals to k.
+     * <p>
      * store all the presums and occurrences.
      *
      * @param nums input value
-     * @param k input value
+     * @param k    input value
      * @return result
      */
     public int subarraySum(int[] nums, int k) {
@@ -980,7 +1149,9 @@ public class ArrayQuestion {
 
         for (int i = 0; i < nums.length; i++) {
             sum += nums[i];
-            if (preSum.containsKey(sum - k)) result += preSum.get(sum - k);
+            if (preSum.containsKey(sum - k)) {
+                result += preSum.get(sum - k);
+            }
             preSum.put(sum, preSum.getOrDefault(sum, 0) + 1);
         }
         return result;
@@ -988,7 +1159,7 @@ public class ArrayQuestion {
 
     /**
      * LeetCode 565: array Nesting.
-     *
+     * <p>
      * s[K] = { A[K], A[A[K]], A[A[A[K]]], ... }; find the largest size of S[K].
      *
      * @param nums input value
@@ -1001,7 +1172,7 @@ public class ArrayQuestion {
             for (int k = i; nums[k] >= 0; count++) { // watch out the condition
                 int ak = nums[k];
                 nums[k] =
-                        -1; // mark a[k] as visited; next time don't step on it because it would be a smaller
+                    -1; // mark a[k] as visited; next time don't step on it because it would be a smaller
                 // cycle
                 k = ak;
             }
@@ -1014,24 +1185,27 @@ public class ArrayQuestion {
      * LeetCode 566: matrix Reshape.
      *
      * @param nums input value
-     * @param r input value
-     * @param c input value
+     * @param r    input value
+     * @param c    input value
      * @return result
      */
     public int[][] matrixReshape(int[][] nums, int r, int c) {
         int x = nums.length;
         int y = nums[0].length;
-        if (x * y != r * c) return nums;
+        if (x * y != r * c) {
+            return nums;
+        }
         int[][] res = new int[r][c];
         for (int i = 0; i < r * c; i++)
-        /** note the indexing of matrices */
+        /** note the indexing of matrices */ {
             res[i / c][i % c] = nums[i / y][i % y];
+        }
         return res;
     }
 
     /**
      * LeetCode 575: distribution Candies: return the max kind of candies one can get.
-     *
+     * <p>
      * use set to return number of distinct numbers.
      *
      * @param candies input value
@@ -1041,7 +1215,9 @@ public class ArrayQuestion {
         final Set<Integer> set = new HashSet<>();
         for (int i : candies) {
             set.add(i);
-            if (set.size() == candies.length / 2) return candies.length / 2;
+            if (set.size() == candies.length / 2) {
+                return candies.length / 2;
+            }
         }
         return set.size(); // smaller than half
     }
@@ -1057,23 +1233,25 @@ public class ArrayQuestion {
         for (int i = 1; i < len; i++) {
             min = Math.min(min, A[len - 1 - i]);
             max = Math.max(max, A[i]);
-            if (A[i] < max)
+            if (A[i] < max) {
                 end = i; // if the index is not the current max -> unsorted -> move end to this index
-            if (A[len - 1 - i] > min)
+            }
+            if (A[len - 1 - i] > min) {
                 start =
-                        len - 1
-                                - i; // if the index is not the current min -> unsorted -> move start to this index
+                    len - 1
+                        - i; // if the index is not the current min -> unsorted -> move start to this index
+            }
         }
         return end - start + 1;
     }
 
     /**
      * LeetCode 605: place flowers s.t. no flowers are adjacent to each other.
-     *
+     * <p>
      * greedy.
      *
      * @param flowerbed input value
-     * @param n input value
+     * @param n         input value
      * @return result
      */
     public boolean canPlaceFlowers(int[] flowerbed, int n) {
@@ -1095,7 +1273,7 @@ public class ArrayQuestion {
 
     /**
      * LeetCode 611: valid triangle numbers:.
-     *
+     * <p>
      * note the reduction of calculation of sums of 2 numbers.
      *
      * @param nums input value
@@ -1110,7 +1288,9 @@ public class ArrayQuestion {
                 if (nums[l] + nums[r] > nums[i]) {
                     count += r - l;
                     r--;
-                } else l++;
+                } else {
+                    l++;
+                }
             }
         }
         return count;
@@ -1118,19 +1298,23 @@ public class ArrayQuestion {
 
     /**
      * LeetCode 621: task Scheduler.
-     *
+     * <p>
      * only consider most frequent tasks.
      *
      * @param tasks input value
-     * @param n input value
+     * @param n     input value
      * @return result
      */
     public int taskScheduler(char[] tasks, int n) {
         int[] c = new int[26];
-        for (char t : tasks) c[t - 'A']++;
+        for (char t : tasks) {
+            c[t - 'A']++;
+        }
         Arrays.sort(c);
         int i = 25;
-        while (i >= 0 && c[i] == c[25]) i--;
+        while (i >= 0 && c[i] == c[25]) {
+            i--;
+        }
         /** c[25] - 1: # of frames n + 1: frame size 25 - i: length of last frame */
         return Math.max(tasks.length, (c[25] - 1) * (n + 1) + 25 - i);
     }
@@ -1151,8 +1335,9 @@ public class ArrayQuestion {
 
     /**
      * LeetCode 645: set Mismatch.
-     *
-     * n size array with elements ranging from 1 to n, one element is duplicated & another element is missing; find these elements.
+     * <p>
+     * n size array with elements ranging from 1 to n, one element is duplicated & another element is missing; find
+     * these elements.
      *
      * @param nums input value
      * @return result
@@ -1167,7 +1352,9 @@ public class ArrayQuestion {
             }
         }
         for (int i = 0; i < nums.length; i++) {
-            if (nums[i] > 0) res[1] = i + 1;
+            if (nums[i] > 0) {
+                res[1] = i + 1;
+            }
         }
         return res;
     }
@@ -1183,7 +1370,9 @@ public class ArrayQuestion {
         int duplicate = 0, n = nums.length;
         long sum = (n * (n + 1)) / 2;
         for (int i : nums) {
-            if (set.contains(i)) duplicate = i;
+            if (set.contains(i)) {
+                duplicate = i;
+            }
             sum -= i;
             set.add(i);
         }
@@ -1192,7 +1381,7 @@ public class ArrayQuestion {
 
     /**
      * LeetCode 665: check if it is possible to change one element to make the array non-descending.
-     *
+     * <p>
      * greedy: try to decrease i-1 to i first; if can't, increase i to i - 1.
      *
      * @param nums input value
@@ -1214,10 +1403,11 @@ public class ArrayQuestion {
     }
 
     /**
-     * LeetCode 683: flowers[i] = x means the flower at pos x would be blooming on day i. Output the day where there are at least 2 flowers blooming, and the number of flowers between them is k, and those flowers are not blooming.
+     * LeetCode 683: flowers[i] = x means the flower at pos x would be blooming on day i. Output the day where there are
+     * at least 2 flowers blooming, and the number of flowers between them is k, and those flowers are not blooming.
      *
      * @param flowers input value
-     * @param k input value
+     * @param k       input value
      * @return result
      */
     public int kEmptySlots(int[] flowers, int k) {
@@ -1232,7 +1422,9 @@ public class ArrayQuestion {
              * - 1
              */
             if (days[i] < days[left] || days[i] <= days[right]) {
-                if (i == right) res = Math.min(res, Math.max(days[left], days[right])); // valid case
+                if (i == right) {
+                    res = Math.min(res, Math.max(days[left], days[right])); // valid case
+                }
                 left = i;
                 right = k + 1 + i;
             }
@@ -1241,33 +1433,46 @@ public class ArrayQuestion {
     }
 
     /**
-     * LeetCode 683: variation flowers[i] = x means the flower at pos x would be blooming on day i. Output the day where there are k consecutive flowers blooming.
+     * LeetCode 683: variation flowers[i] = x means the flower at pos x would be blooming on day i. Output the day where
+     * there are k consecutive flowers blooming.
      *
      * @param P input value
      * @param K input value
      * @return result
      */
     public int kEmptySlotsII(int[] P, int K) {
-        if (K == P.length) return K;
+        if (K == P.length) {
+            return K;
+        }
         int[] days = new int[P.length]; // days[i] record blooming day of flower in pos i+1
-        for (int i = 0; i < P.length; i++) days[P[i] - 1] = i + 1;
+        for (int i = 0; i < P.length; i++) {
+            days[P[i] - 1] = i + 1;
+        }
         int res = Integer.MIN_VALUE;
         for (int i = 0, left = -1, right = K; right <= P.length; i++) {
             if (right == P.length) { // edge case
-                if (i == P.length - 1 && days[i] < days[left]) return Math.max(res, days[left] - 1);
-                if (days[i] > days[left]) break;
+                if (i == P.length - 1 && days[i] < days[left]) {
+                    return Math.max(res, days[left] - 1);
+                }
+                if (days[i] > days[left]) {
+                    break;
+                }
             } else if (left == -1) { // edge case: do not need to compare left at the start
                 if (days[i] >= days[right]) {
-                    if (i == right) res = Math.max(res, days[right] - 1);
+                    if (i == right) {
+                        res = Math.max(res, days[right] - 1);
+                    }
                     left = i;
                     right = K + i + 1;
                 }
             } else if (days[i] > days[left]
-                    || days[i]
-                    >= days[
-                    right]) { // need to make sure blooming days from left + 1 to right - 1 are less
+                || days[i]
+                >= days[
+                right]) { // need to make sure blooming days from left + 1 to right - 1 are less
                 // than bloomingDays[left] and bloomingDays[right]
-                if (i == right) res = Math.max(res, Math.min(days[left], days[right]) - 1); // valid case
+                if (i == right) {
+                    res = Math.max(res, Math.min(days[left], days[right]) - 1); // valid case
+                }
                 left = i;
                 right = K + i + 1;
             }
@@ -1282,12 +1487,18 @@ public class ArrayQuestion {
      * @return result
      */
     public int maxAreaOfIsland(int[][] grid) {
-        if (grid == null || grid.length == 0 || grid[0].length == 0) return 0;
+        if (grid == null || grid.length == 0 || grid[0].length == 0) {
+            return 0;
+        }
         int res = 0, row = grid.length, col = grid[0].length;
 
-        for (int i = 0; i < row; i++)
-            for (int j = 0; j < col; j++)
-                if (grid[i][j] == 1) res = Math.max(res, AreaOfIsland(grid, i, j));
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                if (grid[i][j] == 1) {
+                    res = Math.max(res, AreaOfIsland(grid, i, j));
+                }
+            }
+        }
         return res;
     }
 
@@ -1296,16 +1507,17 @@ public class ArrayQuestion {
         if (i >= 0 && i < grid.length && j >= 0 && j < grid[0].length && grid[i][j] == 1) {
             grid[i][j] = 0;
             return 1
-                    + AreaOfIsland(grid, i + 1, j)
-                    + AreaOfIsland(grid, i - 1, j)
-                    + AreaOfIsland(grid, i, j - 1)
-                    + AreaOfIsland(grid, i, j + 1);
+                + AreaOfIsland(grid, i + 1, j)
+                + AreaOfIsland(grid, i - 1, j)
+                + AreaOfIsland(grid, i, j - 1)
+                + AreaOfIsland(grid, i, j + 1);
         }
         return 0;
     }
 
     /**
-     * LeetCode 697: find the smallest possible length of a (contiguous) subarray of nums, that has the same degree as nums degree: the maximum frequency of any one of its elements.
+     * LeetCode 697: find the smallest possible length of a (contiguous) subarray of nums, that has the same degree as
+     * nums degree: the maximum frequency of any one of its elements.
      *
      * @param nums input value
      * @return result
@@ -1315,10 +1527,10 @@ public class ArrayQuestion {
         for (int i = 0; i < nums.length; i++) {
             if (!map.containsKey(nums[i])) {
                 map.put(
-                        nums[i],
-                        new int[]{
-                                1, i, i
-                        }); // the first element in array is degree, second is first index of this key, third is
+                    nums[i],
+                    new int[]{
+                        1, i, i
+                    }); // the first element in array is degree, second is first index of this key, third is
                 // last index of this key
             } else {
                 int[] temp = map.get(nums[i]);
@@ -1340,14 +1552,16 @@ public class ArrayQuestion {
 
     /**
      * LeetCode 720: : ["w". "wo", "wor", "worl", "world", "wort", "worth"] -> "world".
-     *
+     * <p>
      * sort.
      *
      * @param words input value
      * @return result
      */
     public String longestWord(String[] words) {
-        if (words == null || words.length == 0) return "";
+        if (words == null || words.length == 0) {
+            return "";
+        }
         Arrays.sort(words);
         Set<String> built = new HashSet<>();
         String res = "";
@@ -1362,7 +1576,7 @@ public class ArrayQuestion {
 
     /**
      * LeetCode 724: find Pivot Index.
-     *
+     * <p>
      * find index where LHS sum == RHS sum.
      *
      * @param nums input value
@@ -1370,10 +1584,14 @@ public class ArrayQuestion {
      */
     public int pivotIndex(int[] nums) {
         int sum = 0, half = 0;
-        for (int n : nums) sum += n;
+        for (int n : nums) {
+            sum += n;
+        }
 
         for (int i = 0; i < nums.length; i++) {
-            if (sum == half * 2 + nums[i]) return i;
+            if (sum == half * 2 + nums[i]) {
+                return i;
+            }
             half += nums[i];
         }
         return -1;
@@ -1386,7 +1604,9 @@ public class ArrayQuestion {
      * @return result
      */
     public int[] dailyTemperatures(int[] temperatures) {
-        if (temperatures.length == 0) return new int[0];
+        if (temperatures.length == 0) {
+            return new int[0];
+        }
         int[] res = new int[temperatures.length];
         for (int i = 0; i < temperatures.length; i++) {
             for (int j = i + 1; j < temperatures.length; j++) {
@@ -1409,7 +1629,9 @@ public class ArrayQuestion {
         int curLen = 0, res = 0;
         for (int i = 0; i < arr.length; i++) {
             curLen = Math.max(curLen, arr[i]);
-            if (i == curLen) res++;
+            if (i == curLen) {
+                res++;
+            }
         }
         return res;
     }
@@ -1422,7 +1644,9 @@ public class ArrayQuestion {
      */
     public boolean isIdealPermutation(int[] A) {
         for (int i = 0; i < A.length; i++) {
-            if (Math.abs(A[i] - i) > 1) return false;
+            if (Math.abs(A[i] - i) > 1) {
+                return false;
+            }
         }
         return true;
     }
@@ -1444,8 +1668,11 @@ public class ArrayQuestion {
         return A;
     }
 
-    /** LeetCode 252: interval model for checking whether all meetings can be attended. */
+    /**
+     * LeetCode 252: interval model for checking whether all meetings can be attended.
+     */
     private class Interval {
+
         int start;
         int end;
     }
@@ -1458,7 +1685,9 @@ public class ArrayQuestion {
      */
     public boolean canAttendMeetings(Interval[] intervals) {
         int len = intervals.length;
-        if (len == 0) return true;
+        if (len == 0) {
+            return true;
+        }
         int[] begin = new int[len];
         int[] stop = new int[len];
         for (int i = 0; i < len; i++) {
@@ -1468,7 +1697,9 @@ public class ArrayQuestion {
         Arrays.sort(begin);
         Arrays.sort(stop);
         for (int i = 1; i < len; i++) {
-            if (begin[i] < stop[i - 1]) return false;
+            if (begin[i] < stop[i - 1]) {
+                return false;
+            }
         }
         return true;
     }
@@ -1480,17 +1711,22 @@ public class ArrayQuestion {
      * @return result
      */
     public boolean canAttendMeetings2(Interval[] intervals) {
-        if (intervals == null) return false;
+        if (intervals == null) {
+            return false;
+        }
         /** Sort the intervals by start time */
         Arrays.sort(intervals, (a, b) -> a.start - b.start);
-        for (int i = 1; i < intervals.length; i++)
-            if (intervals[i].start < intervals[i - 1].end) return false;
+        for (int i = 1; i < intervals.length; i++) {
+            if (intervals[i].start < intervals[i - 1].end) {
+                return false;
+            }
+        }
         return true;
     }
 
     /**
      * LeetCode 463: island Perimeter.
-     *
+     * <p>
      * watch out how to count neighbours.
      *
      * @param grid input value
@@ -1514,31 +1750,42 @@ public class ArrayQuestion {
         return numOfIslands * 4 - neighbours * 2;
     }
 
-    /** LeetCode 308: mutable 2D range sum query structure. */
+    /**
+     * LeetCode 308: mutable 2D range sum query structure.
+     */
     class NumMatrix {
+
         private int[][] colSums;
         private int[][] matrix;
 
         public NumMatrix(int[][] matrix) {
             int row = matrix.length;
-            if (row == 0 || matrix[0].length == 0) return;
+            if (row == 0 || matrix[0].length == 0) {
+                return;
+            }
             int col = matrix[0].length;
             this.matrix = matrix;
             this.colSums = new int[row + 1][col];
 
-            for (int i = 1; i <= row; i++)
-                for (int j = 0; j < col; j++) colSums[i][j] = colSums[i - 1][j] + matrix[i - 1][j];
+            for (int i = 1; i <= row; i++) {
+                for (int j = 0; j < col; j++) {
+                    colSums[i][j] = colSums[i - 1][j] + matrix[i - 1][j];
+                }
+            }
         }
 
         public void update(int row, int col, int val) {
-            for (int i = row + 1; i < colSums.length; i++)
+            for (int i = row + 1; i < colSums.length; i++) {
                 colSums[i][col] = colSums[i][col] - matrix[row][col] + val;
+            }
             matrix[row][col] = val;
         }
 
         public int sumRegion(int row1, int col1, int row2, int col2) {
             int res = 0;
-            for (int j = col1; j <= col2; j++) res += colSums[row2 + 1][j] - colSums[row1][j];
+            for (int j = col1; j <= col2; j++) {
+                res += colSums[row2 + 1][j] - colSums[row1][j];
+            }
             return res;
         }
     }

@@ -10,9 +10,10 @@ import java.util.Map;
  * self-contained so they can be copied into individual LeetCode submissions.
  */
 public class MathQuestion {
+
     /**
      * LeetCode 69.
-     *
+     * <p>
      * newton's method.
      *
      * @param x input value
@@ -20,7 +21,9 @@ public class MathQuestion {
      */
     public int mySqrt(int x) {
         long r = x;
-        while (r * r > x) r = (r + x / r) / 2;
+        while (r * r > x) {
+            r = (r + x / r) / 2;
+        }
         return (int) r;
     }
 
@@ -56,7 +59,7 @@ public class MathQuestion {
 
     /**
      * LeetCode 202: is happy number.
-     *
+     * <p>
      * test cycle.
      *
      * @param n input value
@@ -83,7 +86,7 @@ public class MathQuestion {
 
     /**
      * LeetCode 204: count Primes.
-     *
+     * <p>
      * semi-dp idea.
      *
      * @param n input value
@@ -141,8 +144,12 @@ public class MathQuestion {
      * @return result
      */
     public boolean isPerfectSquare(int num) {
-        if (num < 1) return false;
-        for (int i = 1; num > 0; i += 2) num -= i;
+        if (num < 1) {
+            return false;
+        }
+        for (int i = 1; num > 0; i += 2) {
+            num -= i;
+        }
         return num == 0;
     }
 
@@ -153,7 +160,9 @@ public class MathQuestion {
      * @return result
      */
     public boolean isPerfectSquare1(int num) {
-        if (num < 1) return false;
+        if (num < 1) {
+            return false;
+        }
         long left = 1, right = num; // long type to avoid 2147483647 case
 
         while (left <= right) {
@@ -174,8 +183,12 @@ public class MathQuestion {
      * newton's method to find the square root
      */
     boolean isPerfectSquare2(int num) {
-        if (num < 1) return false;
-        if (num == 1) return true;
+        if (num < 1) {
+            return false;
+        }
+        if (num == 1) {
+            return true;
+        }
         long t = num / 2;
         while (t * t > num) {
             t = (t + num / t) / 2;
@@ -194,9 +207,11 @@ public class MathQuestion {
         return b == 0 ? a : getSum(a ^ b, (a & b) << 1);
     }
 
-    /** LeetCode 405: converts a number to hexadecimal. */
+    /**
+     * LeetCode 405: converts a number to hexadecimal.
+     */
     private char[] map = {
-            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
+        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
     };
 
     /**
@@ -206,7 +221,9 @@ public class MathQuestion {
      * @return result
      */
     public String toHex(int num) {
-        if (num == 0) return "0";
+        if (num == 0) {
+            return "0";
+        }
         String result = "";
         while (num != 0) {
             result = map[(num & 15)] + result;
@@ -216,7 +233,8 @@ public class MathQuestion {
     }
 
     /**
-     * LeetCode 447: find the number of 2 points that have same distance towards one point store the distance to point i & number of coordinates for that distance.
+     * LeetCode 447: find the number of 2 points that have same distance towards one point store the distance to point i
+     * & number of coordinates for that distance.
      *
      * @param points input value
      * @return result
@@ -226,7 +244,9 @@ public class MathQuestion {
         Map<Integer, Integer> map = new HashMap<>();
         for (int i = 0; i < points.length; i++) {
             for (int j = 0; j < points.length; j++) {
-                if (i == j) continue;
+                if (i == j) {
+                    continue;
+                }
                 int d = getDistance(points[i], points[j]);
                 map.put(d, map.getOrDefault(d, 0) + 1);
             }
@@ -298,7 +318,9 @@ public class MathQuestion {
      * @return result
      */
     public int largestPalindrome(int n) {
-        if (n == 1) return 9;
+        if (n == 1) {
+            return 9;
+        }
         // if n = 3 then upperBound = 999 and lowerBound = 99
         int upperBound = (int) Math.pow(10, n) - 1, lowerBound = upperBound / 10;
         long maxNumber = (long) upperBound * (long) upperBound;
@@ -319,7 +341,9 @@ public class MathQuestion {
             for (long i = upperBound; upperBound > lowerBound; i--) {
                 // if n= 3 none of the factor of palindrom  can be more than 999 or less than square root of
                 // assumed palindrom
-                if (palindrom / i > maxNumber || i * i < palindrom) break;
+                if (palindrom / i > maxNumber || i * i < palindrom) {
+                    break;
+                }
 
                 // if two factors found, where both of them are n-digits,
                 if (palindrom % i == 0) {

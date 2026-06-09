@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
  * Created by jasperwang on 2017-11-27.
  */
 public class StringTest {
+
     private StringQuestion stringQuestion;
 
     @BeforeEach
@@ -61,9 +62,9 @@ public class StringTest {
     @Test
     public void testCompress() {
         assertEquals(
-                4,
-                stringQuestion.compress(
-                        new char[]{'a', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'}));
+            4,
+            stringQuestion.compress(
+                new char[]{'a', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'}));
     }
 
     @Test

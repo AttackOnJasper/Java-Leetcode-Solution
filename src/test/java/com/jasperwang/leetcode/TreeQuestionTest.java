@@ -7,6 +7,7 @@ import java.util.ArrayDeque;
 import org.junit.jupiter.api.Test;
 
 public class TreeQuestionTest {
+
     @Test
     public void testLCS() {
         TreeQuestion.TreeNode t = new TreeQuestion.TreeNode(1);

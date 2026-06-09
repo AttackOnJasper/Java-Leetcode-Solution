@@ -11,7 +11,9 @@ import java.util.PriorityQueue;
  * self-contained so they can be copied into individual LeetCode submissions.
  */
 public class ListQuestion {
+
     public static class ListNode {
+
         public int val;
         public ListNode next;
 
@@ -25,7 +27,9 @@ public class ListQuestion {
         }
 
         public static ListNode listNodeFactory(ArrayDeque<Integer> vals) {
-            if (vals.isEmpty()) return null;
+            if (vals.isEmpty()) {
+                return null;
+            }
             return new ListNode(vals.pollFirst(), listNodeFactory(vals));
         }
     }
@@ -37,7 +41,9 @@ public class ListQuestion {
      * @return result
      */
     public static ListNode reverseSecondHalfList(ListNode head) {
-        if (head == null) return null;
+        if (head == null) {
+            return null;
+        }
         ListNode fast = head, slow = head, prev = head;
         while (fast != null && fast.next != null) {
             fast = fast.next.next;
@@ -83,7 +89,9 @@ public class ListQuestion {
             temp.next = new ListNode(sum % 10);
             temp = temp.next;
         }
-        if (sum / 10 == 1) temp.next = new ListNode(1);
+        if (sum / 10 == 1) {
+            temp.next = new ListNode(1);
+        }
         return res.next;
     }
 
@@ -94,8 +102,12 @@ public class ListQuestion {
      * @return result
      */
     public ListNode mergeKLists(ListNode[] lists) {
-        if (lists == null || lists.length == 0) return null;
-        if (lists.length == 1) return lists[0];
+        if (lists == null || lists.length == 0) {
+            return null;
+        }
+        if (lists.length == 1) {
+            return lists[0];
+        }
         return mergeKListsHelper(lists, 0, lists.length - 1);
     }
 
@@ -110,8 +122,12 @@ public class ListQuestion {
     }
 
     private ListNode merge(ListNode l1, ListNode l2) {
-        if (l1 == null) return l2;
-        if (l2 == null) return l1;
+        if (l1 == null) {
+            return l2;
+        }
+        if (l2 == null) {
+            return l1;
+        }
         if (l1.val < l2.val) {
             l1.next = merge(l1.next, l2);
             return l1;
@@ -130,15 +146,17 @@ public class ListQuestion {
     public ListNode mergeKLists2(ListNode[] lists) {
         ListNode curr = null;
         ListNode head = null;
-        if (lists == null || lists.length < 1) return null;
+        if (lists == null || lists.length < 1) {
+            return null;
+        }
         PriorityQueue<ListNode> q =
-                new PriorityQueue<ListNode>(
-                        lists.length,
-                        new Comparator<ListNode>() {
-                            public int compare(ListNode l1, ListNode l2) {
-                                return l1.val - l2.val;
-                            }
-                        });
+            new PriorityQueue<ListNode>(
+                lists.length,
+                new Comparator<ListNode>() {
+                    public int compare(ListNode l1, ListNode l2) {
+                        return l1.val - l2.val;
+                    }
+                });
         // Add all the list nodes to the min heap
         for (ListNode list : lists) {
             if (list != null) {
@@ -173,7 +191,9 @@ public class ListQuestion {
      * @return result
      */
     public ListNode deleteDuplicates(ListNode head) {
-        if (head == null) return null;
+        if (head == null) {
+            return null;
+        }
         ListNode list = head;
         while (list.next != null) {
             if (list.val == list.next.val) {
@@ -186,14 +206,17 @@ public class ListQuestion {
     }
 
     /**
-     * LeetCode 160: intersection of 2 lists note the change to headB when a == null; max iteration is length a + length b when the lengths of lists are different.
+     * LeetCode 160: intersection of 2 lists note the change to headB when a == null; max iteration is length a + length
+     * b when the lengths of lists are different.
      *
      * @param headA input value
      * @param headB input value
      * @return result
      */
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
-        if (headA == null || headB == null) return null;
+        if (headA == null || headB == null) {
+            return null;
+        }
         ListNode a = headA, b = headB;
 
         while (a != b) {
@@ -207,11 +230,13 @@ public class ListQuestion {
      * LeetCode 203: remove Linked List Elements.
      *
      * @param head input value
-     * @param val input value
+     * @param val  input value
      * @return result
      */
     public ListNode removeElements(ListNode head, int val) {
-        if (head == null) return null;
+        if (head == null) {
+            return null;
+        }
         head.next = removeElements(head.next, val);
         return head.val == val ? head.next : head;
     }
@@ -220,11 +245,13 @@ public class ListQuestion {
      * remove elements2.
      *
      * @param head input value
-     * @param val input value
+     * @param val  input value
      * @return result
      */
     public ListNode removeElements2(ListNode head, int val) {
-        if (head == null) return head;
+        if (head == null) {
+            return head;
+        }
         ListNode curr = head;
         while (curr.next != null) {
             if (curr.next.val == val) {
@@ -247,7 +274,9 @@ public class ListQuestion {
     }
 
     private ListNode helper(ListNode head, ListNode newHead) {
-        if (head == null) return newHead;
+        if (head == null) {
+            return newHead;
+        }
         ListNode next = head.next;
         head.next = newHead;
         return helper(next, head);
@@ -310,14 +339,18 @@ public class ListQuestion {
      * @return result
      */
     public ListNode plusOne(ListNode head) {
-        if (plusOneHelper(head).val != 0) return head;
+        if (plusOneHelper(head).val != 0) {
+            return head;
+        }
         final ListNode newHead = new ListNode(1);
         newHead.next = head;
         return newHead;
     }
 
     private ListNode plusOneHelper(ListNode head) {
-        if (head == null) return null;
+        if (head == null) {
+            return null;
+        }
         head.next = plusOneHelper(head.next);
         if (carry == 1) {
             if (head.val != 9) {
@@ -360,7 +393,7 @@ public class ListQuestion {
 
     /**
      * LeetCode 445: adds two linked-list numbers whose digits are stored in forward order.
-     *
+     * <p>
      * numbers are in right order.
      *
      * @param l1 input value

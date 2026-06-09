@@ -12,6 +12,7 @@ import java.util.List;
  * self-contained so they can be copied into individual LeetCode submissions.
  */
 public class BackTrackQuestion {
+
     /**
      * LeetCode 46: permutation: return permutations on a distinct set.
      *
@@ -23,6 +24,7 @@ public class BackTrackQuestion {
         permuteHelper(res, nums, new ArrayList<>());
         return res;
     }
+
     // Recursion helper
     private void permuteHelper(List<List<Integer>> res, int[] nums, List<Integer> cur) {
         if (cur.size() == nums.length) {
@@ -96,15 +98,19 @@ public class BackTrackQuestion {
      */
     public List<String> letterCombinations(String digits) {
         LinkedList<String> ans = new LinkedList<String>();
-        if (digits == null || digits.isEmpty()) return ans;
+        if (digits == null || digits.isEmpty()) {
+            return ans;
+        }
         String[] mapping =
-                new String[]{"0", "1", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+            new String[]{"0", "1", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
         ans.add("");
         for (int i = 0; i < digits.length(); i++) {
             int x = Character.getNumericValue(digits.charAt(i));
             while (ans.peek().length() == i) {
                 String t = ans.remove();
-                for (char s : mapping[x].toCharArray()) ans.add(t + s);
+                for (char s : mapping[x].toCharArray()) {
+                    ans.add(t + s);
+                }
             }
         }
         return ans;
@@ -123,7 +129,7 @@ public class BackTrackQuestion {
     }
 
     private void generateParenthesesHelper(
-            String cur, List<String> res, int left, int right, int max) {
+        String cur, List<String> res, int left, int right, int max) {
         if (cur.length() == max * 2) {
             res.add(cur);
             return;
@@ -140,7 +146,7 @@ public class BackTrackQuestion {
      * LeetCode 39: combination Sum I Each number can be used infinite number of times.
      *
      * @param candidates input value
-     * @param target input value
+     * @param target     input value
      * @return result
      */
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
@@ -150,12 +156,14 @@ public class BackTrackQuestion {
     }
 
     private void combinationSumHelper(
-            int start, List<Integer> temp, List<List<Integer>> res, int[] candidates, int target) {
+        int start, List<Integer> temp, List<List<Integer>> res, int[] candidates, int target) {
         if (target == 0) {
             res.add(new ArrayList<>(temp));
             return;
         }
-        if (target < 0) return;
+        if (target < 0) {
+            return;
+        }
         for (int i = start; i < candidates.length; i++) {
             temp.add(candidates[i]);
             // use i as start to re-use the same element
@@ -168,7 +176,7 @@ public class BackTrackQuestion {
      * LeetCode 40: combination Sum: each element can only be used once, no duplicated combinations.
      *
      * @param candidates input value
-     * @param target input value
+     * @param target     input value
      * @return result
      */
     public List<List<Integer>> combinationSum2(int[] candidates, int target) {
@@ -179,9 +187,11 @@ public class BackTrackQuestion {
     }
 
     private void combinationSum2Helper(
-            List<List<Integer>> res, int[] candidates, int target, List<Integer> temp, int start) {
+        List<List<Integer>> res, int[] candidates, int target, List<Integer> temp, int start) {
         if (target <= 0) {
-            if (target == 0) res.add(new ArrayList<>(temp));
+            if (target == 0) {
+                res.add(new ArrayList<>(temp));
+            }
             return;
         }
         for (int i = start; i < candidates.length; i++) {
@@ -207,7 +217,7 @@ public class BackTrackQuestion {
     }
 
     private void subsetsWithDupHelper(
-            int[] nums, List<List<Integer>> res, List<Integer> temp, int start) {
+        int[] nums, List<List<Integer>> res, List<Integer> temp, int start) {
         res.add(new ArrayList<>(temp));
         for (int i = start; i < nums.length; i++) {
             if (i == start || nums[i] != nums[i - 1]) {
@@ -244,9 +254,13 @@ public class BackTrackQuestion {
     }
 
     private boolean isPalindrome(String str, int l, int r) {
-        if (l == r) return true;
+        if (l == r) {
+            return true;
+        }
         while (l < r) {
-            if (str.charAt(l) != str.charAt(r)) return false;
+            if (str.charAt(l) != str.charAt(r)) {
+                return false;
+            }
             l++;
             r--;
         }
@@ -254,7 +268,8 @@ public class BackTrackQuestion {
     }
 
     /**
-     * LeetCode 216: combination Sum Find all possible combinations of k numbers that add up to a number n, given that only numbers from 1 to 9 can be used and each combination should be a unique set of numbers.
+     * LeetCode 216: combination Sum Find all possible combinations of k numbers that add up to a number n, given that
+     * only numbers from 1 to 9 can be used and each combination should be a unique set of numbers.
      *
      * @param k input value
      * @param n input value
@@ -267,7 +282,7 @@ public class BackTrackQuestion {
     }
 
     private static void combination(
-            List<List<Integer>> ans, List<Integer> comb, int k, int start, int n) {
+        List<List<Integer>> ans, List<Integer> comb, int k, int start, int n) {
         if (comb.size() > k) {
             return;
         }
@@ -296,9 +311,13 @@ public class BackTrackQuestion {
             List<Integer> list1 = generateDigit(nums1, i);
             List<Integer> list2 = generateDigit(nums2, num - i);
             for (int num1 : list1) {
-                if (num1 >= 12) continue;
+                if (num1 >= 12) {
+                    continue;
+                }
                 for (int num2 : list2) {
-                    if (num2 >= 60) continue;
+                    if (num2 >= 60) {
+                        continue;
+                    }
                     res.add(num1 + ":" + (num2 < 10 ? "0" + num2 : num2));
                 }
             }
@@ -317,14 +336,15 @@ public class BackTrackQuestion {
             res.add(sum);
             return;
         }
-        for (int i = pos; i < nums.length; i++)
+        for (int i = pos; i < nums.length; i++) {
             generateDigitHelper(nums, count - 1, i + 1, sum + nums[i], res);
+        }
     }
 
 
     /**
-     * 526 Beautiful arrangement: arrange the array of 1 .. N numbers s.t. num[i] % i == 0 || i % num[i] == 0
-     * note the addition and deletion of middle element
+     * 526 Beautiful arrangement: arrange the array of 1 .. N numbers s.t. num[i] % i == 0 || i % num[i] == 0 note the
+     * addition and deletion of middle element
      */
     int count = 0;
 
@@ -335,7 +355,9 @@ public class BackTrackQuestion {
      * @return result
      */
     public int countArrangement(int N) {
-        if (N == 0) return 0;
+        if (N == 0) {
+            return 0;
+        }
         countArrangementHelper(N, 1, new int[N + 1]);
         return count;
     }

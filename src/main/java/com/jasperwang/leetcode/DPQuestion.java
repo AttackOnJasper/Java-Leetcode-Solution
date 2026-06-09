@@ -1,6 +1,9 @@
 package com.jasperwang.leetcode;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.PriorityQueue;
 
 /**
  * DP-focused LeetCode solutions and related utilities.
@@ -9,7 +12,9 @@ import java.util.*;
  * self-contained so they can be copied into individual LeetCode submissions.
  */
 public class DPQuestion {
+
     private class Interval {
+
         int start;
         int end;
 
@@ -25,6 +30,7 @@ public class DPQuestion {
     }
 
     private class WeightedInterval {
+
         int start;
         int end;
         int weight;
@@ -47,7 +53,9 @@ public class DPQuestion {
      * @return maximum total weight obtainable by selecting compatible jobs
      */
     public int weightedIntervalScheduling(Interval[] intervals, int[] weights) {
-        if (intervals == null || weights == null || intervals.length == 0) return 0;
+        if (intervals == null || weights == null || intervals.length == 0) {
+            return 0;
+        }
         if (intervals.length != weights.length) {
             throw new IllegalArgumentException("intervals and weights must have the same length");
         }
@@ -91,9 +99,14 @@ public class DPQuestion {
      */
     public boolean subsetSum(int[] nums, int k) {
         boolean[][] dp = new boolean[nums.length][k + 1];
-        for (int i = 0; i < nums.length; i++) dp[i][0] = true;
-        for (int i = 0; i < nums.length; i++)
-            for (int j = 0; j <= k; j++) dp[i][j] = dp[i - 1][j] || dp[i - 1][k - nums[i]];
+        for (int i = 0; i < nums.length; i++) {
+            dp[i][0] = true;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = 0; j <= k; j++) {
+                dp[i][j] = dp[i - 1][j] || dp[i - 1][k - nums[i]];
+            }
+        }
         return dp[nums.length - 1][k];
     }
 
@@ -109,9 +122,11 @@ public class DPQuestion {
      */
     public int knapsack(int[] weight, int[] value, int limit) {
         int[][] dp = new int[weight.length][limit + 1]; // dp[i][w] represents max value from item 0 - i with limit w
-        for (int i = 1; i < weight.length; i++)
-            for (int j = weight[i]; j <= limit; j++)
+        for (int i = 1; i < weight.length; i++) {
+            for (int j = weight[i]; j <= limit; j++) {
                 dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - weight[i]] + value[i]);
+            }
+        }
         return dp[weight.length - 1][limit];
     }
 
@@ -312,7 +327,9 @@ public class DPQuestion {
      * @return area of the largest all-ones square
      */
     public int maximalSquare(char[][] matrix) {
-        if (matrix.length == 0) return 0;
+        if (matrix.length == 0) {
+            return 0;
+        }
         int m = matrix.length, n = matrix[0].length, result = 0;
         int[][] b = new int[m + 1][n + 1];
         for (int i = 1; i <= m; i++) {
@@ -333,17 +350,19 @@ public class DPQuestion {
      * @return minimum number of rooms needed so all meetings can be scheduled
      */
     public int minMeetingRooms(Interval[] intervals) {
-        if (intervals.length == 0) return 0;
+        if (intervals.length == 0) {
+            return 0;
+        }
         Arrays.sort(intervals, (a, b) -> a.start - b.start);
         PriorityQueue<Interval> heap =
-                new PriorityQueue<>(
-                        intervals.length,
-                        (a, b) -> a.end - b.end); // track minimum end time of merged intervals
+            new PriorityQueue<>(
+                intervals.length,
+                (a, b) -> a.end - b.end); // track minimum end time of merged intervals
         heap.offer(intervals[0]);
         for (int i = 1; i < intervals.length; i++) {
             Interval interval = heap.poll();
             if (intervals[i].start
-                    >= interval.end) { // do not need a new room; merge 2 intervals into a larger one
+                >= interval.end) { // do not need a new room; merge 2 intervals into a larger one
                 interval.end = intervals[i].end;
             } else { // 2 meetings overlap; need a new room
                 heap.offer(intervals[i]);
@@ -363,7 +382,9 @@ public class DPQuestion {
      * @return minimum total painting cost
      */
     public int minCost(int[][] costs) {
-        if (costs == null || costs.length == 0 || costs[0].length == 0) return 0;
+        if (costs == null || costs.length == 0 || costs[0].length == 0) {
+            return 0;
+        }
         int n = costs.length, r = 0, g = 0, b = 0;
         for (int i = 0; i < n; i++) {
             int rr = r, bb = b, gg = g;
@@ -375,16 +396,19 @@ public class DPQuestion {
     }
 
     /**
-     * LeetCode 276: counts ways to paint a fence with no more than two adjacent posts sharing a
-     * color.
+     * LeetCode 276: counts ways to paint a fence with no more than two adjacent posts sharing a color.
      *
      * @param n number of fence posts
      * @param k number of available colors
      * @return number of valid painting arrangements
      */
     public int numWays(int n, int k) {
-        if (n == 0) return 0;
-        if (n == 1) return k;
+        if (n == 0) {
+            return 0;
+        }
+        if (n == 1) {
+            return k;
+        }
         int diffColorCounts = k * (k - 1);
         int sameColorCounts = k;
         for (int i = 2; i < n; i++) {
@@ -402,13 +426,24 @@ public class DPQuestion {
      * @return length of the longest strictly increasing subsequence
      */
     public int lengthOfLIS(int[] nums) {
-        if (nums.length == 0) return 0;
+        if (nums.length == 0) {
+            return 0;
+        }
         int[] dp = new int[nums.length];
-        for (int i = 0; i < dp.length; i++) dp[i] = 1;
-        for (int i = 1; i < nums.length; i++)
-            for (int j = 0; j < i; j++) if (nums[j] < nums[i]) dp[i] = Math.max(dp[i], dp[j] + 1);
+        for (int i = 0; i < dp.length; i++) {
+            dp[i] = 1;
+        }
+        for (int i = 1; i < nums.length; i++) {
+            for (int j = 0; j < i; j++) {
+                if (nums[j] < nums[i]) {
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                }
+            }
+        }
         int res = 0;
-        for (int n : dp) res = Math.max(n, res);
+        for (int n : dp) {
+            res = Math.max(n, res);
+        }
         return res;
     }
 
@@ -420,7 +455,9 @@ public class DPQuestion {
      */
     public int[] countBits(int num) {
         int[] res = new int[num + 1];
-        for (int i = 1; i <= num; i++) res[i] = res[i / 2] + i % 2;
+        for (int i = 1; i <= num; i++) {
+            res[i] = res[i / 2] + i % 2;
+        }
         return res;
     }
 
@@ -493,7 +530,9 @@ public class DPQuestion {
      */
     public boolean PredictTheWinner(int[] nums) {
         int[][] dp = new int[nums.length][nums.length];
-        for (int i = 0; i < nums.length; i++) dp[i][i] = nums[i];
+        for (int i = 0; i < nums.length; i++) {
+            dp[i][i] = nums[i];
+        }
         for (int len = 1; len < nums.length; len++) {
             for (int i = 0; i < nums.length - len; i++) {
                 int j = i + len;
@@ -526,14 +565,17 @@ public class DPQuestion {
          * for delete sum from one string to null
          */
         int[][] dp = new int[m + 1][n + 1];
-        for (int j = 1; j <= n; j++) dp[0][j] = dp[0][j - 1] + s2.charAt(j - 1);
+        for (int j = 1; j <= n; j++) {
+            dp[0][j] = dp[0][j - 1] + s2.charAt(j - 1);
+        }
         for (int i = 1; i <= m; i++) {
             dp[i][0] = dp[i - 1][0] + s1.charAt(i - 1);
-            for (int j = 1; j <= n; j++)
+            for (int j = 1; j <= n; j++) {
                 dp[i][j] =
-                        s1.charAt(i - 1) == s2.charAt(j - 1)
-                                ? dp[i - 1][j - 1]
-                                : Math.min(dp[i - 1][j] + s1.charAt(i - 1), dp[i][j - 1] + s2.charAt(j - 1));
+                    s1.charAt(i - 1) == s2.charAt(j - 1)
+                        ? dp[i - 1][j - 1]
+                        : Math.min(dp[i - 1][j] + s1.charAt(i - 1), dp[i][j - 1] + s2.charAt(j - 1));
+            }
         }
         return dp[m][n];
     }
@@ -569,7 +611,7 @@ public class DPQuestion {
         isValid[0] = bits[0] == 0;
         for (int i = 1; i < bits.length; i++) {
             isValid[i] =
-                    (bits[i] == 0 && isValid[i - 1]) || (bits[i - 1] == 1 && (i > 1 ? isValid[i - 2] : true));
+                (bits[i] == 0 && isValid[i - 1]) || (bits[i - 1] == 1 && (i > 1 ? isValid[i - 2] : true));
         }
         return bits.length > 1 ? isValid[bits.length - 2] : isValid[bits.length - 1];
     }
@@ -625,7 +667,9 @@ public class DPQuestion {
      * @return count of numbers with no repeated digits
      */
     public int countNumbersWithUniqueDigits(int n) {
-        if (n == 0) return 1;
+        if (n == 0) {
+            return 1;
+        }
         int res = 10;
         int uniqueDigits = 9;
         int availableNumber = 9;
@@ -645,8 +689,12 @@ public class DPQuestion {
      * @return value of the requested symbol, either {@code 0} or {@code 1}
      */
     public int kthGrammar(int N, int K) {
-        if (N == 1) return 0;
-        if (K % 2 == 0) return (kthGrammar(N - 1, K / 2) == 0) ? 1 : 0;
+        if (N == 1) {
+            return 0;
+        }
+        if (K % 2 == 0) {
+            return (kthGrammar(N - 1, K / 2) == 0) ? 1 : 0;
+        }
         return (kthGrammar(N - 1, (K + 1) / 2) == 0) ? 0 : 1;
     }
 }

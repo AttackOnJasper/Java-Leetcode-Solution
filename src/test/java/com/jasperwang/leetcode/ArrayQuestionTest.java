@@ -8,11 +8,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class ArrayQuestionTest {
+
     private static final int[] TEST_ARR_1 = new int[]{4, 1, 5, 3, 2};
     private static final int[] TEST_LONG_ARR =
-            new int[]{
-                    123, 456, 3423, 543, 7657, 213, 54, 8, 6, 23, 4, 7, 34, 42, 123, 23, 124, 454, 654, 1231
-            };
+        new int[]{
+            123, 456, 3423, 543, 7657, 213, 54, 8, 6, 23, 4, 7, 34, 42, 123, 23, 124, 454, 654, 1231
+        };
 
     private ArrayQuestion arrayQuestion;
 
