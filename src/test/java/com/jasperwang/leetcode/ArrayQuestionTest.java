@@ -126,7 +126,7 @@ public class ArrayQuestionTest {
     @Test
     public void testFindShortestSubArray() {
         int[] arr = new int[]{1, 2, 2, 3, 1};
-        int res = ArrayQuestion.findShortestSubArray(arr);
+        int res = arrayQuestion.findShortestSubArray(arr);
         assertEquals(2, res);
         assertEquals("aaa", "aaa".split(" ")[0]);
     }

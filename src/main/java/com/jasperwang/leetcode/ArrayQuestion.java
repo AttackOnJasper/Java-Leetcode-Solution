@@ -847,7 +847,7 @@ public class ArrayQuestion {
      * @param k    input value
      * @return result
      */
-    public static List<Integer> topKFrequent(int[] nums, int k) {
+    public List<Integer> topKFrequent(int[] nums, int k) {
         List<Integer>[] buckets =
             new List
                 [nums.length
@@ -1522,7 +1522,7 @@ public class ArrayQuestion {
      * @param nums input value
      * @return result
      */
-    public static int findShortestSubArray(int[] nums) {
+    public int findShortestSubArray(int[] nums) {
         Map<Integer, int[]> map = new HashMap<>();
         for (int i = 0; i < nums.length; i++) {
             if (!map.containsKey(nums[i])) {

@@ -10,9 +10,9 @@ import java.util.PriorityQueue;
  * <p>The methods are grouped by problem domain rather than by difficulty. Most implementations are
  * self-contained so they can be copied into individual LeetCode submissions.
  */
-public class ListQuestion {
+public class LinkedListQuestion {
 
-    public static class ListNode {
+    protected static class ListNode {
 
         public int val;
         public ListNode next;
@@ -35,12 +35,49 @@ public class ListQuestion {
     }
 
     /**
+     * LeetCode 206: reverse Linked List.
+     *
+     * @param head input value
+     * @return result
+     */
+    public ListNode reverseList1(ListNode head) {
+        return helper(head, null);
+    }
+
+    private ListNode helper(ListNode head, ListNode newHead) {
+        if (head == null) {
+            return newHead;
+        }
+        ListNode next = head.next;
+        head.next = newHead;
+        return helper(next, head);
+    }
+
+    /**
+     * reverse list2.
+     *
+     * @param head input value
+     * @return result
+     */
+    public ListNode reverseList2(ListNode head) {
+        /* iterative solution */
+        ListNode res = null;
+        while (head != null) {
+            ListNode next = head.next; // cache the reference of the next node into a variable
+            head.next = res; // set the current node to the start of the resulting list
+            res = head; // update the resulting list reference
+            head = next; // move to the next item of the list
+        }
+        return res;
+    }
+
+    /**
      * reverse second half list.
      *
      * @param head input value
      * @return result
      */
-    public static ListNode reverseSecondHalfList(ListNode head) {
+    public ListNode reverseSecondHalfList(ListNode head) {
         if (head == null) {
             return null;
         }
@@ -50,19 +87,8 @@ public class ListQuestion {
             prev = slow;
             slow = slow.next;
         }
-        prev.next = reverse(slow);
+        prev.next = reverseList1(slow);
         return head;
-    }
-
-    private static ListNode reverse(ListNode head) {
-        ListNode prev = null;
-        while (head != null) {
-            ListNode next = head.next;
-            head.next = prev;
-            prev = head;
-            head = next;
-        }
-        return prev;
     }
 
     /**
@@ -261,45 +287,6 @@ public class ListQuestion {
             }
         }
         return head.val == val ? head.next : head;
-    }
-
-    /**
-     * LeetCode 206: reverse Linked List.
-     *
-     * @param head input value
-     * @return result
-     */
-    public ListNode reverseList1(ListNode head) {
-        return helper(head, null);
-    }
-
-    private ListNode helper(ListNode head, ListNode newHead) {
-        if (head == null) {
-            return newHead;
-        }
-        ListNode next = head.next;
-        head.next = newHead;
-        return helper(next, head);
-    }
-
-    /**
-     * reverse list2.
-     *
-     * @param head input value
-     * @return result
-     */
-    public ListNode reverseList2(ListNode head) {
-        /* iterative solution */
-        ListNode newHead = null;
-        while (head != null) {
-            ListNode next = head.next; // store the next node for next iteration
-            // append new list to the back of this node, and update the new head
-            head.next = newHead;
-            newHead = head;
-            // move to next node
-            head = next;
-        }
-        return newHead;
     }
 
     /**

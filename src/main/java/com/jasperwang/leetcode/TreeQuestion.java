@@ -774,7 +774,7 @@ public class TreeQuestion {
         return Math.abs(a - target) < Math.abs(b - target) ? a : b;
     }
 
-    private static int max = 0;
+    private static int ZERO = 0;
 
     /**
      * LeetCode 298: finds the longest consecutive path in a binary tree.
@@ -782,20 +782,20 @@ public class TreeQuestion {
      * @param root input value
      * @return result
      */
-    public static int longestConsecutive(TreeNode root) {
+    public int longestConsecutive(TreeNode root) {
         if (root == null) {
             return 0;
         }
         longestConsecutiveHelper(root, 0, root.val);
-        return max;
+        return ZERO;
     }
 
-    private static void longestConsecutiveHelper(TreeNode root, int cur, int target) {
+    private void longestConsecutiveHelper(TreeNode root, int cur, int target) {
         if (root == null) {
             return;
         }
         cur = (root.val == target) ? cur + 1 : 1;
-        max = Math.max(cur, max);
+        ZERO = Math.max(cur, ZERO);
         longestConsecutiveHelper(root.left, cur, root.val + 1);
         longestConsecutiveHelper(root.right, cur, root.val + 1);
     }
@@ -1114,7 +1114,7 @@ public class TreeQuestion {
             return 0;
         }
         longestUnivaluePathHelper(root, root.val);
-        return max;
+        return ZERO;
     }
 
     private int longestUnivaluePathHelper(TreeNode root, int parentVal) {
@@ -1124,7 +1124,7 @@ public class TreeQuestion {
         /** left, right: max path length in which all nodes' val == parentVal */
         int left = longestUnivaluePathHelper(root.left, root.val);
         int right = longestUnivaluePathHelper(root.right, root.val);
-        max = Math.max(max, left + right);
+        ZERO = Math.max(ZERO, left + right);
         return parentVal == root.val ? Math.max(left, right) + 1 : 0;
     }
 

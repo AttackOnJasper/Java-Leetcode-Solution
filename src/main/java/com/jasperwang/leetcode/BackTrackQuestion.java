@@ -275,13 +275,13 @@ public class BackTrackQuestion {
      * @param n input value
      * @return result
      */
-    public static List<List<Integer>> combinationSum3(int k, int n) {
+    public List<List<Integer>> combinationSum3(int k, int n) {
         List<List<Integer>> res = new ArrayList<>();
         combination(res, new ArrayList<>(), k, 1, n);
         return res;
     }
 
-    private static void combination(
+    private void combination(
         List<List<Integer>> ans, List<Integer> comb, int k, int start, int n) {
         if (comb.size() > k) {
             return;

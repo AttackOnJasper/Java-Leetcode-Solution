@@ -104,6 +104,7 @@ public class DPQuestion {
         }
         for (int i = 0; i < nums.length; i++) {
             for (int j = 0; j <= k; j++) {
+                // j can be summed up by using either previous indexes or together with the current number
                 dp[i][j] = dp[i - 1][j] || dp[i - 1][k - nums[i]];
             }
         }
@@ -111,7 +112,7 @@ public class DPQuestion {
     }
 
     /**
-     * Finds the maximum value that can be packed within a weight limit.
+     * 01 Knapsack: Finds the maximum value that can be packed within a weight limit.
      *
      * <p>{@code weight[i]} and {@code value[i]} describe the same item.
      *
@@ -121,7 +122,11 @@ public class DPQuestion {
      * @return maximum total value within {@code limit}
      */
     public int knapsack(int[] weight, int[] value, int limit) {
-        int[][] dp = new int[weight.length][limit + 1]; // dp[i][w] represents max value from item 0 - i with limit w
+        // dp[i][w] represents the max value obtained via putting some items from 0 - i with limit weight w
+        int[][] dp = new int[weight.length][limit + 1];
+        for (int i = 0; i < weight.length; i++) {
+            dp[i][0] = 0;
+        }
         for (int i = 1; i < weight.length; i++) {
             for (int j = weight[i]; j <= limit; j++) {
                 dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - weight[i]] + value[i]);
@@ -129,6 +134,33 @@ public class DPQuestion {
         }
         return dp[weight.length - 1][limit];
     }
+
+    /**
+     * Unbounded Knapsack Problem: Finds the maximum value that can be packed within a weight limit. Each item can be
+     * used more than once
+     *
+     * <p>{@code weight[i]} and {@code value[i]} describe the same item.
+     *
+     * @param weight item weights
+     * @param value  item values
+     * @param limit  maximum total weight allowed
+     * @return maximum total value within {@code limit}
+     */
+    public int unboundedKnapsack(int[] weight, int[] value, int limit) {
+        // dp[i][w] represents the max value obtained via putting some items from 0 - i with limit weight w
+        int[][] dp = new int[weight.length][limit + 1];
+        for (int i = 0; i < weight.length; i++) {
+            dp[i][0] = 0;
+        }
+        for (int i = 1; i < weight.length; i++) {
+            for (int j = weight[i]; j <= limit; j++) {
+                // use dp[i][j - weight[i]] + value[i] because we can still add i to dp[i][any]
+                dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - weight[i]] + value[i]);
+            }
+        }
+        return dp[weight.length - 1][limit];
+    }
+
 
     /**
      * LeetCode 5: finds the longest palindromic substring.
@@ -140,6 +172,7 @@ public class DPQuestion {
         if (s == null || s.length() <= 1) {
             return s;
         }
+        // dp[i][j]: whether the substring between i and j is a palindrome
         boolean[][] dp = new boolean[s.length()][s.length()];
         char[] w = s.toCharArray();
         int maxLen = 0;
@@ -149,6 +182,7 @@ public class DPQuestion {
         for (int i = s.length() - 2; i >= 0; --i) {
             int maxJ = i;
             for (int j = i + 1; j < s.length(); j++) {
+                // if s[i] == s[j] and the substring between i and j is a palindrome, then so is s[i:j].
                 if (w[j] == w[i] && (j < i + 3 || dp[i + 1][j - 1])) {
                     dp[i][j] = true;
                     maxJ = j;
@@ -167,7 +201,7 @@ public class DPQuestion {
     /**
      * LeetCode 53: finds the maximum subarray sum.
      *
-     * <p>{@code dp[i]} stores the best subarray sum ending at {@code nums[i]}.
+     * <p>{@code dp[i]} stores the best subarray sum including {@code nums[i]}.
      *
      * @param nums integer array
      * @return largest sum over all contiguous subarrays
@@ -234,13 +268,14 @@ public class DPQuestion {
      * @return minimum sum along a path from the top row to the bottom row
      */
     public int minimumTotal(List<List<Integer>> triangle) {
-        int[] A = new int[triangle.size() + 1];
+        // dp[i]: minimum sum containing the index i
+        int[] dp = new int[triangle.size() + 1];
         for (int i = triangle.size() - 1; i >= 0; i--) {
             for (int j = 0; j < triangle.get(i).size(); j++) {
-                A[j] = Math.min(A[j], A[j + 1]) + triangle.get(i).get(j);
+                dp[j] = Math.min(dp[j], dp[j + 1]) + triangle.get(i).get(j);
             }
         }
-        return A[0];
+        return dp[0];
     }
 
     /**

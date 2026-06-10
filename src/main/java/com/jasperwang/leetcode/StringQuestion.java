@@ -2,6 +2,7 @@ package com.jasperwang.leetcode;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,6 +28,7 @@ public class StringQuestion {
 
     /**
      * LeetCode 5: finds the longest palindromic substring by expanding around each possible center.
+     * Please see DPQuestion for a different solution.
      *
      * @param s input string
      * @return longest contiguous palindrome in {@code s}
@@ -61,7 +63,7 @@ public class StringQuestion {
      * @param shift number of positions to shift letters forward
      * @return encoded text
      */
-    public static String cipherEncode(final String text, final int shift) {
+    public String cipherEncode(final String text, final int shift) {
         final StringBuilder sb = new StringBuilder();
         final char[] arr = text.toCharArray();
         for (final char c : arr) {
@@ -83,7 +85,7 @@ public class StringQuestion {
      * @param shift number of positions originally shifted forward
      * @return decoded text
      */
-    public static String cipherDecode(final String text, final int shift) {
+    public String cipherDecode(final String text, final int shift) {
         final StringBuilder sb = new StringBuilder();
         final char[] arr = text.toCharArray();
         for (final char c : arr) {
@@ -217,13 +219,22 @@ public class StringQuestion {
      *
      * <p>Tip: sort each string to create a stable key for detecting existing anagram groups.
      *
-     * <p>This method is currently a placeholder and returns an empty result.
      *
      * @param strs strings to group
      * @return grouped anagrams
      */
     public List<List<String>> groupAnagrams(String[] strs) {
+        Map<String, List<String>> map = new HashMap<>();
+        for (String s : strs) {
+            char[] arr = s.toCharArray();
+            Arrays.sort(arr);
+            String temp = String.valueOf(arr);
+            if (!map.containsKey(temp))
+                map.put(temp, new ArrayList<>());
+            map.get(temp).add(s);
+        }
         List<List<String>> res = new ArrayList<>();
+        res.addAll(map.values());
         return res;
     }
 
